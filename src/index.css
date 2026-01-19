@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 14px;
+  --color-offset: #F5F6F8;
+  --color-border-default: #D8DEE4;
+}
+
+@layer base {
+  html {
+    /* font-size: 14px; */
+    /* Changes the base rem value to 10px */
+  }
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
