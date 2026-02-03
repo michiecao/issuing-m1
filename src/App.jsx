@@ -3,49 +3,26 @@ import PrototypeWrapper from './PrototypeWrapper';
 import Prototype1, {
   initialVariables as prototype1InitialVars
 } from './prototypes/Prototype1';
-import Prototype2, { initialVariables as prototype2InitialVars } from './prototypes/Prototype2';
-import Prototype3, { initialVariables as prototype3InitialVars } from './prototypes/Prototype3';
 
 // Prototype definitions - edit this array to add/modify prototypes
 const PROTOTYPES = [
   {
     id: 'prototype1',
-    title: 'Platform controls ↔ Embedded',
-    description: 'Mapping platform features to the embedded component.',
+    title: 'Prototype 1',
+    description: 'Explores self-serve onboarding flow for direct Issuing users.',
     status: 'in-progress',
     component: Prototype1,
     initialVariables: prototype1InitialVars,
     initialControlVariables: { currentView: 'platform', showWrapper: true },
   },
-  {
-    id: 'prototype2',
-    title: 'Embedded navigation',
-    description: 'Exploring navigation patterns in the component.',
-    status: 'in-progress',
-    component: Prototype2,
-    initialVariables: prototype2InitialVars,
-    initialControlVariables: { currentView: 'platform', showWrapper: true },
-  },
-  {
-    id: 'prototype3',
-    title: 'Platform configuration & onboarding',
-    description: 'Exploring platform configuration and onboarding flows.',
-    status: 'in-progress',
-    component: Prototype3,
-    initialVariables: prototype3InitialVars,
-    initialControlVariables: { currentView: 'platform', showWrapper: true, onboardingStep: 'none' },
-  },
 ];
 
-const PrototypeCard = ({ id, title, description, status, href, disabled }) => (
+const PrototypeCard = ({ title, description, status, href, disabled }) => (
   <tr
     className={`border-b border-gray-200 last:border-b-0 relative ${disabled ? 'opacity-50' : 'cursor-pointer hover:bg-gray-50'} transition-colors`}
   >
     <td className="px-6 py-4">
       {!disabled && <a href={href} className="absolute inset-1" aria-label={title} />}
-      <code className="text-sm text-gray-500 font-mono">{id}</code>
-    </td>
-    <td className="px-6 py-4">
       <div className="font-medium text-gray-900">{title}</div>
     </td>
     <td className="px-6 py-4">
@@ -100,9 +77,6 @@ const HomePage = () => (
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -118,7 +92,6 @@ const HomePage = () => (
             {PROTOTYPES.map((prototype) => (
               <PrototypeCard
                 key={prototype.id}
-                id={prototype.id}
                 title={prototype.title}
                 description={prototype.description}
                 status={prototype.status}

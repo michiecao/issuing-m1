@@ -4,9 +4,7 @@ import * as Icons from './icons';
 export const NavItem = ({ icon, label }) => (
   <div className="flex items-center space-x-2 h-[30px] px-1 rounded-md hover:bg-gray-50 cursor-pointer">
     {icon && (
-      <div className="w-6 h-6 flex items-center justify-center text-gray-500">
-        {icon}
-      </div>
+      <div className="w-4 h-4 bg-gray-300 rounded-sm" />
     )}
     <span className="text-sm text-gray-700 flex-1">{label}</span>
   </div>
@@ -14,7 +12,7 @@ export const NavItem = ({ icon, label }) => (
 
 export const SectionHeading = ({ label }) => (
   <div className="h-[26px] flex items-center">
-    <span className="text-xs text-gray-500 uppercase tracking-wider">
+    <span className="text-xs text-[#596171]">
       {label}
     </span>
   </div>
@@ -41,8 +39,17 @@ export const Sidebar = () => (
         <NavItem icon={<Icons.HomeIcon />} label="Home" />
         <NavItem icon={<Icons.BalanceIcon />} label="Balances" />
         <NavItem icon={<Icons.TransactionsIcon />} label="Transactions" />
-        <NavItem icon={<Icons.DirectoryIcon />} label="Directory" />
+        <NavItem icon={<Icons.DirectoryIcon />} label="Customers" />
         <NavItem icon={<Icons.ProductIcon />} label="Product catalog" />
+      </div>
+
+      {/* Shortcuts */}
+      <div className="space-y-2">
+        <SectionHeading label="Shortcuts" />
+        <div className="">
+          <NavItem icon={<Icons.FraudToolsIcon />} label="Fraud tools" />
+          <NavItem icon={<Icons.RecentIcon />} label="Recent item" />
+        </div>
       </div>
 
       {/* Products */}
@@ -50,8 +57,10 @@ export const Sidebar = () => (
         <SectionHeading label="Products" />
         <div className="">
           <NavItem icon={<Icons.ConnectIcon />} label="Connect" />
+          <NavItem icon={<Icons.PaymentsIcon />} label="Payments" />
           <NavItem icon={<Icons.BillingIcon />} label="Billing" />
           <NavItem icon={<Icons.ReportingIcon />} label="Reporting" />
+          <NavItem icon={<Icons.MoreIcon />} label="More" />
         </div>
       </div>
     </div>
