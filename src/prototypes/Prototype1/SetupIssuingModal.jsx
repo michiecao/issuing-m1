@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Edit Icon
 const EditIcon = () => (
@@ -23,17 +23,21 @@ const ChevronDownIcon = ({ className }) => (
 
 // Balance/Financial Accounts Icon
 const BalanceIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M2.5 5H17.5M2.5 10H17.5M2.5 15H17.5" stroke="#675dff" strokeWidth="1.5" strokeLinecap="round"/>
-    <path d="M5 3V7M10 3V7M15 3V7M5 8V12M10 8V12M15 8V12M5 13V17M10 13V17M15 13V17" stroke="#675dff" strokeWidth="1.5" strokeLinecap="round"/>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1.5 3C1.5 2.37868 2.00368 1.875 2.625 1.875H13.875C14.4963 1.875 15 2.37868 15 3C15 3.62132 14.4963 4.125 13.875 4.125H2.625C2.00368 4.125 1.5 3.62132 1.5 3Z" fill="#675DFF"/>
+    <path d="M1.5 15C1.5 14.3787 2.00368 13.875 2.625 13.875H10.125C10.7463 13.875 11.25 14.3787 11.25 15C11.25 15.6213 10.7463 16.125 10.125 16.125H2.625C2.00368 16.125 1.5 15.6213 1.5 15Z" fill="#675DFF"/>
+    <path d="M4.875 7.875C4.25368 7.875 3.75 8.37868 3.75 9C3.75 9.62132 4.25368 10.125 4.875 10.125H16.125C16.7463 10.125 17.25 9.62132 17.25 9C17.25 8.37868 16.7463 7.875 16.125 7.875H4.875Z" fill="#675DFF"/>
+    <path d="M3.75 21C3.75 20.3787 4.25368 19.875 4.875 19.875H10.875C11.4963 19.875 12 20.3787 12 21C12 21.6213 11.4963 22.125 10.875 22.125H4.875C4.25368 22.125 3.75 21.6213 3.75 21Z" fill="#675DFF"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M24 17.25C24 20.1495 21.6495 22.5 18.75 22.5C15.8505 22.5 13.5 20.1495 13.5 17.25C13.5 14.3505 15.8505 12 18.75 12C21.6495 12 24 14.3505 24 17.25ZM21.75 17.25C21.75 18.9069 20.4069 20.25 18.75 20.25C17.0931 20.25 15.75 18.9069 15.75 17.25C15.75 15.5931 17.0931 14.25 18.75 14.25C20.4069 14.25 21.75 15.5931 21.75 17.25Z" fill="#675DFF"/>
   </svg>
 );
 
-// API Icon
+// API Icon - Terminal/code style
 const ApiIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7 5L3 10L7 15" stroke="#675dff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M13 5L17 10L13 15" stroke="#675dff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M19.5 3.75H4.5C3.25736 3.75 2.25 4.75736 2.25 6V18C2.25 19.2426 3.25736 20.25 4.5 20.25H19.5C20.7426 20.25 21.75 19.2426 21.75 18V6C21.75 4.75736 20.7426 3.75 19.5 3.75ZM4.5 1.5C2.01472 1.5 0 3.51472 0 6V18C0 20.4853 2.01472 22.5 4.5 22.5H19.5C21.9853 22.5 24 20.4853 24 18V6C24 3.51472 21.9853 1.5 19.5 1.5H4.5Z" fill="#675DFF"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M5.14584 6.76786C5.55019 6.29612 6.2604 6.24149 6.73214 6.64584L11.9821 11.1458C12.2315 11.3596 12.375 11.6716 12.375 12C12.375 12.3284 12.2315 12.6404 11.9821 12.8542L6.73214 17.3542C6.2604 17.7585 5.55019 17.7039 5.14584 17.2321C4.74149 16.7604 4.79612 16.0502 5.26786 15.6458L9.52134 12L5.26786 8.35416C4.79612 7.94981 4.74149 7.2396 5.14584 6.76786Z" fill="#675DFF"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M12 16.125C12 15.5037 12.5037 15 13.125 15H18.375C18.9963 15 19.5 15.5037 19.5 16.125C19.5 16.7463 18.9963 17.25 18.375 17.25H13.125C12.5037 17.25 12 16.7463 12 16.125Z" fill="#675DFF"/>
   </svg>
 );
 
@@ -61,7 +65,7 @@ const TaskListItem = ({ label, status, isLast }) => {
         </div>
         
         {/* Label */}
-        <span className={`text-sm leading-5 tracking-[-0.15px] ${isComplete ? 'text-[#533afd] font-semibold' : isActive ? 'text-[#533afd] font-semibold' : 'text-[#596171]'}`}>
+        <span className={`text-sm leading-5 tracking-[-0.15px] ${isActive ? 'text-[#533afd]' : 'text-[#596171]'}`}>
           {label}
         </span>
       </div>
@@ -91,23 +95,9 @@ const UseCaseOption = ({ title, description, selected, onClick }) => (
   </button>
 );
 
-// Simple Option Component (title only, no description)
-const SimpleOption = ({ title, selected, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`w-full text-left px-[14px] py-[10px] rounded-lg transition-colors ${
-      selected 
-        ? 'border-2 border-[#675dff] bg-white' 
-        : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
-    }`}
-  >
-    <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">{title}</h4>
-  </button>
-);
-
 // Info Card Component
 const InfoCard = ({ title, children, onEdit }) => (
-  <div className="bg-[#f6f9fb] border border-[#d5dbe1] rounded-lg p-6">
+  <div className="border border-[#d5dbe1] rounded-lg p-6">
     <div className="flex items-start justify-between mb-1">
       <h4 className="font-semibold text-[16px] text-[#353a44]">{title}</h4>
       <button 
@@ -433,52 +423,45 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
           Tell us about your use case
         </h1>
         <p className="text-[16px] text-[#596171] leading-[24px]">
-          This helps Stripe determine if Issuing supports your use case or not.
+          This helps us understand how you'll use Issuing.
         </p>
       </div>
       
       {/* Use Case Selection */}
       <div className="mb-8">
-        <h3 className="font-semibold text-[16px] text-[#353a44] mb-3">Select the use case that best applies</h3>
         <div className="space-y-[9px]">
           <UseCaseOption
             title="Corporate expense management"
-            description="Let employees, contractors, or agents to make purchases on your business' behalf."
+            description="Let employees or contractors make purchases on your business' behalf"
             selected={selectedUseCase === 'corporate'}
             onClick={() => setSelectedUseCase('corporate')}
           />
           <UseCaseOption
-            title="Ancillary services provider or agentic commerce"
-            description="Buy goods and services from merchants on behalf of your customers."
-            selected={selectedUseCase === 'ancillary'}
-            onClick={() => setSelectedUseCase('ancillary')}
+            title="B2B payments"
+            description="Buy goods or services for inventory to resell to your customers."
+            selected={selectedUseCase === 'b2b'}
+            onClick={() => setSelectedUseCase('b2b')}
           />
           <UseCaseOption
-            title="Reseller"
-            description="Buy goods or services for inventory and resell them to your customers."
-            selected={selectedUseCase === 'reseller'}
-            onClick={() => setSelectedUseCase('reseller')}
+            title="On-demand services"
+            description="Buy goods and services from merchants on your customers' behalf."
+            selected={selectedUseCase === 'ondemand'}
+            onClick={() => setSelectedUseCase('ondemand')}
           />
         </div>
         
-        {/* More Options Toggle */}
+        {/* Specialized Use Cases Toggle */}
         <button 
           onClick={() => setMoreOptionsExpanded(!moreOptionsExpanded)}
           className="flex items-center gap-1 mt-4 text-[#596171] hover:text-[#474e5a]"
         >
           <ChevronDownIcon className={`transition-transform duration-200 ${moreOptionsExpanded ? '' : '-rotate-90'}`} />
-          <span className="font-semibold text-sm">More options</span>
+          <span className="font-semibold text-sm">Specialized use cases</span>
         </button>
         
-        {/* Expanded More Options */}
+        {/* Expanded Specialized Use Cases */}
         {moreOptionsExpanded && (
           <div className="space-y-[9px] mt-[9px]">
-            <UseCaseOption
-              title="Contractor purchase card"
-              description="Let contractors to purchase materials or services needed to deliver work for your business."
-              selected={selectedUseCase === 'contractor'}
-              onClick={() => setSelectedUseCase('contractor')}
-            />
             <UseCaseOption
               title="Fleet"
               description="Let employees, contractors, or customers to pay for vehicle operations or related expenses."
@@ -491,6 +474,12 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
               selected={selectedUseCase === 'insurance'}
               onClick={() => setSelectedUseCase('insurance')}
             />
+            <UseCaseOption
+              title="Buy now pay later"
+              description="Fund purchases for customers who pay you back over time."
+              selected={selectedUseCase === 'bnpl'}
+              onClick={() => setSelectedUseCase('bnpl')}
+            />
           </div>
         )}
       </div>
@@ -498,13 +487,13 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
       {/* Description Textarea */}
       <div className="mb-8">
         <label className="block font-semibold text-[16px] text-[#353a44] mb-2">
-          Describe how your business plans to use Issuing
+          How will you use Issuing?
         </label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Description"
-          className="w-full h-[68px] px-3 py-2 border border-[#d8dee4] rounded-md text-sm text-[#353a44] placeholder-[#6c7688] resize-y focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
+          placeholder="e.g. We want to issue virtual cards to our sales team for client entertainment expenses."
+          className="w-full h-[88px] px-3 py-2 border border-[#d8dee4] rounded-md text-sm text-[#353a44] placeholder-[#6c7688] resize-y focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
         />
       </div>
       
@@ -522,166 +511,32 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
   );
 };
 
-// Step 3: Card Holder Content
-const CardHolderContent = ({ onContinue, selectedCardHolder, setSelectedCardHolder }) => (
+// Step 3: Pricing Content
+const PricingContent = ({ onContinue }) => (
   <div className="w-full max-w-[580px] px-4">
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        Who do you want to issue cards for?
+        How Issuing pricing works
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px]">
-        Choose who will hold and use the cards.
+        Review the costs before you get started.
       </p>
     </div>
     
-    {/* Card Holder Selection */}
-    <div className="mb-8">
-      <div className="space-y-[9px]">
-        <UseCaseOption
-          title="My business"
-          description="Example: employees or agents of your business"
-          selected={selectedCardHolder === 'my-business'}
-          onClick={() => setSelectedCardHolder('my-business')}
-        />
-        <UseCaseOption
-          title="Businesses of my platform"
-          description="Example: LLC or S-corp entities using your platform"
-          selected={selectedCardHolder === 'platform-businesses'}
-          onClick={() => setSelectedCardHolder('platform-businesses')}
-        />
-        <UseCaseOption
-          title="Consumers on my platform"
-          description="Example: Individuals using your platform"
-          selected={selectedCardHolder === 'platform-consumers'}
-          onClick={() => setSelectedCardHolder('platform-consumers')}
-        />
-      </div>
-    </div>
+    {/* Pricing Content Placeholder */}
+    <div className="bg-[#f5f6f8] rounded-lg h-[470px] w-full mb-8" />
     
     {/* Continue Button */}
     <div className="flex justify-center">
       <button 
         onClick={onContinue}
-        disabled={!selectedCardHolder}
-        className={continueButtonClasses(!selectedCardHolder)}
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
         Continue
       </button>
     </div>
   </div>
-);
-
-// Step 4: API Access Content
-const ApiAccessContent = ({ onContinue, selectedApiAccess, setSelectedApiAccess }) => (
-  <div className="w-full max-w-[580px] px-4">
-    {/* Page Header */}
-    <div className="mb-8">
-      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        Do you want access to Stripe's Issuing API?
-      </h1>
-    </div>
-    
-    {/* API Access Selection */}
-    <div className="mb-8">
-      <div className="space-y-[9px]">
-        <UseCaseOption
-          title="Yes"
-          description="Recommended if you are building a custom card program and want programmatic control and customization of the experience"
-          selected={selectedApiAccess === 'yes'}
-          onClick={() => setSelectedApiAccess('yes')}
-        />
-        <UseCaseOption
-          title="No"
-          description="Recommended if you to launch quickly with minimal integration time and leverage Stripe's pre-built experiences"
-          selected={selectedApiAccess === 'no'}
-          onClick={() => setSelectedApiAccess('no')}
-        />
-      </div>
-    </div>
-    
-    {/* Continue Button */}
-    <div className="flex justify-center">
-      <button 
-        onClick={onContinue}
-        disabled={!selectedApiAccess}
-        className={continueButtonClasses(!selectedApiAccess)}
-      >
-        Continue
-      </button>
-    </div>
-  </div>
-);
-
-// Step 5: Region Content - Where will your cardholders primarily reside?
-const RegionContent = ({ onContinue, selectedRegion, setSelectedRegion }) => (
-  <div className="w-full max-w-[580px] px-4">
-    {/* Page Header */}
-    <div className="mb-8">
-      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        Where will your cardholders primarily reside?
-      </h1>
-    </div>
-    
-    {/* Region Selection */}
-    <div className="mb-8">
-      <div className="space-y-[9px]">
-        <SimpleOption
-          title="United States"
-          selected={selectedRegion === 'us'}
-          onClick={() => setSelectedRegion('us')}
-        />
-        <SimpleOption
-          title="EMEA"
-          selected={selectedRegion === 'emea'}
-          onClick={() => setSelectedRegion('emea')}
-        />
-        <SimpleOption
-          title="Global / multiple regions"
-          selected={selectedRegion === 'global'}
-          onClick={() => setSelectedRegion('global')}
-        />
-      </div>
-    </div>
-    
-    {/* Continue Button */}
-    <div className="flex justify-center">
-      <button 
-        onClick={onContinue}
-        disabled={!selectedRegion}
-        className={continueButtonClasses(!selectedRegion)}
-      >
-        Continue
-      </button>
-    </div>
-  </div>
-);
-
-// Review Card with divider support
-const ReviewCard = ({ children }) => (
-  <div className="bg-[#f6f9fb] border border-[#d5dbe1] rounded-lg p-6">
-    <div className="flex flex-col gap-4">
-      {children}
-    </div>
-  </div>
-);
-
-// Review Card Row Component
-const ReviewCardRow = ({ label, value, onEdit, showDivider = false }) => (
-  <>
-    {showDivider && <div className="bg-[#e3e8ee] h-px w-full" />}
-    <div className="flex flex-col">
-      <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-[16px] text-[#353a44]">{label}</h4>
-        {onEdit && (
-          <button onClick={onEdit} className="text-[#6c7688] hover:text-[#474e5a] p-1">
-            <EditIcon />
-          </button>
-        )}
-      </div>
-      <p className="text-sm text-[#414552] leading-5">{value}</p>
-    </div>
-  </>
 );
 
 // Checkbox Component
@@ -711,49 +566,25 @@ const Checkbox = ({ checked, onChange, children }) => (
 const getUseCaseDisplayName = (useCase) => {
   const names = {
     'corporate': 'Corporate expense management',
-    'ancillary': 'Ancillary services provider or agentic commerce',
-    'reseller': 'Reseller',
-    'contractor': 'Contractor purchase card',
+    'b2b': 'B2B payments',
+    'ondemand': 'On-demand services',
     'fleet': 'Fleet',
     'insurance': 'Insurance',
+    'bnpl': 'Buy now pay later',
   };
   return names[useCase] || useCase || 'Not selected';
 };
 
-// Helper to get display name for cardholder
-const getCardholderDisplayName = (cardholder) => {
-  const names = {
-    'my-business': 'My business',
-    'platform-businesses': 'Businesses of my platform',
-    'platform-consumers': 'Consumers on my platform',
-  };
-  return names[cardholder] || cardholder || 'Not selected';
-};
 
-// Helper to get display name for region
-const getRegionDisplayName = (region) => {
-  const names = {
-    'us': 'United States',
-    'emea': 'EMEA',
-    'global': 'Global / multiple regions',
-  };
-  return names[region] || region || 'Not selected';
-};
-
-// Step 6: Submit Review Content
+// Step 4: Submit Review Content
 const SubmitReviewContent = ({ 
   onSubmit, 
   selectedUseCase, 
-  selectedCardHolder, 
-  selectedApiAccess, 
-  selectedRegion,
   description,
-  agreedEsign,
-  setAgreedEsign,
-  agreedPrivacy,
-  setAgreedPrivacy,
+  agreedTerms,
+  setAgreedTerms,
 }) => {
-  const canSubmit = agreedEsign && agreedPrivacy;
+  const canSubmit = agreedTerms;
 
   return (
     <div className="w-full max-w-[580px] px-4">
@@ -763,15 +594,15 @@ const SubmitReviewContent = ({
           Review and submit
         </h1>
         <p className="text-[16px] text-[#596171] leading-[24px]">
-          Please confirm your program details. Stripe will review this information to determine eligibility and next steps.
+          Confirm your details before submitting.
         </p>
       </div>
       
       {/* Business Details */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Business details</h3>
         <InfoCard title="Acme Inc." onEdit={() => {}}>
-          <div className="text-sm text-[#414552] leading-5 space-y-0">
+          <div className="text-sm text-[#596171] leading-5 space-y-0">
             <p>www.acme.com</p>
             <p>101 SW Water Ave</p>
             <p>Portland, OR 97211</p>
@@ -780,69 +611,69 @@ const SubmitReviewContent = ({
           </div>
           <div className="mt-4">
             <p className="font-semibold text-[16px] text-[#353a44]">Other information provided</p>
-            <p className="text-sm text-[#414552]">Doing business as, EIN, website, product description</p>
+            <p className="text-sm text-[#596171]">EIN, DBA, Industry, number of employees, estimated annual revenue, end of fiscal year</p>
           </div>
         </InfoCard>
       </div>
       
-      {/* Business Representative */}
-      <div className="mb-8">
-        <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Business representative</h3>
+      {/* Business Owners */}
+      <div className="mb-6">
+        <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Business owners</h3>
         <InfoCard title="Cedar Andrews (you)" onEdit={() => {}}>
-          <div className="text-sm text-[#414552] leading-5 space-y-0">
+          <div className="text-sm text-[#596171] leading-5 space-y-0">
             <p>Co-founder and CEO</p>
             <p>cedar@grotto.com</p>
             <p>354 Oyster Point Blvd, South San Francisco CA 94080</p>
           </div>
           <div className="mt-4">
             <p className="font-semibold text-[16px] text-[#353a44]">Other information provided</p>
-            <p className="text-sm text-[#414552]">Date of birth, phone number, full SSN</p>
+            <p className="text-sm text-[#596171]">EISSNIN, Job title, Phone</p>
           </div>
         </InfoCard>
       </div>
 
-      {/* Card Program Details */}
-      <div className="mb-8">
-        <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Card program details</h3>
-        <ReviewCard>
-          <ReviewCardRow 
-            label="Use case" 
-            value={getUseCaseDisplayName(selectedUseCase)} 
-            onEdit={() => {}} 
-          />
-          <ReviewCardRow 
-            label="Description of use case" 
-            value={description || 'Not provided'} 
-            showDivider 
-          />
-          <ReviewCardRow 
-            label="Cardholders" 
-            value={getCardholderDisplayName(selectedCardHolder)} 
-            onEdit={() => {}} 
-            showDivider 
-          />
-          <ReviewCardRow 
-            label="API access needed" 
-            value={selectedApiAccess === 'yes' ? 'Yes' : selectedApiAccess === 'no' ? 'No' : 'Not selected'} 
-            onEdit={() => {}} 
-            showDivider 
-          />
-          <ReviewCardRow 
-            label="Primary cardholder region" 
-            value={getRegionDisplayName(selectedRegion)} 
-            onEdit={() => {}} 
-            showDivider 
-          />
-        </ReviewCard>
+      {/* Program Details */}
+      <div className="mb-6">
+        <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Program details</h3>
+        <div className="border border-[#d5dbe1] rounded-lg p-6">
+          <div className="flex flex-col gap-4">
+            <div>
+              <div className="flex items-center justify-between">
+                <h4 className="font-semibold text-[16px] text-[#353a44]">Card program</h4>
+                <button className="text-[#6c7688] hover:text-[#474e5a] p-1">
+                  <EditIcon />
+                </button>
+              </div>
+              <p className="text-sm text-[#414552] leading-5">{getUseCaseDisplayName(selectedUseCase)}</p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-[16px] text-[#353a44]">Program description</h4>
+              <p className="text-sm text-[#414552] leading-5">{description || 'Description'}</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Agreements */}
-      <div className="mb-8 space-y-2">
-        <Checkbox checked={agreedEsign} onChange={setAgreedEsign}>
-          I agree to the <a href="#" className="text-[#533afd] hover:underline">E-sign policy</a>
-        </Checkbox>
-        <Checkbox checked={agreedPrivacy} onChange={setAgreedPrivacy}>
-          I agree to Celtic Bank's <a href="#" className="text-[#533afd] hover:underline">privacy policy</a>
+      {/* Pricing */}
+      <div className="mb-8">
+        <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Pricing</h3>
+        <div className="border border-[#d5dbe1] rounded-lg p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-semibold text-[16px] text-[#353a44]">—</p>
+              <p className="text-sm text-[#414552] leading-5">—</p>
+            </div>
+            <button className="text-[#6c7688] hover:text-[#474e5a] p-1">
+              <EditIcon />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Agreement */}
+      <div className="mb-8">
+        <Checkbox checked={agreedTerms} onChange={setAgreedTerms}>
+          I agree to the <a href="#" className="text-[#533afd] hover:underline">E-sign policy</a> and <a href="#" className="text-[#533afd] hover:underline">Celtic Bank's privacy policy</a>
         </Checkbox>
       </div>
       
@@ -860,65 +691,104 @@ const SubmitReviewContent = ({
   );
 };
 
+// Spinning Loader Component
+const Spinner = () => (
+  <svg 
+    className="animate-spin" 
+    width="40" 
+    height="40" 
+    viewBox="0 0 40 40" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle 
+      cx="20" 
+      cy="20" 
+      r="17" 
+      stroke="#e3e8ee" 
+      strokeWidth="6"
+    />
+    <path 
+      d="M20 3C10.611 3 3 10.611 3 20" 
+      stroke="#675dff" 
+      strokeWidth="6" 
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+// Step 5: Processing Content
+const ProcessingContent = () => (
+  <div className="w-full max-w-[580px] px-4">
+    <div className="mb-4">
+      <Spinner />
+    </div>
+    <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
+      Reviewing your details...
+    </h1>
+    <p className="text-[16px] text-[#596171] leading-[24px]">
+      We're checking your submission. This usually takes less than a minute.
+    </p>
+  </div>
+);
+
 // Feature Highlight Component
 const FeatureHighlight = ({ icon: Icon, title, children }) => (
   <div className="flex gap-4 items-start">
-    <div className="shrink-0">
+    <div className="shrink-0 py-[5px]">
       <div className="bg-[#f7f5fd] rounded-lg p-4 flex items-center justify-center">
         <Icon />
       </div>
     </div>
     <div className="flex-1">
-      <h4 className="font-bold text-[16px] text-[#596171] leading-6">{title}</h4>
+      <h4 className="font-bold text-[16px] text-[#353a44] leading-6">{title}</h4>
       <p className="text-[16px] text-[#596171] leading-6">{children}</p>
     </div>
   </div>
 );
 
-// Step 7: Success Screen - "You're all set"
-const SuccessContent = ({ onFinish }) => (
+// Step 5: Success Screen - "You're ready to start building"
+const SuccessContent = ({ onStartIntegrating, onViewDocs }) => (
   <div className="w-full max-w-[580px] px-4">
     {/* Illustration Placeholder */}
-    <div className="bg-[#f6f8fa] border border-[#d5dbe1] rounded-xl h-[180px] mb-12" />
+    <div className="bg-[#f5f6f8] border border-[#d5dbe1] rounded-xl h-[212px] mb-8" />
     
     {/* Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        You're all set
+        You're ready to start building
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px]">
-        Based on the details you provided, Stripe can support your program. No further setup required. You can start building now.
+        Here's what you get:
       </p>
     </div>
 
-    {/* What's New Section */}
-    <div className="mb-12">
-      <p className="text-[16px] text-[#596171] leading-[24px] mb-6">
-        Here's what's new:
-      </p>
-      
+    {/* Features Section */}
+    <div className="mb-8">
       <div className="space-y-6">
         <FeatureHighlight icon={BalanceIcon} title="Financial accounts">
-          You can manage your money in more ways, including storing money on Stripe in multiple currencies, sending payouts, and spending from issued cards.
+          The cards you create pull from your financial account balance. Add funds to your balance and spend easily.
         </FeatureHighlight>
         
-        <FeatureHighlight icon={ApiIcon} title="Stripe Issuing API">
-          You can create and manage cards programmatically. View the{' '}
-          <a href="#" className="text-[#533afd] hover:underline">quickstart</a>
-          {' '}and{' '}
-          <a href="#" className="text-[#533afd] hover:underline">integration</a>
-          {' '}guides to get started.
+        <FeatureHighlight icon={ApiIcon} title="Stripe Issuing APIs">
+          Create and manage cards programatically. Start integrating with the quickstart guide or view the Issuing API docs.
         </FeatureHighlight>
       </div>
     </div>
     
-    {/* Go to Issuing Button */}
-    <div className="flex justify-center">
+    {/* Buttons */}
+    <div className="flex flex-col gap-4">
       <button 
-        onClick={onFinish}
-        className="w-full py-3 bg-[#533afd] hover:bg-[#4730d9] text-white font-medium text-sm rounded-md transition-colors"
+        onClick={onStartIntegrating}
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
-        Go to Issuing
+        Start integrating
+      </button>
+      <button 
+        onClick={onViewDocs}
+        className="w-full py-3 bg-white hover:bg-gray-50 text-[#353a44] font-semibold text-base rounded-md border border-[#d8dee4] transition-colors shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
+      >
+        View Issuing docs
       </button>
     </div>
   </div>
@@ -931,49 +801,64 @@ const UseCaseCallout = () => (
       Supported use cases for Issuing
     </h4>
     <p className="text-[14px] text-[#596171] leading-5 mb-4">
-      Learn more about the various use cases Stripe Issuing can enable for your business.
+      Learn about the use cases Issuing supports and how to set up your program.
     </p>
     <a href="#" className="text-[14px] font-semibold text-[#533afd] hover:underline">
-      View doc
+      View documentation
     </a>
   </div>
 );
 
 // Main Modal Component
-const SetupIssuingModal = ({ isOpen, onClose, onComplete }) => {
+const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onViewDocs }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
-  const [selectedCardHolder, setSelectedCardHolder] = useState(null);
-  const [selectedApiAccess, setSelectedApiAccess] = useState(null);
-  const [selectedRegion, setSelectedRegion] = useState(null);
   const [description, setDescription] = useState('');
-  const [agreedEsign, setAgreedEsign] = useState(false);
-  const [agreedPrivacy, setAgreedPrivacy] = useState(false);
+  const [agreedTerms, setAgreedTerms] = useState(false);
+
+  // Auto-transition from processing (step 5) to success (step 6) after 5 seconds
+  useEffect(() => {
+    if (currentStep === 5) {
+      const timer = setTimeout(() => {
+        setCurrentStep(6);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep]);
 
   if (!isOpen) return null;
 
   // Task list shows 5 items now with "Choose setup type" as first step
   // Step 0: Choose setup type
   // Step 1: Review your information
-  // Steps 2-5: Describe use case (multiple sub-steps)
-  // Step 6: Submit for review
-  // Step 7: Success screen (task list hidden)
+  // Step 2: Describe use case
+  // Step 3: Review pricing
+  // Step 4: Review and submit
+  // Step 5: Processing screen (task list hidden)
+  // Step 6: Success screen (task list hidden)
   const steps = [
     { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
     { label: 'Review your information', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
-    { label: 'Describe use case', status: (currentStep >= 2 && currentStep <= 5) ? 'active' : currentStep > 5 ? 'complete' : 'pending' },
-    { label: 'Review pricing', status: 'pending' }, // Placeholder - not yet implemented
-    { label: 'Review and submit', status: currentStep === 6 ? 'active' : currentStep > 6 ? 'complete' : 'pending' },
+    { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
+    { label: 'Review pricing', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
+    { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
   ];
 
   const handleContinue = () => {
-    if (currentStep < 7) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     }
   };
 
-  const isSuccessScreen = currentStep === 7;
+  const handleStartIntegratingClick = () => {
+    if (onStartIntegrating) {
+      onStartIntegrating();
+    }
+  };
+
+  const isProcessingScreen = currentStep === 5;
+  const isSuccessScreen = currentStep === 6;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -988,7 +873,16 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete }) => {
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 shrink-0">
           <h2 className="font-bold text-[16px] text-[#353a44] tracking-[-0.31px]">Set up Issuing</h2>
-          {!isSuccessScreen && (
+          {isSuccessScreen ? (
+            <button 
+              onClick={onComplete || onClose}
+              className="px-3 py-1.5 text-sm text-[#353a44] border border-[#d8dee4] rounded-md hover:bg-gray-50 transition-colors"
+            >
+              Exit
+            </button>
+          ) : isProcessingScreen ? (
+            <div /> 
+          ) : (
             <div className="flex gap-2">
               <button 
                 className="px-3 py-1.5 text-sm text-[#353a44] border border-[#d8dee4] rounded-md hover:bg-gray-50 transition-colors"
@@ -1007,9 +901,9 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete }) => {
         
         {/* Content - Three column layout with centered main content */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Left Sidebar - Task List (hidden on success screen) */}
+          {/* Left Sidebar - Task List (hidden on processing and success screens) */}
           <div className="w-[278px] pt-6 px-8 shrink-0">
-            {!isSuccessScreen && (
+            {!isProcessingScreen && !isSuccessScreen && (
               <div className="space-y-0">
                 {steps.map((step, index) => (
                   <TaskListItem
@@ -1046,42 +940,25 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete }) => {
                 />
               )}
               {currentStep === 3 && (
-                <CardHolderContent
-                  onContinue={handleContinue}
-                  selectedCardHolder={selectedCardHolder}
-                  setSelectedCardHolder={setSelectedCardHolder}
-                />
+                <PricingContent onContinue={handleContinue} />
               )}
               {currentStep === 4 && (
-                <ApiAccessContent
-                  onContinue={handleContinue}
-                  selectedApiAccess={selectedApiAccess}
-                  setSelectedApiAccess={setSelectedApiAccess}
-                />
-              )}
-              {currentStep === 5 && (
-                <RegionContent
-                  onContinue={handleContinue}
-                  selectedRegion={selectedRegion}
-                  setSelectedRegion={setSelectedRegion}
-                />
-              )}
-              {currentStep === 6 && (
                 <SubmitReviewContent
                   onSubmit={handleContinue}
                   selectedUseCase={selectedUseCase}
-                  selectedCardHolder={selectedCardHolder}
-                  selectedApiAccess={selectedApiAccess}
-                  selectedRegion={selectedRegion}
                   description={description}
-                  agreedEsign={agreedEsign}
-                  setAgreedEsign={setAgreedEsign}
-                  agreedPrivacy={agreedPrivacy}
-                  setAgreedPrivacy={setAgreedPrivacy}
+                  agreedTerms={agreedTerms}
+                  setAgreedTerms={setAgreedTerms}
                 />
               )}
-              {currentStep === 7 && (
-                <SuccessContent onFinish={onComplete || onClose} />
+              {currentStep === 5 && (
+                <ProcessingContent />
+              )}
+              {currentStep === 6 && (
+                <SuccessContent 
+                  onStartIntegrating={handleStartIntegratingClick} 
+                  onViewDocs={onViewDocs || onComplete || onClose} 
+                />
               )}
             </div>
           </div>

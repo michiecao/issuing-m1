@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SetupIssuingModal from './SetupIssuingModal';
 import IssuingHomeView from './IssuingHomeView';
+import QuickstartGuideView, { BlueprintPanel } from './QuickstartGuideView';
 import PrototypeControlPanel from '../../components/PrototypeControlPanel';
 
 // Icons as inline SVGs - matching Sail UI / Stripe Dashboard icons from Figma
@@ -220,10 +221,14 @@ const DashboardView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalKey, setModalKey] = useState(0); // Used to reset modal state
   const [isOnboardingComplete, setIsOnboardingComplete] = useState(false);
+  const [showQuickstartGuide, setShowQuickstartGuide] = useState(false);
+  const [showBlueprintOverlay, setShowBlueprintOverlay] = useState(false);
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
     setIsOnboardingComplete(false);
+    setShowQuickstartGuide(false);
+    setShowBlueprintOverlay(false);
     setModalKey(prev => prev + 1); // Increment key to remount modal with fresh state
   };
 
@@ -231,6 +236,38 @@ const DashboardView = () => {
     setIsModalOpen(false);
     setIsOnboardingComplete(true);
   };
+
+  // "Start integrating" -> Show Issuing tab with Blueprint overlay
+  const handleStartIntegrating = () => {
+    setIsModalOpen(false);
+    setIsOnboardingComplete(true);
+    setShowBlueprintOverlay(true);
+  };
+
+  // "View Issuing docs" -> Show Quickstart guide
+  const handleViewIssuingDocs = () => {
+    setIsModalOpen(false);
+    setShowQuickstartGuide(true);
+  };
+
+  // Render Quickstart Guide as a standalone full-page view (no dashboard sidebar)
+  if (showQuickstartGuide) {
+    return (
+      <div className="flex h-screen bg-white">
+        <QuickstartGuideView onExit={() => setShowQuickstartGuide(false)} />
+        
+        {/* Prototype Control Panel */}
+        <PrototypeControlPanel>
+          <button
+            onClick={handleResetPrototype}
+            className="w-full px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 border border-gray-300 hover:bg-gray-100"
+          >
+            Reset prototype
+          </button>
+        </PrototypeControlPanel>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-white">
@@ -333,7 +370,13 @@ const DashboardView = () => {
         {/* Page Content */}
         {isOnboardingComplete ? (
           /* Issuing Home View - shown after onboarding */
-          <IssuingHomeView />
+          <>
+            <IssuingHomeView />
+            <BlueprintPanel 
+              isOpen={showBlueprintOverlay} 
+              onClose={() => setShowBlueprintOverlay(false)} 
+            />
+          </>
         ) : (
           <div className="flex-1 overflow-y-auto px-10 pb-10 pt-6">
             <div className="w-full">
@@ -397,6 +440,8 @@ const DashboardView = () => {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
         onComplete={handleOnboardingComplete}
+        onStartIntegrating={handleStartIntegrating}
+        onViewDocs={handleViewIssuingDocs}
       />
 
       {/* Prototype Control Panel */}
