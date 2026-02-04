@@ -1080,6 +1080,22 @@ const UseCaseCallout = () => (
   </div>
 );
 
+// Helper to check if user should be declined based on their selections
+const shouldUserBeDeclined = (useCase, cardHolder) => {
+  // Decline if user selected a specialized use case
+  const specializedUseCases = ['fleet', 'insurance', 'bnpl'];
+  if (specializedUseCases.includes(useCase)) {
+    return true;
+  }
+  
+  // Decline if user selected anything other than "My business" for cardholders
+  if (cardHolder && cardHolder !== 'business') {
+    return true;
+  }
+  
+  return false;
+};
+
 // Main Modal Component
 const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy' }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
@@ -1090,19 +1106,36 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const [agreedTerms, setAgreedTerms] = useState(false);
   const [showDashboardSuccess, setShowDashboardSuccess] = useState(false);
   
-  // Declined path is shorter - goes directly from use case to processing/declined
-  const isDeclinedPath = onboardingPath === 'declined';
-  const maxStep = isDeclinedPath ? 4 : 7;
-  const processingStep = isDeclinedPath ? 3 : 6;
-  const finalStep = isDeclinedPath ? 4 : 7;
+  // Track if user has been declined (computed after cardholders step)
+  // null = not yet determined, true = declined, false = approved
+  const [isDeclined, setIsDeclined] = useState(null);
   
-  // Reset to initial step when modal opens with a new initialStep
+  // For direct navigation to declined screen via external link (e.g., "Preview declined" button)
+  const isDirectDeclinePath = onboardingPath === 'declined';
+  
+  // Step counts depend on whether user is declined
+  // Declined flow: steps 0-3 normal, then step 4 = processing, step 5 = declined
+  // Normal flow: steps 0-7 (includes pricing, review, processing, success)
+  const isDeclinedFlow = isDeclined === true || isDirectDeclinePath;
+  const maxStep = isDeclinedFlow ? 5 : 7;
+  const processingStep = isDeclinedFlow ? 4 : 6;
+  const finalStep = isDeclinedFlow ? 5 : 7;
+  
+  // Reset state when modal opens
   React.useEffect(() => {
     if (isOpen) {
-      setCurrentStep(initialStep);
       setShowDashboardSuccess(false);
+      
+      // For direct decline path link, skip directly to the declined screen
+      if (isDirectDeclinePath) {
+        setIsDeclined(true);
+        setCurrentStep(5); // Declined screen is step 5 in declined flow
+      } else {
+        setIsDeclined(null);
+        setCurrentStep(initialStep);
+      }
     }
-  }, [isOpen, initialStep]);
+  }, [isOpen, initialStep, isDirectDeclinePath]);
 
   // Auto-transition from processing to success/declined after 5 seconds
   useEffect(() => {
@@ -1117,32 +1150,34 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   if (!isOpen) return null;
 
   // Step flow:
-  // Happy/KYC paths (8 steps):
+  // All paths go through steps 0-3:
   //   0: Choose setup type
   //   1: Review your information (happy) OR Provide more information (kyc)
   //   2: Describe use case
   //   3: Describe card holders
+  // 
+  // After step 3, we check decline criteria:
+  //   - If user selected specialized use case (fleet, insurance, bnpl) → DECLINE
+  //   - If user selected non-business cardholder (platforms, consumers) → DECLINE
+  //
+  // Declined flow (after step 3):
+  //   4: Processing
+  //   5: Declined screen
+  //
+  // Normal flow (after step 3):
   //   4: Review pricing
   //   5: Review and submit
   //   6: Processing
   //   7: Success
-  // Declined path (5 steps - goes directly to declined after use case):
-  //   0: Choose setup type
-  //   1: Provide more information
-  //   2: Describe use case
-  //   3: Processing
-  //   4: Declined
   
-  // Build steps array based on path
-  // Note: For declined path, we show the full steps in the sidebar until after use case step,
-  // since we wouldn't know to decline until we get use case info
+  // Build steps array for sidebar
   const getSteps = () => {
-    const step1Label = (onboardingPath === 'kyc' || onboardingPath === 'declined') 
+    const step1Label = onboardingPath === 'kyc' 
       ? 'Provide more information' 
       : 'Review your information';
     
-    // All paths show the same steps in the sidebar (full flow)
-    // The declined path just exits early after use case step
+    // Show full expected flow in sidebar
+    // If user gets declined, they'll see processing/declined screens which hide the sidebar
     return [
       { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
       { label: step1Label, status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
@@ -1156,6 +1191,15 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const steps = getSteps();
 
   const handleContinue = () => {
+    // After step 3 (Cardholders), check if user should be declined
+    if (currentStep === 3 && isDeclined === null) {
+      const shouldDecline = shouldUserBeDeclined(selectedUseCase, selectedCardHolder);
+      setIsDeclined(shouldDecline);
+      // Continue to next step (which will now be appropriate based on decline status)
+      setCurrentStep(4);
+      return;
+    }
+    
     if (currentStep < maxStep) {
       setCurrentStep(currentStep + 1);
     }
@@ -1184,8 +1228,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   // Processing and final screens
   const isProcessingScreen = currentStep === processingStep && !showDashboardSuccess;
   const isFinalScreen = (currentStep === finalStep || showDashboardSuccess);
-  const isSuccessScreen = (isFinalScreen && onboardingPath !== 'declined') || showDashboardSuccess;
-  const isDeclinedScreen = isFinalScreen && onboardingPath === 'declined' && !showDashboardSuccess;
+  const isSuccessScreen = (isFinalScreen && !isDeclinedFlow) || showDashboardSuccess;
+  const isDeclinedScreen = isFinalScreen && isDeclinedFlow && !showDashboardSuccess;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -1263,11 +1307,11 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                       setSelectedSetupType={setSelectedSetupType}
                     />
                   )}
-                  {/* Step 1: Review info (happy) or Provide more info (kyc/declined) */}
+                  {/* Step 1: Review info (happy) or Provide more info (kyc) */}
                   {currentStep === 1 && onboardingPath === 'happy' && (
                     <ReviewInfoContent onContinue={handleContinue} />
                   )}
-                  {currentStep === 1 && (onboardingPath === 'kyc' || onboardingPath === 'declined') && (
+                  {currentStep === 1 && onboardingPath === 'kyc' && (
                     <OwnerInfoContent onContinue={handleContinue} />
                   )}
                   {currentStep === 2 && (
@@ -1280,17 +1324,29 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                     />
                   )}
                   
-                  {/* Path-dependent steps after Use Case */}
-                  {!isDeclinedPath ? (
+                  {/* Step 3: Cardholders (same for all paths) */}
+                  {currentStep === 3 && (
+                    <CardHoldersContent 
+                      onContinue={handleContinue}
+                      selectedCardHolder={selectedCardHolder}
+                      setSelectedCardHolder={setSelectedCardHolder}
+                    />
+                  )}
+                  
+                  {/* Steps 4+ depend on whether user is declined */}
+                  {isDeclinedFlow ? (
                     <>
-                      {/* Happy/KYC path: includes Describe card holders step */}
-                      {currentStep === 3 && (
-                        <CardHoldersContent 
-                          onContinue={handleContinue}
-                          selectedCardHolder={selectedCardHolder}
-                          setSelectedCardHolder={setSelectedCardHolder}
-                        />
+                      {/* Declined flow: processing → declined */}
+                      {currentStep === 4 && (
+                        <ProcessingContent />
                       )}
+                      {currentStep === 5 && (
+                        <DeclinedContent onClose={onClose} />
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {/* Normal flow: pricing → review → processing → success */}
                       {currentStep === 4 && (
                         <PricingContent onContinue={handleContinue} />
                       )}
@@ -1311,16 +1367,6 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                           onStartIntegrating={handleStartIntegratingClick} 
                           onViewDocs={onViewDocs || onComplete || onClose} 
                         />
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {/* Declined path: goes directly to processing/declined after use case */}
-                      {currentStep === 3 && (
-                        <ProcessingContent />
-                      )}
-                      {currentStep === 4 && (
-                        <DeclinedContent onClose={onClose} />
                       )}
                     </>
                   )}
