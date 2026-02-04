@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SetupIssuingModal from './SetupIssuingModal';
 import IssuingHomeView from './IssuingHomeView';
 import QuickstartGuideView, { BlueprintPanel, SetupGuide } from './QuickstartGuideView';
+import BalancesView from './BalancesView';
 import PrototypeControlPanel from '../../components/PrototypeControlPanel';
 
 // Icons as inline SVGs - matching Sail UI / Stripe Dashboard icons from Figma
@@ -221,6 +222,7 @@ const DashboardView = () => {
   const [showQuickstartGuide, setShowQuickstartGuide] = useState(false);
   const [showBlueprintOverlay, setShowBlueprintOverlay] = useState(false);
   const [isBlueprintMinimized, setIsBlueprintMinimized] = useState(false);
+  const [showBalancesView, setShowBalancesView] = useState(false);
   const [onboardingPath, setOnboardingPath] = useState('happy'); // 'happy', 'kyc', 'declined'
 
   const handleResetPrototype = () => {
@@ -229,6 +231,7 @@ const DashboardView = () => {
     setShowQuickstartGuide(false);
     setShowBlueprintOverlay(false);
     setIsBlueprintMinimized(false);
+    setShowBalancesView(false);
     setModalInitialStep(0);
     setModalKey(prev => prev + 1); // Increment key to remount modal with fresh state
   };
@@ -244,8 +247,8 @@ const DashboardView = () => {
     setShowQuickstartGuide(false);
     setShowBlueprintOverlay(false);
     setIsBlueprintMinimized(false);
-    // Happy/KYC paths: step 7 is final, Declined: step 6 is final
-    setModalInitialStep(onboardingPath === 'declined' ? 6 : 7);
+    // Happy/KYC paths: step 7 is final, Declined: step 4 is final
+    setModalInitialStep(onboardingPath === 'declined' ? 4 : 7);
     setModalKey(prev => prev + 1);
     setIsModalOpen(true);
   };
@@ -279,6 +282,24 @@ const DashboardView = () => {
   const handleViewIssuingDocs = () => {
     setIsModalOpen(false);
     setShowQuickstartGuide(true);
+  };
+
+  // "Go to Balances" -> Show Balances view (from dashboard setup path)
+  const handleGoToBalances = () => {
+    setIsModalOpen(false);
+    setShowBalancesView(true);
+    setActiveNav('balances');
+  };
+
+  // Jump to Balances view
+  const handleJumpToBalances = () => {
+    setIsOnboardingComplete(false);
+    setShowQuickstartGuide(false);
+    setShowBlueprintOverlay(false);
+    setIsBlueprintMinimized(false);
+    setShowBalancesView(true);
+    setActiveNav('balances');
+    setIsModalOpen(false);
   };
 
   // Render Quickstart Guide as a standalone full-page view (no dashboard sidebar)
@@ -464,7 +485,10 @@ const DashboardView = () => {
         </div>
 
         {/* Page Content */}
-        {isOnboardingComplete ? (
+        {showBalancesView ? (
+          /* Balances View - shown after "Manage in dashboard" setup */
+          <BalancesView />
+        ) : isOnboardingComplete ? (
           /* Issuing Home View - shown after onboarding */
           <>
             <IssuingHomeView />
@@ -548,6 +572,7 @@ const DashboardView = () => {
         onComplete={handleOnboardingComplete}
         onStartIntegrating={handleStartIntegrating}
         onViewDocs={handleViewIssuingDocs}
+        onGoToBalances={handleGoToBalances}
         initialStep={modalInitialStep}
         onboardingPath={onboardingPath}
       />
@@ -615,6 +640,12 @@ const DashboardView = () => {
                 3. Issuing dashboard
               </button>
             )}
+            <button
+              onClick={handleJumpToBalances}
+              className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+            >
+              4. Balances view
+            </button>
           </div>
         </div>
         <div className="border-t border-gray-200 pt-3">

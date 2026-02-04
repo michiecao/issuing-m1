@@ -239,7 +239,7 @@ const CustomSetupCallout = () => (
 );
 
 // Step 0: Choose Setup Type Content
-const ChooseSetupTypeContent = ({ onContinue, selectedSetupType, setSelectedSetupType }) => (
+const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupType, setSelectedSetupType }) => (
   <div className="w-full max-w-[520px]">
     {/* Page Header */}
     <div className="mb-8">
@@ -265,7 +265,7 @@ const ChooseSetupTypeContent = ({ onContinue, selectedSetupType, setSelectedSetu
         illustration={<DashboardIllustration />}
         onContinue={() => {
           setSelectedSetupType('dashboard');
-          onContinue();
+          onDashboardSetup();
         }}
       />
       
@@ -838,11 +838,65 @@ const FeatureHighlight = ({ icon: Icon, title, children }) => (
   </div>
 );
 
+// API Code Illustration for "You're ready to start building"
+const ApiCodeIllustration = () => (
+  <div className="w-full h-[220px] bg-[#e3e8ee] rounded-xl overflow-hidden relative">
+    {/* Terminal window - centered horizontally */}
+    <div className="absolute left-1/2 -translate-x-1/2 top-6 w-[480px] bg-[#1a1f36] rounded-xl p-5 shadow-xl">
+      {/* Window controls */}
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+        <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+        <div className="w-3 h-3 rounded-full bg-[#28ca42]" />
+        <span className="ml-3 text-[11px] text-[#6b7280] font-mono">create-card.js</span>
+      </div>
+      
+      {/* Code content */}
+      <div className="font-mono text-[12px] leading-[20px] space-y-0.5">
+        <div className="flex">
+          <span className="w-6 text-[#4b5563] text-right mr-4 select-none">1</span>
+          <span><span className="text-[#c084fc]">const</span> <span className="text-[#e2e8f0]">stripe</span> <span className="text-[#94a3b8]">=</span> <span className="text-[#60a5fa]">require</span><span className="text-[#e2e8f0]">(</span><span className="text-[#a5f3ab]">'stripe'</span><span className="text-[#e2e8f0]">);</span></span>
+        </div>
+        <div className="flex">
+          <span className="w-6 text-[#4b5563] text-right mr-4 select-none">2</span>
+          <span className="text-[#4b5563]"></span>
+        </div>
+        <div className="flex">
+          <span className="w-6 text-[#4b5563] text-right mr-4 select-none">3</span>
+          <span><span className="text-[#c084fc]">const</span> <span className="text-[#e2e8f0]">card</span> <span className="text-[#94a3b8]">=</span> <span className="text-[#c084fc]">await</span> <span className="text-[#e2e8f0]">stripe.issuing.cards</span></span>
+        </div>
+        <div className="flex">
+          <span className="w-6 text-[#4b5563] text-right mr-4 select-none">4</span>
+          <span><span className="text-[#e2e8f0]">  .create</span><span className="text-[#fbbf24]">{"({"}</span></span>
+        </div>
+        <div className="flex">
+          <span className="w-6 text-[#4b5563] text-right mr-4 select-none">5</span>
+          <span><span className="text-[#60a5fa]">    cardholder</span><span className="text-[#e2e8f0]">:</span> <span className="text-[#a5f3ab]">'ich_1234'</span><span className="text-[#e2e8f0]">,</span></span>
+        </div>
+        <div className="flex">
+          <span className="w-6 text-[#4b5563] text-right mr-4 select-none">6</span>
+          <span><span className="text-[#60a5fa]">    type</span><span className="text-[#e2e8f0]">:</span> <span className="text-[#a5f3ab]">'virtual'</span><span className="text-[#e2e8f0]">,</span></span>
+        </div>
+        <div className="flex">
+          <span className="w-6 text-[#4b5563] text-right mr-4 select-none">7</span>
+          <span><span className="text-[#60a5fa]">    currency</span><span className="text-[#e2e8f0]">:</span> <span className="text-[#a5f3ab]">'usd'</span></span>
+        </div>
+        <div className="flex">
+          <span className="w-6 text-[#4b5563] text-right mr-4 select-none">8</span>
+          <span><span className="text-[#fbbf24]">{"  })"}</span><span className="text-[#e2e8f0]">;</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 // Step 5: Success Screen - "You're ready to start building"
 const SuccessContent = ({ onStartIntegrating, onViewDocs }) => (
   <div className="w-full max-w-[580px] px-4">
-    {/* Illustration Placeholder */}
-    <div className="bg-[#f5f6f8] border border-[#d5dbe1] rounded-xl h-[212px] mb-8" />
+    {/* API Code Illustration */}
+    <div className="mb-8">
+      <ApiCodeIllustration />
+    </div>
     
     {/* Header */}
     <div className="mb-8">
@@ -885,61 +939,129 @@ const SuccessContent = ({ onStartIntegrating, onViewDocs }) => (
   </div>
 );
 
-// Declined Content (Step 7 for declined path)
-const DeclinedContent = ({ onClose }) => (
-  <div className="w-full max-w-[580px] px-4 flex flex-col items-center text-center">
-    {/* Warning Icon */}
-    <div className="w-16 h-16 rounded-full bg-[#fef3cd] flex items-center justify-center mb-6">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 10V18M16 22V22.01" stroke="#B45309" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M3.77 22.91L13.88 5.17C14.05 4.88 14.29 4.64 14.58 4.48C14.87 4.32 15.19 4.23 15.52 4.23C15.85 4.23 16.17 4.32 16.46 4.48C16.75 4.64 16.99 4.88 17.16 5.17L27.27 22.91C27.44 23.2 27.53 23.53 27.53 23.87C27.53 24.21 27.44 24.54 27.27 24.83C27.1 25.12 26.86 25.36 26.57 25.52C26.28 25.68 25.95 25.77 25.62 25.77H5.42C5.09 25.77 4.76 25.68 4.47 25.52C4.18 25.36 3.94 25.12 3.77 24.83C3.6 24.54 3.51 24.21 3.51 23.87C3.51 23.53 3.6 23.2 3.77 22.91Z" stroke="#B45309" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
+// Resource Link Icons with rounded background
+const ContactIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1.18047" y="1.18035" width="40.1326" height="40.1326" rx="10.6233" fill="#F5F6F8"/>
+    <rect x="1.18047" y="1.18035" width="40.1326" height="40.1326" rx="10.6233" stroke="white" strokeWidth="2.36074"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M19.9322 17.6145C19.6575 17.9097 19.4761 18.3587 19.4761 18.9396C19.4761 19.4285 19.0798 19.8249 18.5908 19.8249C18.1019 19.8249 17.7056 19.4285 17.7056 18.9396C17.7056 17.9914 18.0059 17.0856 18.636 16.4084C19.2745 15.7222 20.1833 15.3448 21.2467 15.3448C22.31 15.3448 23.2189 15.7222 23.8574 16.4084C24.4875 17.0856 24.7878 17.9914 24.7878 18.9396C24.7878 20.3959 23.7622 21.2076 23.0932 21.6912C22.982 21.7716 22.8824 21.8418 22.7922 21.9054C22.5681 22.0634 22.4025 22.1802 22.2617 22.3099C22.1795 22.3858 22.145 22.4322 22.132 22.4534V23.0172C22.132 23.5062 21.7356 23.9025 21.2467 23.9025C20.7578 23.9025 20.3614 23.5062 20.3614 23.0172V22.427C20.3614 21.7625 20.746 21.2991 21.0616 21.0082C21.2955 20.7925 21.6003 20.5781 21.8542 20.3994C21.9265 20.3486 21.9947 20.3006 22.056 20.2563C22.7149 19.7799 23.0172 19.4381 23.0172 18.9396C23.0172 18.3587 22.8358 17.9097 22.5611 17.6145C22.2948 17.3282 21.8758 17.1154 21.2467 17.1154C20.6176 17.1154 20.1985 17.3282 19.9322 17.6145Z" fill="#474E5A"/>
+    <path d="M22.427 25.9682C22.427 26.619 21.8975 27.1485 21.2467 27.1485C20.5958 27.1485 20.0663 26.619 20.0663 25.9682C20.0663 25.3173 20.5958 24.7878 21.2467 24.7878C21.8975 24.7878 22.427 25.3173 22.427 25.9682Z" fill="#474E5A"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M21.2467 28.9191C25.484 28.9191 28.9191 25.484 28.9191 21.2467C28.9191 17.0093 25.484 13.5743 21.2467 13.5743C17.0093 13.5743 13.5743 17.0093 13.5743 21.2467C13.5743 22.4532 13.7855 23.1441 14.2856 24.0778C14.6589 24.7748 14.767 25.6282 14.4957 26.4421L13.7179 28.7754L16.0512 27.9977C16.8651 27.7264 17.7186 27.8344 18.4156 28.2078C19.3492 28.7078 20.0401 28.9191 21.2467 28.9191ZM21.2467 30.6896C26.4619 30.6896 30.6896 26.4619 30.6896 21.2467C30.6896 16.0315 26.4619 11.8037 21.2467 11.8037C16.0315 11.8037 11.8037 16.0315 11.8037 21.2467C11.8037 22.7697 12.0993 23.7458 12.7248 24.9137C12.8844 25.2117 12.9229 25.5616 12.816 25.8822L11.8643 28.7374C11.8242 28.8577 11.8037 28.9838 11.8037 29.1106V29.5093C11.8037 30.1612 12.3322 30.6896 12.9841 30.6896H13.3827C13.5096 30.6896 13.6356 30.6692 13.756 30.6291L16.6111 29.6774C16.9318 29.5705 17.2817 29.609 17.5796 29.7686C18.7476 30.3941 19.7236 30.6896 21.2467 30.6896Z" fill="#474E5A"/>
+  </svg>
+);
+
+const SupportedUseCasesIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1.18047" y="1.18035" width="40.1326" height="40.1326" rx="10.6233" fill="#F5F6F8"/>
+    <rect x="1.18047" y="1.18035" width="40.1326" height="40.1326" rx="10.6233" stroke="white" strokeWidth="2.36074"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M11.8037 15.0498C11.8037 13.909 12.7285 12.9841 13.8694 12.9841H18.2958C19.4823 12.9841 20.543 13.5228 21.2467 14.369C21.9504 13.5228 23.0111 12.9841 24.1976 12.9841H28.624C29.7648 12.9841 30.6896 13.909 30.6896 15.0498V27.4437C30.6896 28.5845 29.7648 29.5093 28.624 29.5093H13.8694C12.7285 29.5093 11.8037 28.5845 11.8037 27.4437V15.0498ZM20.3614 27.7388V16.8203C20.3614 15.6795 19.4366 14.7547 18.2958 14.7547H13.8694C13.7064 14.7547 13.5743 14.8868 13.5743 15.0498V27.4437C13.5743 27.6066 13.7064 27.7388 13.8694 27.7388H20.3614ZM22.132 27.7388H28.624C28.787 27.7388 28.9191 27.6066 28.9191 27.4437V15.0498C28.9191 14.8868 28.787 14.7547 28.624 14.7547H26.5537V19.1811C26.5537 19.67 26.1574 20.0664 25.6685 20.0664C25.1795 20.0664 24.7832 19.67 24.7832 19.1811V14.7547H24.1976C23.0568 14.7547 22.132 15.6795 22.132 16.8203V27.7388Z" fill="#474E5A"/>
+  </svg>
+);
+
+const SandboxIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1.18047" y="1.18035" width="40.1326" height="40.1326" rx="10.6233" fill="#F5F6F8"/>
+    <rect x="1.18047" y="1.18035" width="40.1326" height="40.1326" rx="10.6233" stroke="white" strokeWidth="2.36074"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M20.1819 13.7957C20.4945 13.6498 20.8353 13.5742 21.1802 13.5742H21.3131C21.6581 13.5742 21.9989 13.6498 22.3115 13.7957L29.3272 17.0697C30.1584 17.4576 30.6896 18.2918 30.6896 19.209V23.3287C30.6896 24.2229 30.1844 25.0403 29.3847 25.4402L23.1747 28.5452C22.683 28.791 22.1408 28.919 21.5911 28.919H20.9022C20.3525 28.919 19.8103 28.791 19.3186 28.5452L13.1087 25.4402C12.3089 25.0403 11.8037 24.2229 11.8037 23.3287V19.209C11.8037 18.2918 12.335 17.4576 13.1661 17.0697L20.1819 13.7957ZM28.9191 20.1708V23.3287C28.9191 23.5523 28.7928 23.7566 28.5928 23.8566L22.3829 26.9616C22.3018 27.0021 22.2179 27.0363 22.132 27.0638V23.5644L28.9191 20.1708ZM28.2551 18.5233L25.3251 19.9883L21.9549 18.4328V15.5832L28.2551 18.5233ZM20.5385 15.5832L14.2383 18.5232L17.1683 19.9882L20.5385 18.4327V15.5832ZM21.2467 22.0275L23.7027 20.7995L21.2466 19.6659L18.7907 20.7994L21.2467 22.0275ZM13.5743 20.1708L20.3614 23.5644V27.0639C20.2755 27.0363 20.1916 27.0021 20.1104 26.9616L13.9005 23.8566C13.7006 23.7566 13.5743 23.5523 13.5743 23.3287V20.1708Z" fill="#474E5A"/>
+  </svg>
+);
+
+// Resource Link Component for declined view
+const ResourceLink = ({ icon: Icon, children, href = "#" }) => (
+  <a 
+    href={href}
+    className="flex items-center gap-3 text-[14px] font-semibold text-[#533afd] hover:text-[#4730d9] transition-colors"
+  >
+    <div className="shrink-0">
+      <Icon />
     </div>
-    
+    <span>{children}</span>
+  </a>
+);
+
+// Declined Content (Step 6 for declined path)
+const DeclinedContent = ({ onClose }) => (
+  <div className="w-full max-w-[580px] px-4">
     {/* Page Header */}
     <div className="mb-6">
-      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        We can't approve your application right now
+      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-3">
+        We're not able to support this use case
       </h1>
-      <p className="text-[16px] text-[#596171] leading-[24px]">
-        Based on the information provided, we're unable to approve your Issuing application at this time. This decision was made based on our review of your business information and compliance requirements.
+      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px] mb-4">
+        Thanks for providing details about your business. Based on what you've told us, Stripe can't support this type of card program. If you've think we've got it wrong, reach out to Stripe support and we're happy to discuss.
+      </p>
+      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
+        In the meantime, explore supported use cases or continue testing Issuing in your sandbox.
       </p>
     </div>
     
-    {/* Info Box */}
-    <div className="w-full bg-[#f5f6f8] rounded-lg p-6 mb-6 text-left">
-      <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">What happens next?</h3>
-      <ul className="space-y-2 text-[14px] text-[#596171]">
-        <li className="flex items-start gap-2">
-          <span className="text-[#596171] mt-1">•</span>
-          <span>You'll receive an email with more details about this decision within 1-2 business days.</span>
-        </li>
-        <li className="flex items-start gap-2">
-          <span className="text-[#596171] mt-1">•</span>
-          <span>If you believe this decision was made in error, you can contact our support team.</span>
-        </li>
-        <li className="flex items-start gap-2">
-          <span className="text-[#596171] mt-1">•</span>
-          <span>You may reapply after 90 days with updated business information.</span>
-        </li>
-      </ul>
-    </div>
-    
-    {/* Buttons */}
-    <div className="flex flex-col gap-4 w-full">
+    {/* Return to Dashboard Button */}
+    <div className="mb-8">
       <button 
         onClick={onClose}
         className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
         Return to dashboard
       </button>
-      <a 
-        href="#"
-        className="w-full py-3 text-[#533afd] font-semibold text-base hover:underline text-center"
-      >
-        Contact support
-      </a>
     </div>
+    
+    {/* Resources Section */}
+    <div>
+      <h3 className="font-bold text-[16px] text-[#353a44] leading-6 mb-4">Resources</h3>
+      <div className="flex flex-col gap-3">
+        <ResourceLink icon={ContactIcon}>Contact Stripe support</ResourceLink>
+        <ResourceLink icon={SupportedUseCasesIcon}>See supportable use cases</ResourceLink>
+        <ResourceLink icon={SandboxIcon}>Explore Issuing in sandbox</ResourceLink>
+      </div>
+    </div>
+  </div>
+);
+
+// Success Illustration - Financial Accounts illustration
+const SuccessIllustration = () => (
+  <div className="w-full h-[220px] flex items-center justify-center">
+    <img 
+      src={new URL('../../assets/fa-illustration.svg', import.meta.url).href}
+      alt="Financial accounts illustration"
+      className="w-full h-full object-contain"
+    />
+  </div>
+);
+
+// Dashboard Setup Success Content - "You're all set" view for Manage in dashboard path
+const DashboardSetupSuccessContent = ({ onGoToBalances }) => (
+  <div className="w-full max-w-[580px] px-4">
+    {/* Success Illustration */}
+    <div className="mb-6">
+      <SuccessIllustration />
+    </div>
+    
+    {/* Header */}
+    <div className="mb-6">
+      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
+        You're all set
+      </h1>
+      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
+        You can start creating cards and tracking expenses in your redesigned Balances page.
+      </p>
+    </div>
+
+    {/* What's New Section */}
+    <div className="mb-6">
+      <p className="text-[14px] text-[#596171] leading-5 mb-4">Here's what's new:</p>
+      
+      <FeatureHighlight icon={BalanceIcon} title="Financial accounts">
+        Your cards spend from your financial account balance. You can also store funds in multiple currencies and send payouts.
+      </FeatureHighlight>
+    </div>
+    
+    {/* Go to Balances Button */}
+    <button 
+      onClick={onGoToBalances}
+      className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+    >
+      Go to Balances
+    </button>
   </div>
 );
 
@@ -959,24 +1081,26 @@ const UseCaseCallout = () => (
 );
 
 // Main Modal Component
-const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onViewDocs, initialStep = 0, onboardingPath = 'happy' }) => {
+const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy' }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
   const [selectedCardHolder, setSelectedCardHolder] = useState(null);
   const [description, setDescription] = useState('');
   const [agreedTerms, setAgreedTerms] = useState(false);
+  const [showDashboardSuccess, setShowDashboardSuccess] = useState(false);
   
-  // Declined path has fewer steps (no "Describe card holders" step)
-  const hasCardHoldersStep = onboardingPath !== 'declined';
-  const maxStep = hasCardHoldersStep ? 7 : 6;
-  const processingStep = hasCardHoldersStep ? 6 : 5;
-  const finalStep = hasCardHoldersStep ? 7 : 6;
+  // Declined path is shorter - goes directly from use case to processing/declined
+  const isDeclinedPath = onboardingPath === 'declined';
+  const maxStep = isDeclinedPath ? 4 : 7;
+  const processingStep = isDeclinedPath ? 3 : 6;
+  const finalStep = isDeclinedPath ? 4 : 7;
   
   // Reset to initial step when modal opens with a new initialStep
   React.useEffect(() => {
     if (isOpen) {
       setCurrentStep(initialStep);
+      setShowDashboardSuccess(false);
     }
   }, [isOpen, initialStep]);
 
@@ -1002,39 +1126,31 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   //   5: Review and submit
   //   6: Processing
   //   7: Success
-  // Declined path (7 steps - no card holders):
+  // Declined path (5 steps - goes directly to declined after use case):
   //   0: Choose setup type
   //   1: Provide more information
   //   2: Describe use case
-  //   3: Review pricing
-  //   4: Review and submit
-  //   5: Processing
-  //   6: Declined
+  //   3: Processing
+  //   4: Declined
   
   // Build steps array based on path
+  // Note: For declined path, we show the full steps in the sidebar until after use case step,
+  // since we wouldn't know to decline until we get use case info
   const getSteps = () => {
     const step1Label = (onboardingPath === 'kyc' || onboardingPath === 'declined') 
       ? 'Provide more information' 
       : 'Review your information';
     
-    if (hasCardHoldersStep) {
-      return [
-        { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
-        { label: step1Label, status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
-        { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
-        { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
-        { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
-        { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending' },
-      ];
-    } else {
-      return [
-        { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
-        { label: step1Label, status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
-        { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
-        { label: 'Review pricing', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
-        { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
-      ];
-    }
+    // All paths show the same steps in the sidebar (full flow)
+    // The declined path just exits early after use case step
+    return [
+      { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
+      { label: step1Label, status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
+      { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
+      { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
+      { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
+      { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending' },
+    ];
   };
   
   const steps = getSteps();
@@ -1051,11 +1167,25 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
     }
   };
 
+  const handleDashboardSetup = () => {
+    setShowDashboardSuccess(true);
+  };
+
+  const handleGoToBalances = () => {
+    if (onGoToBalances) {
+      onGoToBalances();
+    } else if (onComplete) {
+      onComplete();
+    } else {
+      onClose();
+    }
+  };
+
   // Processing and final screens
-  const isProcessingScreen = currentStep === processingStep;
-  const isFinalScreen = currentStep === finalStep;
-  const isSuccessScreen = isFinalScreen && onboardingPath !== 'declined';
-  const isDeclinedScreen = isFinalScreen && onboardingPath === 'declined';
+  const isProcessingScreen = currentStep === processingStep && !showDashboardSuccess;
+  const isFinalScreen = (currentStep === finalStep || showDashboardSuccess);
+  const isSuccessScreen = (isFinalScreen && onboardingPath !== 'declined') || showDashboardSuccess;
+  const isDeclinedScreen = isFinalScreen && onboardingPath === 'declined' && !showDashboardSuccess;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -1117,83 +1247,82 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           {/* Main Content - Centered */}
           <div className="flex-1 overflow-y-auto scrollbar-hide">
             <div className="flex justify-center py-6 min-h-full">
-              {currentStep === 0 && (
-                <ChooseSetupTypeContent
-                  onContinue={handleContinue}
-                  selectedSetupType={selectedSetupType}
-                  setSelectedSetupType={setSelectedSetupType}
-                />
-              )}
-              {/* Step 1: Review info (happy) or Provide more info (kyc/declined) */}
-              {currentStep === 1 && onboardingPath === 'happy' && (
-                <ReviewInfoContent onContinue={handleContinue} />
-              )}
-              {currentStep === 1 && (onboardingPath === 'kyc' || onboardingPath === 'declined') && (
-                <OwnerInfoContent onContinue={handleContinue} />
-              )}
-              {currentStep === 2 && (
-                <UseCaseContent 
-                  onContinue={handleContinue}
-                  selectedUseCase={selectedUseCase}
-                  setSelectedUseCase={setSelectedUseCase}
-                  description={description}
-                  setDescription={setDescription}
-                />
+              {/* Dashboard Setup Success - shown when user selects "Manage in dashboard" */}
+              {showDashboardSuccess && (
+                <DashboardSetupSuccessContent onGoToBalances={handleGoToBalances} />
               )}
               
-              {/* Path-dependent steps after Use Case */}
-              {hasCardHoldersStep ? (
+              {/* Regular flow - hidden when dashboard success is shown */}
+              {!showDashboardSuccess && (
                 <>
-                  {/* Happy/KYC path: includes Describe card holders step */}
-                  {currentStep === 3 && (
-                    <CardHoldersContent 
+                  {currentStep === 0 && (
+                    <ChooseSetupTypeContent
                       onContinue={handleContinue}
-                      selectedCardHolder={selectedCardHolder}
-                      setSelectedCardHolder={setSelectedCardHolder}
+                      onDashboardSetup={handleDashboardSetup}
+                      selectedSetupType={selectedSetupType}
+                      setSelectedSetupType={setSelectedSetupType}
                     />
                   )}
-                  {currentStep === 4 && (
-                    <PricingContent onContinue={handleContinue} />
+                  {/* Step 1: Review info (happy) or Provide more info (kyc/declined) */}
+                  {currentStep === 1 && onboardingPath === 'happy' && (
+                    <ReviewInfoContent onContinue={handleContinue} />
                   )}
-                  {currentStep === 5 && (
-                    <SubmitReviewContent
-                      onSubmit={handleContinue}
+                  {currentStep === 1 && (onboardingPath === 'kyc' || onboardingPath === 'declined') && (
+                    <OwnerInfoContent onContinue={handleContinue} />
+                  )}
+                  {currentStep === 2 && (
+                    <UseCaseContent 
+                      onContinue={handleContinue}
                       selectedUseCase={selectedUseCase}
+                      setSelectedUseCase={setSelectedUseCase}
                       description={description}
-                      agreedTerms={agreedTerms}
-                      setAgreedTerms={setAgreedTerms}
+                      setDescription={setDescription}
                     />
                   )}
-                  {currentStep === 6 && (
-                    <ProcessingContent />
-                  )}
-                  {currentStep === 7 && (
-                    <SuccessContent 
-                      onStartIntegrating={handleStartIntegratingClick} 
-                      onViewDocs={onViewDocs || onComplete || onClose} 
-                    />
-                  )}
-                </>
-              ) : (
-                <>
-                  {/* Declined path: no card holders step */}
-                  {currentStep === 3 && (
-                    <PricingContent onContinue={handleContinue} />
-                  )}
-                  {currentStep === 4 && (
-                    <SubmitReviewContent
-                      onSubmit={handleContinue}
-                      selectedUseCase={selectedUseCase}
-                      description={description}
-                      agreedTerms={agreedTerms}
-                      setAgreedTerms={setAgreedTerms}
-                    />
-                  )}
-                  {currentStep === 5 && (
-                    <ProcessingContent />
-                  )}
-                  {currentStep === 6 && (
-                    <DeclinedContent onClose={onClose} />
+                  
+                  {/* Path-dependent steps after Use Case */}
+                  {!isDeclinedPath ? (
+                    <>
+                      {/* Happy/KYC path: includes Describe card holders step */}
+                      {currentStep === 3 && (
+                        <CardHoldersContent 
+                          onContinue={handleContinue}
+                          selectedCardHolder={selectedCardHolder}
+                          setSelectedCardHolder={setSelectedCardHolder}
+                        />
+                      )}
+                      {currentStep === 4 && (
+                        <PricingContent onContinue={handleContinue} />
+                      )}
+                      {currentStep === 5 && (
+                        <SubmitReviewContent
+                          onSubmit={handleContinue}
+                          selectedUseCase={selectedUseCase}
+                          description={description}
+                          agreedTerms={agreedTerms}
+                          setAgreedTerms={setAgreedTerms}
+                        />
+                      )}
+                      {currentStep === 6 && (
+                        <ProcessingContent />
+                      )}
+                      {currentStep === 7 && (
+                        <SuccessContent 
+                          onStartIntegrating={handleStartIntegratingClick} 
+                          onViewDocs={onViewDocs || onComplete || onClose} 
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {/* Declined path: goes directly to processing/declined after use case */}
+                      {currentStep === 3 && (
+                        <ProcessingContent />
+                      )}
+                      {currentStep === 4 && (
+                        <DeclinedContent onClose={onClose} />
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -1202,8 +1331,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           
           {/* Right Sidebar - Contextual content */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
-            {currentStep === 0 && <CustomSetupCallout />}
-            {currentStep === 2 && <UseCaseCallout />}
+            {currentStep === 0 && !showDashboardSuccess && <CustomSetupCallout />}
+            {currentStep === 2 && !showDashboardSuccess && <UseCaseCallout />}
           </div>
         </div>
       </div>
