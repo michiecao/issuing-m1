@@ -43,13 +43,23 @@ const ApiIcon = () => (
 );
 
 // Task List Item Component
-const TaskListItem = ({ label, status, isLast }) => {
+const TaskListItem = ({ label, status, isLast, onClick }) => {
   const isActive = status === 'active';
   const isComplete = status === 'complete';
+  const isClickable = isComplete && onClick;
+  
+  const handleClick = () => {
+    if (isClickable) {
+      onClick();
+    }
+  };
   
   return (
     <div className="flex flex-col">
-      <div className="flex gap-2 items-start">
+      <div 
+        className={`flex gap-2 items-start group ${isClickable ? 'cursor-pointer' : ''}`}
+        onClick={handleClick}
+      >
         {/* Progress Indicator */}
         <div className="w-5 h-5 flex items-center justify-center shrink-0">
           {isComplete ? (
@@ -66,7 +76,7 @@ const TaskListItem = ({ label, status, isLast }) => {
         </div>
         
         {/* Label */}
-        <span className={`text-sm leading-5 tracking-[-0.15px] ${isActive ? 'text-[#533afd]' : 'text-[#596171]'}`}>
+        <span className={`text-sm leading-5 tracking-[-0.15px] ${isActive ? 'text-[#533afd]' : 'text-[#596171]'} ${isClickable ? 'group-hover:text-[#533afd]' : ''}`}>
           {label}
         </span>
       </div>
@@ -1423,22 +1433,22 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
     // For happy path, skip "Review your information" step
     if (onboardingPath === 'happy') {
       return [
-        { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
-        { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
-        { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
-        { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
-        { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending' },
+        { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
+        { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
+        { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
+        { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
+        { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending', stepNumber: 5 },
       ];
     }
     
     // For KYC path, include "Provide more information" step
     return [
-      { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
-      { label: 'Provide more information', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
-      { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
-      { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
-      { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
-      { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending' },
+      { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
+      { label: 'Provide more information', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
+      { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
+      { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
+      { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
+      { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending', stepNumber: 5 },
     ];
   };
   
@@ -1558,6 +1568,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                     label={step.label}
                     status={step.status}
                     isLast={index === steps.length - 1}
+                    onClick={step.status === 'complete' ? () => setCurrentStep(step.stepNumber) : undefined}
                   />
                 ))}
               </div>
