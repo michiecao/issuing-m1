@@ -194,7 +194,7 @@ const SetupTypeCard = ({ title, description, features, onContinue, illustration 
   <div className="bg-white border border-[#d8dee4] rounded-lg p-6 w-full">
     <div className="flex gap-6">
       {/* Left side - Illustration */}
-      <div className="w-[140px] min-h-[140px] shrink-0">
+      <div className="w-[140px] min-h-[178px] self-stretch shrink-0">
         {illustration}
       </div>
       
@@ -255,22 +255,6 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
     {/* Setup Type Cards */}
     <div className="flex flex-col gap-4">
       <SetupTypeCard
-        title="Manage in dashboard"
-        description="Create cards and manage your business in the Stripe dashboard."
-        features={[
-          'Best for personal use',
-          'No access to Issuing APIs',
-          'No code required',
-          'Free',
-        ]}
-        illustration={<DashboardIllustration />}
-        onContinue={() => {
-          setSelectedSetupType('dashboard');
-          onDashboardSetup();
-        }}
-      />
-      
-      <SetupTypeCard
         title="Build with Stripe Issuing APIs"
         description="You write the code - Stripe handles the rest."
         features={[
@@ -283,6 +267,22 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         onContinue={() => {
           setSelectedSetupType('api');
           onContinue();
+        }}
+      />
+      
+      <SetupTypeCard
+        title="Manage in dashboard"
+        description="Create cards and manage your business in the Stripe dashboard."
+        features={[
+          'Best for personal use',
+          'No access to Issuing APIs',
+          'No code required',
+          'Free',
+        ]}
+        illustration={<DashboardIllustration />}
+        onContinue={() => {
+          setSelectedSetupType('dashboard');
+          onDashboardSetup();
         }}
       />
     </div>
@@ -436,12 +436,6 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
       <div className="mb-8">
         <div className="space-y-[9px]">
           <UseCaseOption
-            title="Corporate expense management"
-            description="Let employees or contractors make purchases on your business' behalf."
-            selected={selectedUseCase === 'corporate'}
-            onClick={() => setSelectedUseCase('corporate')}
-          />
-          <UseCaseOption
             title="B2B payments"
             description="Buy goods or services for inventory to resell to your customers."
             selected={selectedUseCase === 'b2b'}
@@ -453,15 +447,21 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
             selected={selectedUseCase === 'ondemand'}
             onClick={() => setSelectedUseCase('ondemand')}
           />
+          <UseCaseOption
+            title="Corporate expense management"
+            description="Let employees or contractors make purchases on your business' behalf."
+            selected={selectedUseCase === 'corporate'}
+            onClick={() => setSelectedUseCase('corporate')}
+          />
         </div>
         
-        {/* Specialized Use Cases Toggle */}
+        {/* Additional Use Cases Toggle */}
         <button 
           onClick={() => setMoreOptionsExpanded(!moreOptionsExpanded)}
           className="flex items-center gap-1 mt-4 text-[#596171] hover:text-[#474e5a]"
         >
           <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${moreOptionsExpanded ? '' : '-rotate-90'}`} />
-          <span className="font-semibold text-sm">Specialized use cases</span>
+          <span className="font-semibold text-sm">Additional use cases</span>
         </button>
         
         {/* Expanded Specialized Use Cases */}
@@ -570,7 +570,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
         }`}
       >
         <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">My business</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Example: employees or agents of your business</p>
+        <p className="text-[14px] text-[#596171] leading-5">Example: For yourself, employees or agents of your business</p>
       </button>
       <button
         onClick={() => setSelectedCardHolder('platforms')}
@@ -580,8 +580,8 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Businesses of my platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Example: LLC or S-corp entities using your platform</p>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Businesses on my platform</h4>
+        <p className="text-[14px] text-[#596171] leading-5">Example: For LLC or S-corp entities using your platform</p>
       </button>
       <button
         onClick={() => setSelectedCardHolder('consumers')}
@@ -592,7 +592,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
         }`}
       >
         <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Consumers on my platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Example: Individuals using your platform</p>
+        <p className="text-[14px] text-[#596171] leading-5">Example: For individuals using your platform</p>
       </button>
     </div>
     

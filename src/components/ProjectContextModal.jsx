@@ -19,17 +19,17 @@ const Section = ({ title, children }) => (
 
 // Content Components
 const ContentBlock = ({ children, className = '' }) => (
-  <div className={`text-[14px] text-[#596171] leading-relaxed ${className}`}>
+  <div className={`text-[16px] text-[#353a44] leading-relaxed ${className}`}>
     {children}
   </div>
 );
 
 const ContentHeading = ({ children }) => (
-  <h4 className="font-semibold text-[14px] text-[#353a44] mb-1">{children}</h4>
+  <h4 className="font-semibold text-[18px] text-[#353a44] mb-2">{children}</h4>
 );
 
 const BulletList = ({ items }) => (
-  <ul className="list-disc list-outside ml-4 space-y-1 text-[14px] text-[#596171]">
+  <ul className="list-disc list-outside ml-4 space-y-1 text-[16px] text-[#353a44]">
     {items.map((item, index) => (
       <li key={index}>{item}</li>
     ))}
@@ -37,43 +37,15 @@ const BulletList = ({ items }) => (
 );
 
 const NumberedList = ({ items }) => (
-  <ol className="list-decimal list-outside ml-4 space-y-1 text-[14px] text-[#596171]">
+  <ol className="list-decimal list-outside ml-4 space-y-1 text-[16px] text-[#353a44]">
     {items.map((item, index) => (
       <li key={index}>{item}</li>
     ))}
   </ol>
 );
 
-// Section definitions for navigation
-const SECTIONS = [
-  { id: 'target-user-goals', title: 'Goals' },
-  { id: 'direct-vs-connect', title: 'Direct vs Connect' },
-  { id: 'design-principles', title: 'High Level Design Principles' },
-];
-
-// Navigation Item
-const NavItem = ({ title, active, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`w-full text-left px-3 py-2 text-[13px] rounded-md transition-colors ${
-      active 
-        ? 'bg-[#675dff]/10 text-[#675dff] font-medium' 
-        : 'text-[#596171] hover:bg-[#f5f6f8] hover:text-[#353a44]'
-    }`}
-  >
-    {title}
-  </button>
-);
-
 // Main Modal Component
 const ProjectContextModal = ({ isOpen, onClose }) => {
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -97,47 +69,28 @@ const ProjectContextModal = ({ isOpen, onClose }) => {
           </button>
         </div>
         
-        {/* Content with sidebar navigation */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Left Sidebar - Navigation */}
-          <div className="w-[220px] p-4 shrink-0 overflow-y-auto">
-            <nav className="space-y-0.5">
-              {SECTIONS.map((section) => (
-                <NavItem
-                  key={section.id}
-                  title={section.title}
-                  onClick={() => scrollToSection(section.id)}
-                />
-              ))}
-            </nav>
-          </div>
-
-          {/* Main Content - Scrollable */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="max-w-2xl mx-auto py-8 px-8">
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="max-w-[750px] mx-auto py-8 px-8">
               
               {/* Goals */}
               <div id="target-user-goals" className="scroll-mt-8">
                 <Section title="Goals">
                   <div className="space-y-5">
                     <div>
-                      <ContentHeading>M1 Goal</ContentHeading>
+                      <ContentHeading>For user</ContentHeading>
                       <ContentBlock>
-                        Enable startups to self-serve onboard onto Issuing's US Commercial prepaid card program in minutes, easily configure their card program, and go-live ASAP.
+                        Enable <span className="font-semibold">early and growth stage startups</span> to self-serve onboard onto Issuing's <span className="font-semibold">US Commercial prepaid card program</span> and <span className="font-semibold">Stripe Issuing API</span> in minutes, easily configure their card program, and go-live ASAP.
+                      </ContentBlock>
+                      <ContentBlock className="mt-3 p-3 border border-[#e3e8ee] rounded-md">
+                        Examples: <a href="https://imprint.co" target="_blank" rel="noopener noreferrer" className="text-[#675dff] hover:underline">Imprint</a>, <a href="https://rain.xyz" target="_blank" rel="noopener noreferrer" className="text-[#675dff] hover:underline">Rain.xyz</a>, Rho Financial
                       </ContentBlock>
                     </div>
                     <div>
-                      <ContentHeading>Target User</ContentHeading>
-                      <ContentBlock>Early / Growth Stage Startups</ContentBlock>
-                      <ContentBlock className="mt-2 p-3 bg-[#f7f8f9] rounded-md text-[13px]">
-                        Examples: <a href="https://imprint.co" target="_blank" rel="noopener noreferrer" className="text-[#675dff] hover:underline">Imprint</a>, <a href="https://rain.xyz" target="_blank" rel="noopener noreferrer" className="text-[#675dff] hover:underline">Rain.xyz</a>, Rho Financial — all onboarded onto Stripe self-serve.
-                      </ContentBlock>
-                    </div>
-                    <div>
-                      <ContentHeading>Business Impact</ContentHeading>
+                      <ContentHeading>For Stripe</ContentHeading>
                       <BulletList items={[
-                        <><strong>Unlock long tail growth:</strong> Lower barrier to entry for segments that are either growth stage and/or startups, expanding our total addressable market to address the long tail and creating opportunity for Issuing to diversify its core target audience.</>,
-                        <><strong>Create stickiness early on:</strong> As startups grow, Stripe grows with them. Stripe is seen as an early partner for these companies - ensuring we stay at the edge of innovation.</>
+                        <><span className="font-semibold">Unlock long tail growth</span><br />Lower barrier to entry for segments that are either growth stage and/or startups, expanding our total addressable market to address the long tail and creating opportunity for Issuing to diversify its core target audience.</>,
+                        <><span className="font-semibold">Create stickiness early on</span><br />As startups grow, Stripe grows with them. Stripe is seen as an early partner for these companies - ensuring we stay at the edge of innovation.</>
                       ]} />
                     </div>
                   </div>
@@ -146,47 +99,30 @@ const ProjectContextModal = ({ isOpen, onClose }) => {
 
               <div className="border-t border-[#e3e8ee] my-8" />
 
-              {/* Direct vs Connect */}
-              <div id="direct-vs-connect" className="scroll-mt-8">
-                <Section title="Direct vs Connect">
+              {/* Design Principles */}
+              <div id="design-principles" className="scroll-mt-8">
+                <Section title="Design Principles">
                   <div className="space-y-4">
-                    <div>
-                      <ContentHeading>Issuing on Stripe Direct</ContentHeading>
-                      <BulletList items={[
-                        "Businesses create cards for their own, personal business"
-                      ]} />
-                    </div>
-                    <div>
-                      <ContentHeading>Issuing on Stripe Connect</ContentHeading>
-                      <BulletList items={[
-                        "Businesses create cards for the businesses on their platform"
-                      ]} />
-                    </div>
-                    <ContentBlock className="p-3 bg-[#f7f8f9] rounded-md">
-                      Within both cases, businesses are able to manage their program either within the Stripe dashboard or via API.
+                    <ContentBlock>
+                      <span className="font-semibold">Issuing is the hub</span><br />
+                      Maintain a dedicated space where businesses can view all their Issuing programs at a global level
+                    </ContentBlock>
+                    <ContentBlock>
+                      <span className="font-semibold">Design for multi-FA and multi-product</span><br />
+                      Support multiple Financial Accounts and multiple Issuing Programs from day one
+                    </ContentBlock>
+                    <ContentBlock>
+                      <span className="font-semibold">Modular and scalable</span><br />
+                      Enable future expansion (region, fiat/onchain) without major rearchitecture
                     </ContentBlock>
                   </div>
                 </Section>
               </div>
 
-              <div className="border-t border-[#e3e8ee] my-8" />
-
-              {/* High Level Design Principles */}
-              <div id="design-principles" className="scroll-mt-8">
-                <Section title="High Level Design Principles">
-                  <NumberedList items={[
-                    "Maintain a space for Issuing to be a standalone product, allowing businesses to view all their Issuing programs at a global level",
-                    "Allow a design that supports a Multi-FA + multi-Issuing Program world",
-                    "Modular experience allowing for future permutations (i.e. region, fiat/onchain)"
-                  ]} />
-                </Section>
-              </div>
-
 
               {/* Spacer at bottom for scroll */}
-              <div className="h-16" />
+            <div className="h-16" />
 
-            </div>
           </div>
         </div>
         
