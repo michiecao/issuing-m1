@@ -10,7 +10,7 @@ const CloseIcon = () => (
 // Section Component - always visible, scrollable
 const Section = ({ title, children }) => (
   <div className="pb-8 last:pb-0">
-    <h3 className="font-semibold text-[22px] text-[#353a44] mb-4">{title}</h3>
+    <h3 className="font-semibold text-[32px] text-[#353a44] mb-6">{title}</h3>
     <div className="text-[14px] text-[#596171] leading-relaxed">
       {children}
     </div>
@@ -60,7 +60,7 @@ const ProjectContextModal = ({ isOpen, onClose }) => {
       <div className="relative bg-white m-4 rounded-lg shadow-[0px_15px_35px_rgba(48,49,61,0.08),0px_5px_15px_rgba(0,0,0,0.12)] flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#e3e8ee] shrink-0">
-          <h2 className="font-bold text-[16px] text-[#353a44] tracking-[-0.31px]">Project context: Issuing M1</h2>
+          <h2 className="text-[16px] text-[#353a44] tracking-[-0.31px]">About Issuing M1</h2>
           <button 
             onClick={onClose}
             className="p-2 text-[#6c7688] hover:text-[#353a44] hover:bg-[#f5f6f8] rounded-md transition-colors"
@@ -71,69 +71,86 @@ const ProjectContextModal = ({ isOpen, onClose }) => {
         
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          <div className="max-w-[750px] mx-auto py-8 px-8">
+          <div className="max-w-[800px] mx-auto py-8 px-8">
               
               {/* Goals */}
               <div id="target-user-goals" className="scroll-mt-8">
                 <Section title="Goals">
-                  <div className="space-y-5">
+                  <div className="space-y-10">
                     <div>
-                      <ContentHeading>For user</ContentHeading>
-                      <ContentBlock>
-                        Enable <span className="font-semibold">early and growth stage startups</span> to self-serve onboard onto Issuing's <span className="font-semibold">US Commercial prepaid card program</span> and <span className="font-semibold">Stripe Issuing API</span> in minutes, easily configure their card program, and go-live ASAP.
-                      </ContentBlock>
-                      <ContentBlock className="mt-3 p-3 border border-[#e3e8ee] rounded-md">
-                        Examples: <a href="https://imprint.co" target="_blank" rel="noopener noreferrer" className="text-[#675dff] hover:underline">Imprint</a>, <a href="https://rain.xyz" target="_blank" rel="noopener noreferrer" className="text-[#675dff] hover:underline">Rain.xyz</a>, Rho Financial
-                      </ContentBlock>
+                      <span className="text-[16px] text-[#6c7688]">For users</span>
+                      <p className="text-[14px] text-[#353a44] mt-4">
+                        Enable <span className="underline">early and growth stage startups</span> to self-serve onboard onto Issuing's <span className="underline">US Commercial prepaid card program</span> and <span className="underline">Stripe Issuing API</span> in minutes, easily configure their card program, and go-live ASAP.
+                      </p>
+                      <p className="text-[14px] text-[#353a44] mt-3">
+                        Examples of self-serve users we've onboarded previously: <a href="https://imprint.co" target="_blank" rel="noopener noreferrer" className="text-[#675dff] hover:underline">Imprint</a>, <a href="https://rain.xyz" target="_blank" rel="noopener noreferrer" className="text-[#675dff] hover:underline">Rain.xyz</a>, <a href="https://www.rho.co/" target="_blank" rel="noopener noreferrer" className="text-[#675dff] hover:underline">Rho Financial</a>
+                      </p>
                     </div>
                     <div>
-                      <ContentHeading>For Stripe</ContentHeading>
-                      <BulletList items={[
-                        <><span className="font-semibold">Unlock long tail growth</span><br />Lower barrier to entry for segments that are either growth stage and/or startups, expanding our total addressable market to address the long tail and creating opportunity for Issuing to diversify its core target audience.</>,
-                        <><span className="font-semibold">Create stickiness early on</span><br />As startups grow, Stripe grows with them. Stripe is seen as an early partner for these companies - ensuring we stay at the edge of innovation.</>
-                      ]} />
+                      <span className="text-[16px] text-[#6c7688]">For Stripe</span>
+                      <div className="mt-4 space-y-4">
+                        <div>
+                          <span className="font-semibold text-[18px] text-[#353a44]">Unlock long tail growth</span>
+                          <p className="text-[14px] text-[#353a44] mt-1">Lower barrier to entry for segments that are either growth stage and/or startups, expanding our total addressable market to address the long tail and creating opportunity for Issuing to diversify its core target audience.</p>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-[18px] text-[#353a44]">Create stickiness early on</span>
+                          <p className="text-[14px] text-[#353a44] mt-1">As startups grow, Stripe grows with them. Stripe is seen as an early partner for these companies - ensuring we stay at the edge of innovation.</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </Section>
               </div>
 
-              <div className="border-t border-[#e3e8ee] my-8" />
+              <div className="border-t border-[#e3e8ee] my-12" />
+
+              {/* Supportable Use Cases */}
+              <div id="use-cases" className="scroll-mt-8">
+                <Section title="Supportable use cases">
+                  <div className="space-y-4">
+                    <div>
+                      <span className="font-semibold text-[18px] text-[#353a44]">Corporate Expense</span>
+                      <p className="text-[14px] text-[#353a44] mt-1">Cards are used for personal expenses.</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-[18px] text-[#353a44]">B2B Payments</span>
+                      <p className="text-[14px] text-[#353a44] mt-1">Cards are used to buy goods or services for their inventory, which they then resell to their customers.</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-[18px] text-[#353a44]">Ancillary Purchases</span>
+                      <p className="text-[14px] text-[#353a44] mt-1">Cards are used providing their customers with a service that requires them to purchase a good or service from a merchant for their customer, including via artificial intelligence "agents".</p>
+                    </div>
+                  </div>
+                </Section>
+              </div>
+
+              <div className="border-t border-[#e3e8ee] my-12" />
 
               {/* Design Principles */}
               <div id="design-principles" className="scroll-mt-8">
                 <Section title="Design Principles">
-                  <div className="space-y-4">
-                    <ContentBlock>
-                      <span className="font-semibold">Issuing is the hub</span><br />
-                      Maintain a dedicated space where businesses can view all their Issuing programs at a global level
-                    </ContentBlock>
-                    <ContentBlock>
-                      <span className="font-semibold">Design for multi-FA and multi-product</span><br />
-                      Support multiple Financial Accounts and multiple Issuing Programs from day one
-                    </ContentBlock>
-                    <ContentBlock>
-                      <span className="font-semibold">Modular and scalable</span><br />
-                      Enable future expansion (region, fiat/onchain) without major rearchitecture
-                    </ContentBlock>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-5 bg-[#f7f8f9] rounded-lg">
+                      <span className="font-semibold text-[18px] text-[#353a44]">One home for all programs</span>
+                      <p className="text-[14px] text-[#353a44] mt-1">Maintain a dedicated space where businesses can view all their Issuing programs at a global level</p>
+                    </div>
+                    <div className="p-5 bg-[#f7f8f9] rounded-lg">
+                      <span className="font-semibold text-[18px] text-[#353a44]">Multi-FA, multi-program ready</span>
+                      <p className="text-[14px] text-[#353a44] mt-1">Support multiple Financial Accounts and multiple Issuing Programs from day one</p>
+                    </div>
+                    <div className="p-5 bg-[#f7f8f9] rounded-lg">
+                      <span className="font-semibold text-[18px] text-[#353a44]">Modular and scalable</span>
+                      <p className="text-[14px] text-[#353a44] mt-1">Enable future expansion (region, fiat/onchain) without major rearchitecture</p>
+                    </div>
                   </div>
                 </Section>
               </div>
-
 
               {/* Spacer at bottom for scroll */}
             <div className="h-16" />
 
           </div>
-        </div>
-        
-        {/* Footer */}
-        <div className="flex items-center justify-end px-6 py-4 border-t border-[#e3e8ee] shrink-0 bg-[#f7f8f9]">
-          <button 
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-[#353a44] bg-white border border-[#d8dee4] rounded-md hover:bg-gray-50 transition-colors"
-          >
-            Close
-          </button>
         </div>
       </div>
     </div>
