@@ -97,8 +97,8 @@ const MoreIcon = () => (
 );
 
 const ChevronDownIcon = ({ className }) => (
-  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  <svg width="8" height="8" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path fillRule="evenodd" clipRule="evenodd" d="M0.381282 4.38128C0.72299 4.03957 1.27701 4.03957 1.61872 4.38128L8 10.7626L14.3813 4.38128C14.723 4.03957 15.277 4.03957 15.6187 4.38128C15.9604 4.72299 15.9604 5.27701 15.6187 5.61872L8.61872 12.6187C8.27701 12.9604 7.72299 12.9604 7.38128 12.6187L0.381282 5.61872C0.0395728 5.27701 0.0395728 4.72299 0.381282 4.38128Z" fill="currentColor"/>
   </svg>
 );
 
@@ -179,7 +179,7 @@ const NavGroup = ({ icon: Icon, label, children, defaultExpanded = false }) => {
           {Icon && <div className="w-4 h-4 rounded bg-[#F5F6F8]" />}
         </span>
         <span className="flex-1 text-left truncate">{label}</span>
-        <span className="w-6 h-6 flex items-center justify-center shrink-0">
+        <span className="w-4 h-4 flex items-center justify-center shrink-0">
           <ChevronDownIcon className={`text-[#6c7688] transition-transform duration-200 ${expanded ? '' : '-rotate-90'}`} />
         </span>
       </button>
@@ -223,7 +223,12 @@ const DashboardView = () => {
   const [showBlueprintOverlay, setShowBlueprintOverlay] = useState(false);
   const [isBlueprintMinimized, setIsBlueprintMinimized] = useState(false);
   const [showBalancesView, setShowBalancesView] = useState(false);
+  const [showBalancesCreateCardsModal, setShowBalancesCreateCardsModal] = useState(false);
   const [onboardingPath, setOnboardingPath] = useState('happy'); // 'happy', 'kyc', 'declined'
+  const [showAddFundsModal, setShowAddFundsModal] = useState(false);
+  const [addFundsCompleted, setAddFundsCompleted] = useState(false);
+  const [showSetupGuide, setShowSetupGuide] = useState(false);
+  const [setupGuideCompletedTasks, setSetupGuideCompletedTasks] = useState(1);
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
@@ -232,8 +237,19 @@ const DashboardView = () => {
     setShowBlueprintOverlay(false);
     setIsBlueprintMinimized(false);
     setShowBalancesView(false);
+    setShowBalancesCreateCardsModal(false);
     setModalInitialStep(0);
     setModalKey(prev => prev + 1); // Increment key to remount modal with fresh state
+    setAddFundsCompleted(false);
+    setShowSetupGuide(false);
+    setSetupGuideCompletedTasks(1);
+  };
+  
+  // Handle exiting the blueprint - show setup guide with completed tasks
+  const handleBlueprintExit = () => {
+    setShowBlueprintOverlay(false);
+    setShowSetupGuide(true);
+    setSetupGuideCompletedTasks(4); // All tasks except "Spend with card"
   };
   
   // Jump to landing view (initial state)
@@ -253,12 +269,14 @@ const DashboardView = () => {
     setIsModalOpen(true);
   };
   
-  // Jump to Issuing dashboard view
+  // Jump to Issuing dashboard view (with charts) - shows blueprint minimized
   const handleJumpToDashboard = () => {
     setIsOnboardingComplete(true);
     setShowQuickstartGuide(false);
-    setShowBlueprintOverlay(false);
-    setIsBlueprintMinimized(false);
+    setShowBlueprintOverlay(true);
+    setIsBlueprintMinimized(true); // Start minimized - only bottom bar visible
+    setShowBalancesView(false);
+    setActiveNav('issuing');
     setIsModalOpen(false);
   };
 
@@ -272,6 +290,8 @@ const DashboardView = () => {
   const handleStartIntegrating = () => {
     setIsModalOpen(false);
     setIsOnboardingComplete(true);
+    // Start with blueprint expanded
+    setIsBlueprintMinimized(false);
     // Delay the blueprint panel opening by 500ms to allow the view transition to complete
     setTimeout(() => {
       setShowBlueprintOverlay(true);
@@ -284,10 +304,11 @@ const DashboardView = () => {
     setShowQuickstartGuide(true);
   };
 
-  // "Go to Balances" -> Show Balances view (from dashboard setup path)
+  // "Go to Balances" -> Show Balances view with Create Cards modal (from dashboard setup path)
   const handleGoToBalances = () => {
     setIsModalOpen(false);
     setShowBalancesView(true);
+    setShowBalancesCreateCardsModal(true);
     setActiveNav('balances');
   };
 
@@ -298,9 +319,11 @@ const DashboardView = () => {
     setShowBlueprintOverlay(false);
     setIsBlueprintMinimized(false);
     setShowBalancesView(true);
+    setShowBalancesCreateCardsModal(false);
     setActiveNav('balances');
     setIsModalOpen(false);
   };
+  
 
   // Render Quickstart Guide as a standalone full-page view (no dashboard sidebar)
   if (showQuickstartGuide) {
@@ -487,20 +510,36 @@ const DashboardView = () => {
         {/* Page Content */}
         {showBalancesView ? (
           /* Balances View - shown after "Manage in dashboard" setup */
-          <BalancesView />
+          <BalancesView 
+            showCreateCardsModal={showBalancesCreateCardsModal}
+            onCloseCreateCardsModal={() => setShowBalancesCreateCardsModal(false)}
+          />
         ) : isOnboardingComplete ? (
           /* Issuing Home View - shown after onboarding */
           <>
-            <IssuingHomeView />
+            <IssuingHomeView 
+              externalAddFundsOpen={showAddFundsModal}
+              onExternalAddFundsClose={() => setShowAddFundsModal(false)}
+              onAddFundsComplete={() => {
+                setAddFundsCompleted(true);
+                // Re-expand the blueprint overlay after adding funds
+                setIsBlueprintMinimized(false);
+              }}
+            />
             <SetupGuide 
-              isOpen={showBlueprintOverlay} 
+              isOpen={showBlueprintOverlay || showSetupGuide} 
               isPanelMinimized={isBlueprintMinimized}
+              hideForModal={showAddFundsModal}
+              completedTasks={setupGuideCompletedTasks}
+              blueprintOpen={showBlueprintOverlay}
             />
             <BlueprintPanel 
               isOpen={showBlueprintOverlay} 
-              onClose={() => setShowBlueprintOverlay(false)}
+              onClose={handleBlueprintExit}
               isMinimized={isBlueprintMinimized}
               onMinimizeChange={setIsBlueprintMinimized}
+              onAddFunds={() => setShowAddFundsModal(true)}
+              addFundsCompleted={addFundsCompleted}
             />
           </>
         ) : (

@@ -1,12 +1,17 @@
 import React from 'react';
 import * as Icons from './icons';
 
-export const NavItem = ({ icon, label }) => (
+export const NavItem = ({ icon, label, hasChevron }) => (
   <div className="flex items-center space-x-2 h-[30px] px-1 rounded-md hover:bg-gray-50 cursor-pointer">
     {icon && (
       <div className="w-4 h-4 bg-gray-300 rounded-sm" />
     )}
     <span className="text-sm text-gray-700 flex-1">{label}</span>
+    {hasChevron && (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-400">
+        <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )}
   </div>
 );
 
@@ -56,10 +61,10 @@ export const Sidebar = () => (
       <div className="space-y-2">
         <SectionHeading label="Products" />
         <div className="">
-          <NavItem icon={<Icons.ConnectIcon />} label="Connect" />
-          <NavItem icon={<Icons.PaymentsIcon />} label="Payments" />
-          <NavItem icon={<Icons.BillingIcon />} label="Billing" />
-          <NavItem icon={<Icons.ReportingIcon />} label="Reporting" />
+          <NavItem icon={<Icons.ConnectIcon />} label="Connect" hasChevron />
+          <NavItem icon={<Icons.PaymentsIcon />} label="Payments" hasChevron />
+          <NavItem icon={<Icons.BillingIcon />} label="Billing" hasChevron />
+          <NavItem icon={<Icons.ReportingIcon />} label="Reporting" hasChevron />
           <NavItem icon={<Icons.MoreIcon />} label="More" />
         </div>
       </div>

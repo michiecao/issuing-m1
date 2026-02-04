@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import gradientBg from '../../assets/gradient-bg.png';
+import virtualCardIcon from '../../assets/virtual-card-icon.svg';
+import physicalCardIcon from '../../assets/physical-card-icon.svg';
+import appleWalletIcon from '../../assets/apple-wallet-icon.svg';
+import googleWalletIcon from '../../assets/google-wallet-icon.svg';
 
 // Icons
 const InfoIcon = () => (
@@ -11,8 +15,8 @@ const InfoIcon = () => (
 );
 
 const ChevronDownSmallIcon = () => (
-  <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" clipRule="evenodd" d="M0.606072 6.33351C0.307015 6.62011 0.296913 7.09487 0.58351 7.39393L3.45851 10.3939C3.59989 10.5415 3.79535 10.6249 3.99969 10.625C4.20403 10.6251 4.39955 10.5418 4.54106 10.3944L7.41606 7.39938C7.70291 7.10056 7.6932 6.62579 7.39438 6.33894C7.09556 6.0521 6.62079 6.0618 6.33394 6.36062L4.00045 8.79151L1.66649 6.35607C1.3799 6.05701 0.905129 6.04691 0.606072 6.33351Z" fill="currentColor"/>
+  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M0.381282 4.38128C0.72299 4.03957 1.27701 4.03957 1.61872 4.38128L8 10.7626L14.3813 4.38128C14.723 4.03957 15.277 4.03957 15.6187 4.38128C15.9604 4.72299 15.9604 5.27701 15.6187 5.61872L8.61872 12.6187C8.27701 12.9604 7.72299 12.9604 7.38128 12.6187L0.381282 5.61872C0.0395728 5.27701 0.0395728 4.72299 0.381282 4.38128Z" fill="currentColor"/>
   </svg>
 );
 
@@ -176,8 +180,8 @@ const CancelCircleIcon = () => (
 
 // Chevron Down Icon for dropdowns (8px version for chips)
 const ChevronDownChipIcon = () => (
-  <svg width="8" height="8" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" clipRule="evenodd" d="M0.606072 6.33351C0.307015 6.62011 0.296913 7.09487 0.58351 7.39393L3.45851 10.3939C3.59989 10.5415 3.79535 10.6249 3.99969 10.625C4.20403 10.6251 4.39955 10.5418 4.54106 10.3944L7.41606 7.39938C7.70291 7.10056 7.6932 6.62579 7.39438 6.33894C7.09556 6.0521 6.62079 6.0618 6.33394 6.36062L4.00045 8.79151L1.66649 6.35607C1.3799 6.05701 0.905129 6.04691 0.606072 6.33351Z" fill="#6C7688"/>
+  <svg width="8" height="8" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M0.381282 4.38128C0.72299 4.03957 1.27701 4.03957 1.61872 4.38128L8 10.7626L14.3813 4.38128C14.723 4.03957 15.277 4.03957 15.6187 4.38128C15.9604 4.72299 15.9604 5.27701 15.6187 5.61872L8.61872 12.6187C8.27701 12.9604 7.72299 12.9604 7.38128 12.6187L0.381282 5.61872C0.0395728 5.27701 0.0395728 4.72299 0.381282 4.38128Z" fill="#6C7688"/>
   </svg>
 );
 
@@ -342,9 +346,621 @@ const FilterChipDropdown = ({ label, value, options, onSelect, hasSeparator = fa
   );
 };
 
+// Create Card Modal Component
+const CreateCardModal = ({ isOpen, onClose, onAddNewCardholder }) => {
+  const [step, setStep] = useState('select'); // 'select', 'details', or 'success'
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCardholder, setSelectedCardholder] = useState(null);
+  
+  // Card details form state
+  const [cardNickname, setCardNickname] = useState('Ad spend');
+  const [spendFrom, setSpendFrom] = useState('Financial account');
+  const [cardType, setCardType] = useState('virtual'); // 'virtual' or 'physical'
+  const [spendingLimit, setSpendingLimit] = useState('1,000.00');
+  const [timeRange, setTimeRange] = useState('Monthly');
+  const [restrictCategories, setRestrictCategories] = useState(false);
+  const [activateCard, setActivateCard] = useState(true);
+  
+  // Success state
+  const [showCardNumber, setShowCardNumber] = useState(false);
+  const [showCvc, setShowCvc] = useState(false);
+  
+  // Sample cardholders data
+  const cardholders = [
+    { id: '1', name: 'Cosmo Kramer', email: 'cosmo@company.com', cardCount: 1 },
+  ];
+  
+  const filteredCardholders = cardholders.filter(ch => 
+    ch.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    ch.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
+  const handleSelectCardholder = (cardholder) => {
+    setSelectedCardholder(cardholder);
+    setStep('details');
+  };
+  
+  const handleClose = () => {
+    setStep('select');
+    setSelectedCardholder(null);
+    setSearchQuery('');
+    setShowCardNumber(false);
+    setShowCvc(false);
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/40"
+        onClick={handleClose}
+      />
+      
+      {/* Modal */}
+      <div className={`relative bg-white rounded-xl shadow-[0px_16px_32px_rgba(0,0,0,0.12),0px_4px_8px_rgba(0,0,0,0.08)] overflow-hidden ${step === 'success' ? 'w-[420px]' : 'w-[400px]'}`}>
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4">
+          <div className="flex items-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.25 0.5C13.6642 0.5 14 0.835786 14 1.25V2.5H15.25C15.6642 2.5 16 2.83579 16 3.25C16 3.66421 15.6642 4 15.25 4H14V5.25C14 5.66421 13.6642 6 13.25 6C12.8358 6 12.5 5.66421 12.5 5.25V4H11.25C10.8358 4 10.5 3.66421 10.5 3.25C10.5 2.83579 10.8358 2.5 11.25 2.5H12.5V1.25C12.5 0.835786 12.8358 0.5 13.25 0.5Z" fill="#474E5A"/>
+              <path fillRule="evenodd" clipRule="evenodd" d="M3 4.25C3 3.2835 3.7835 2.5 4.75 2.5H8.75C9.16421 2.5 9.5 2.83579 9.5 3.25C9.5 3.66421 9.16421 4 8.75 4H4.75C4.61193 4 4.5 4.11193 4.5 4.25V6.5H10.5C11.3284 6.5 12 7.17157 12 8V9.5H13.25C13.3881 9.5 13.5 9.38807 13.5 9.25V7.75C13.5 7.33579 13.8358 7 14.25 7C14.6642 7 15 7.33579 15 7.75V9.25C15 10.2165 14.2165 11 13.25 11H12V13.5C12 14.3284 11.3284 15 10.5 15H1.5C0.671573 15 0 14.3284 0 13.5V8C0 7.17157 0.671573 6.5 1.5 6.5H3V4.25ZM10.5 8H1.5V9H10.5V8ZM10.5 10.5H1.5V13.5H10.5V10.5Z" fill="#474E5A"/>
+            </svg>
+            <h2 className="text-[14px] font-semibold text-[#353a44]">Create card</h2>
+          </div>
+          <button 
+            onClick={handleClose}
+            className="w-6 h-6 flex items-center justify-center rounded hover:bg-[#f5f6f8] transition-colors"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M1.45647 1.45696C1.84374 1.06969 2.47163 1.06969 2.8589 1.45696L6.99935 5.59741L11.1398 1.45696C11.5271 1.06969 12.155 1.06969 12.5422 1.45696C12.9295 1.84423 12.9295 2.47211 12.5422 2.85938L8.40178 6.99984L12.5422 11.1403C12.9295 11.5276 12.9295 12.1554 12.5422 12.5427C12.155 12.93 11.5271 12.93 11.1398 12.5427L6.99935 8.40227L2.8589 12.5427C2.47163 12.93 1.84374 12.93 1.45647 12.5427C1.0692 12.1554 1.0692 11.5276 1.45647 11.1403L5.59692 6.99984L1.45647 2.85938C1.0692 2.47211 1.0692 1.84423 1.45647 1.45696Z" fill="#474E5A"/>
+            </svg>
+          </button>
+        </div>
+        
+        {step === 'select' ? (
+          <>
+            {/* Search Input */}
+            <div className="px-5 py-3">
+              <div className="relative">
+                <svg 
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8792a2]" 
+                  width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.5"/>
+                  <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search for a cardholder"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full h-10 pl-10 pr-4 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] placeholder-[#8792a2] focus:outline-none focus:border-[#635bff] focus:ring-1 focus:ring-[#635bff] transition-colors"
+                />
+              </div>
+            </div>
+            
+            {/* Add New Cardholder Option */}
+            <div className="px-3">
+              <button 
+                onClick={onAddNewCardholder}
+                className="w-full flex items-center justify-between px-2 py-3 rounded-lg hover:bg-[#f5f6f8] transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#f5f6f8] flex items-center justify-center group-hover:bg-white">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 1V13M1 7H13" stroke="#635bff" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <span className="text-[14px] font-medium text-[#635bff]">Add new cardholder</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#8792a2]">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M5.38128 0.381282C5.72299 0.0395728 6.27701 0.0395728 6.61872 0.381282L13.6187 7.38128C13.9604 7.72299 13.9604 8.27701 13.6187 8.61872L6.61872 15.6187C6.27701 15.9604 5.72299 15.9604 5.38128 15.6187C5.03957 15.277 5.03957 14.723 5.38128 14.3813L11.7626 8L5.38128 1.61872C5.03957 1.27701 5.03957 0.72299 5.38128 0.381282Z" fill="currentColor"/>
+                </svg>
+              </button>
+            </div>
+            
+            {/* Divider */}
+            <div className="mx-5 border-t border-[#e3e8ee]" />
+            
+            {/* Cardholders List */}
+            <div className="px-3 py-2 max-h-[300px] overflow-y-auto">
+              {filteredCardholders.map((cardholder) => (
+                <button
+                  key={cardholder.id}
+                  onClick={() => handleSelectCardholder(cardholder)}
+                  className="w-full flex items-center justify-between px-2 py-3 rounded-lg hover:bg-[#f5f6f8] transition-colors"
+                >
+                  <div className="flex flex-col items-start">
+                    <span className="text-[14px] font-medium text-[#353a44]">{cardholder.name}</span>
+                    <span className="text-[13px] text-[#6c7688]">{cardholder.email}</span>
+                  </div>
+                  <span className="text-[13px] font-medium text-[#635bff]">
+                    {cardholder.cardCount} card{cardholder.cardCount !== 1 ? 's' : ''}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : step === 'details' ? (
+          <>
+            {/* Card Details Form */}
+            <div className="px-5 py-4 space-y-4 max-h-[70vh] overflow-y-auto">
+              {/* Cardholder */}
+              <div>
+                <label className="block text-[13px] font-medium text-[#353a44] mb-1.5">Cardholder</label>
+                <button 
+                  onClick={() => setStep('select')}
+                  className="w-full h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] bg-white hover:bg-[#f5f6f8] transition-colors flex items-center justify-between"
+                >
+                  <span>{selectedCardholder?.name}</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M1.76222 7.43599C2.00468 7.16659 2.41963 7.14476 2.68902 7.38722L5.99993 10.3671L9.31108 7.3872C9.58048 7.14475 9.99542 7.1666 10.2379 7.436C10.4803 7.7054 10.4585 8.12034 10.1891 8.3628L6.43891 11.7378C6.31413 11.8501 6.15703 11.9062 5.99993 11.9062C5.84281 11.9063 5.68569 11.8501 5.5609 11.7378L1.81099 8.36278C1.5416 8.12032 1.51976 7.70538 1.76222 7.43599Z" fill="#6C7688"/>
+                    <path fillRule="evenodd" clipRule="evenodd" d="M5.5609 0.262219C5.68569 0.149903 5.84281 0.0937465 5.99993 0.09375C6.15703 0.0937535 6.31413 0.149905 6.43891 0.262204L10.1891 3.6372C10.4585 3.87966 10.4803 4.2946 10.2379 4.564C9.99542 4.8334 9.58048 4.85525 9.31108 4.6128L5.99993 1.63289L2.68902 4.61278C2.41963 4.85524 2.00468 4.83341 1.76222 4.56401C1.51976 4.29462 1.5416 3.87968 1.81099 3.63722L5.5609 0.262219Z" fill="#6C7688"/>
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Card Nickname */}
+              <div>
+                <label className="block text-[13px] font-medium text-[#353a44] mb-1.5">Card nickname</label>
+                <input
+                  type="text"
+                  value={cardNickname}
+                  onChange={(e) => setCardNickname(e.target.value)}
+                  className="w-full h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] placeholder-[#8792a2] focus:outline-none focus:border-[#635bff] focus:ring-1 focus:ring-[#635bff] transition-colors"
+                />
+              </div>
+              
+              {/* Spend From */}
+              <div>
+                <label className="block text-[13px] font-medium text-[#353a44] mb-1.5">Spend from</label>
+                <button className="w-full h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] bg-white hover:bg-[#f5f6f8] transition-colors flex items-center justify-between">
+                  <span>{spendFrom}</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M1.76222 7.43599C2.00468 7.16659 2.41963 7.14476 2.68902 7.38722L5.99993 10.3671L9.31108 7.3872C9.58048 7.14475 9.99542 7.1666 10.2379 7.436C10.4803 7.7054 10.4585 8.12034 10.1891 8.3628L6.43891 11.7378C6.31413 11.8501 6.15703 11.9062 5.99993 11.9062C5.84281 11.9063 5.68569 11.8501 5.5609 11.7378L1.81099 8.36278C1.5416 8.12032 1.51976 7.70538 1.76222 7.43599Z" fill="#6C7688"/>
+                    <path fillRule="evenodd" clipRule="evenodd" d="M5.5609 0.262219C5.68569 0.149903 5.84281 0.0937465 5.99993 0.09375C6.15703 0.0937535 6.31413 0.149905 6.43891 0.262204L10.1891 3.6372C10.4585 3.87966 10.4803 4.2946 10.2379 4.564C9.99542 4.8334 9.58048 4.85525 9.31108 4.6128L5.99993 1.63289L2.68902 4.61278C2.41963 4.85524 2.00468 4.83341 1.76222 4.56401C1.51976 4.29462 1.5416 3.87968 1.81099 3.63722L5.5609 0.262219Z" fill="#6C7688"/>
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Type */}
+              <div>
+                <label className="block text-[13px] font-medium text-[#353a44] mb-1.5">Type</label>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setCardType('virtual')}
+                    className={`flex-1 h-10 px-3 rounded-lg text-[14px] font-medium flex items-center justify-start gap-2 transition-colors ${
+                      cardType === 'virtual' 
+                        ? 'bg-white border-2 border-[#635bff] text-[#353a44]' 
+                        : 'bg-white border border-[#d8dee4] text-[#353a44] hover:bg-[#f5f6f8]'
+                    }`}
+                  >
+                    <img src={virtualCardIcon} alt="Virtual card" className="w-7 h-6" />
+                    Virtual
+                  </button>
+                  <button 
+                    onClick={() => setCardType('physical')}
+                    className={`flex-1 h-10 px-3 rounded-lg text-[14px] font-medium flex items-center justify-start gap-2 transition-colors ${
+                      cardType === 'physical' 
+                        ? 'bg-white border-2 border-[#635bff] text-[#353a44]' 
+                        : 'bg-white border border-[#d8dee4] text-[#353a44] hover:bg-[#f5f6f8]'
+                    }`}
+                  >
+                    <img src={physicalCardIcon} alt="Physical card" className="w-8 h-7" />
+                    Physical
+                  </button>
+                </div>
+              </div>
+              
+              {/* Spending Limit & Time Range */}
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label className="block text-[13px] font-medium text-[#353a44] mb-1.5">Spending limit</label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#6c7688]">$</span>
+                    <input
+                      type="text"
+                      value={spendingLimit}
+                      onChange={(e) => setSpendingLimit(e.target.value)}
+                      className="w-full h-10 pl-7 pr-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] placeholder-[#8792a2] focus:outline-none focus:border-[#635bff] focus:ring-1 focus:ring-[#635bff] transition-colors"
+                    />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <label className="block text-[13px] font-medium text-[#353a44] mb-1.5">Time range</label>
+                  <button className="w-full h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] bg-white hover:bg-[#f5f6f8] transition-colors flex items-center justify-between">
+                    <span>{timeRange}</span>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M1.76222 7.43599C2.00468 7.16659 2.41963 7.14476 2.68902 7.38722L5.99993 10.3671L9.31108 7.3872C9.58048 7.14475 9.99542 7.1666 10.2379 7.436C10.4803 7.7054 10.4585 8.12034 10.1891 8.3628L6.43891 11.7378C6.31413 11.8501 6.15703 11.9062 5.99993 11.9062C5.84281 11.9063 5.68569 11.8501 5.5609 11.7378L1.81099 8.36278C1.5416 8.12032 1.51976 7.70538 1.76222 7.43599Z" fill="#6C7688"/>
+                      <path fillRule="evenodd" clipRule="evenodd" d="M5.5609 0.262219C5.68569 0.149903 5.84281 0.0937465 5.99993 0.09375C6.15703 0.0937535 6.31413 0.149905 6.43891 0.262204L10.1891 3.6372C10.4585 3.87966 10.4803 4.2946 10.2379 4.564C9.99542 4.8334 9.58048 4.85525 9.31108 4.6128L5.99993 1.63289L2.68902 4.61278C2.41963 4.85524 2.00468 4.83341 1.76222 4.56401C1.51976 4.29462 1.5416 3.87968 1.81099 3.63722L5.5609 0.262219Z" fill="#6C7688"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              {/* Restrict Spending Categories */}
+              <button 
+                onClick={() => setRestrictCategories(!restrictCategories)}
+                className="w-full flex items-center gap-2 text-[13px] font-medium text-[#353a44] hover:text-[#635bff] transition-colors py-1"
+              >
+                <svg 
+                  width="8" height="8" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" 
+                  className={`text-[#6c7688] transition-transform ${restrictCategories ? '' : '-rotate-90'}`}
+                >
+                  <path fillRule="evenodd" clipRule="evenodd" d="M0.381282 4.38128C0.72299 4.03957 1.27701 4.03957 1.61872 4.38128L8 10.7626L14.3813 4.38128C14.723 4.03957 15.277 4.03957 15.6187 4.38128C15.9604 4.72299 15.9604 5.27701 15.6187 5.61872L8.61872 12.6187C8.27701 12.9604 7.72299 12.9604 7.38128 12.6187L0.381282 5.61872C0.0395728 5.27701 0.0395728 4.72299 0.381282 4.38128Z" fill="currentColor"/>
+                </svg>
+                Restrict spending categories
+              </button>
+              
+              {/* Activate Card Checkbox */}
+              <div className="flex items-start gap-3">
+                <button
+                  onClick={() => setActivateCard(!activateCard)}
+                  className={`w-5 h-5 shrink-0 mt-0.5 rounded flex items-center justify-center transition-colors ${
+                    activateCard ? 'bg-[#635bff]' : 'border-2 border-[#d8dee4]'
+                  }`}
+                >
+                  {activateCard && (
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </button>
+                <div>
+                  <p className="text-[13px] font-medium text-[#353a44]">Activate card</p>
+                  <p className="text-[12px] text-[#6c7688] leading-snug">Allows the cardholder to begin using the straight away. You can also activate the card later.</p>
+                </div>
+              </div>
+              
+              {/* Legal Text */}
+              <p className="text-[12px] text-[#6c7688] leading-snug">
+                The cardholder has agreed to the{' '}
+                <a href="#" className="text-[#635bff] hover:underline">Celtic Bank Authorized User Terms</a>
+                {' '}and{' '}
+                <a href="#" className="text-[#635bff] hover:underline">E-sign Policy</a>
+              </p>
+            </div>
+            
+            {/* Footer */}
+            <div className="px-5 py-4">
+              <button
+                onClick={() => setStep('success')}
+                className="w-full py-2.5 text-[14px] font-medium text-white bg-[#635bff] rounded-md hover:bg-[#5651e5] transition-colors shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
+              >
+                Create card
+              </button>
+            </div>
+          </>
+        ) : step === 'success' ? (
+          <>
+            {/* Success Content */}
+            <div className="px-5 py-4">
+              {/* Green Checkmark */}
+              <div className="w-10 h-10 rounded-full bg-[#cbf4c9] flex items-center justify-center mb-4">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 10.5L8 14.5L16 6.5" stroke="#0e6245" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              
+              <h3 className="text-[16px] font-semibold text-[#353a44] mb-1">Card created</h3>
+              <p className="text-[14px] text-[#6c7688] mb-4">Your card is ready. Add it to your digital wallet to start using immediately.</p>
+              
+              {/* Card Details Box */}
+              <div className="bg-[#f5f6f8] rounded-lg p-4 mb-4">
+                {/* Card Number */}
+                <div className="mb-3">
+                  <p className="text-[12px] font-semibold text-[#6c7688] mb-1">Card number</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[14px] font-medium text-[#353a44]">
+                      {showCardNumber ? '4242 4242 4242 9007' : '•••• •••• •••• 9007'}
+                    </span>
+                    <button 
+                      onClick={() => setShowCardNumber(!showCardNumber)}
+                      className="text-[#635bff] hover:text-[#5651e5] transition-colors"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3C4.5 3 1.5 5.5 0.5 8C1.5 10.5 4.5 13 8 13C11.5 13 14.5 10.5 15.5 8C14.5 5.5 11.5 3 8 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="8" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Expiry and CVC */}
+                <div className="flex gap-6">
+                  <div>
+                    <p className="text-[12px] font-semibold text-[#6c7688] mb-1">Expiry</p>
+                    <span className="text-[14px] font-medium text-[#353a44]">12/2028</span>
+                  </div>
+                  <div>
+                    <p className="text-[12px] font-semibold text-[#6c7688] mb-1">CVC</p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[14px] font-medium text-[#353a44]">
+                        {showCvc ? '123' : '•••'}
+                      </span>
+                      <button 
+                        onClick={() => setShowCvc(!showCvc)}
+                        className="text-[#635bff] hover:text-[#5651e5] transition-colors"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M8 3C4.5 3 1.5 5.5 0.5 8C1.5 10.5 4.5 13 8 13C11.5 13 14.5 10.5 15.5 8C14.5 5.5 11.5 3 8 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="8" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Wallet Buttons */}
+              <div className="flex gap-2 mb-4">
+                <button className="flex-1 h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] font-medium text-[#353a44] bg-white hover:bg-[#f5f6f8] transition-colors flex items-center justify-center gap-2">
+                  <img src={appleWalletIcon} alt="Apple Wallet" className="w-5 h-5" />
+                  Add to Apple wallet
+                </button>
+                <button className="flex-1 h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] font-medium text-[#353a44] bg-white hover:bg-[#f5f6f8] transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+                  <img src={googleWalletIcon} alt="Google Wallet" className="w-5 h-5" />
+                  Add to Google wallet
+                </button>
+              </div>
+            </div>
+            
+            {/* Footer */}
+            <div className="flex items-center justify-end gap-2 px-5 py-4">
+              <button
+                onClick={handleClose}
+                className="px-4 py-2 text-[14px] font-medium text-[#353a44] bg-white border border-[#d8dee4] rounded-md hover:bg-[#f5f6f8] transition-colors shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
+              >
+                Manage card
+              </button>
+              <button
+                onClick={handleClose}
+                className="px-4 py-2 text-[14px] font-medium text-white bg-[#635bff] rounded-md hover:bg-[#5651e5] transition-colors shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
+              >
+                Done
+              </button>
+            </div>
+          </>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+// Create Cardholder Modal Component
+const CreateCardholderModal = ({ isOpen, onClose, onBack }) => {
+  const [step, setStep] = useState('form'); // 'form' or 'success'
+  const [firstName, setFirstName] = useState('Cosmo');
+  const [lastName, setLastName] = useState('Kramer');
+  const [nameOnCard, setNameOnCard] = useState('Cosmo Kramer');
+  const [email, setEmail] = useState('cosmo@galtee.com');
+  const [countryCode, setCountryCode] = useState('+1');
+  const [phoneNumber, setPhoneNumber] = useState('(201) 555-0123');
+  const [dateOfBirth, setDateOfBirth] = useState('12/30/2009');
+
+  const handleClose = () => {
+    setStep('form');
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/40"
+        onClick={handleClose}
+      />
+      
+      {/* Modal */}
+      <div className="relative bg-white rounded-xl shadow-[0px_16px_32px_rgba(0,0,0,0.12),0px_4px_8px_rgba(0,0,0,0.08)] w-[496px] max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4 shrink-0">
+          <div className="flex items-center gap-2">
+            <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.25 0.75C13.25 0.335786 12.9142 0 12.5 0C12.0858 0 11.75 0.335786 11.75 0.75V2.25H10.25C9.83579 2.25 9.5 2.58579 9.5 3C9.5 3.41421 9.83579 3.75 10.25 3.75H11.75V5.25C11.75 5.66421 12.0858 6 12.5 6C12.9142 6 13.25 5.66421 13.25 5.25V3.75H14.75C15.1642 3.75 15.5 3.41421 15.5 3C15.5 2.58579 15.1642 2.25 14.75 2.25H13.25V0.75Z" fill="#474E5A"/>
+              <path fillRule="evenodd" clipRule="evenodd" d="M2 15H9C10.1046 15 11 14.1046 11 13C11 10.7909 9.20914 9 7 9H4C1.79086 9 0 10.7909 0 13C0 14.1046 0.895431 15 2 15ZM1.5 13C1.5 13.2761 1.72386 13.5 2 13.5H9C9.27614 13.5 9.5 13.2761 9.5 13C9.5 11.6193 8.38071 10.5 7 10.5H4C2.61929 10.5 1.5 11.6193 1.5 13Z" fill="#474E5A"/>
+              <path fillRule="evenodd" clipRule="evenodd" d="M8.5 5.5C8.5 7.15685 7.15685 8.5 5.5 8.5C3.84315 8.5 2.5 7.15685 2.5 5.5C2.5 3.84315 3.84315 2.5 5.5 2.5C7.15685 2.5 8.5 3.84315 8.5 5.5ZM7 5.5C7 6.32843 6.32843 7 5.5 7C4.67157 7 4 6.32843 4 5.5C4 4.67157 4.67157 4 5.5 4C6.32843 4 7 4.67157 7 5.5Z" fill="#474E5A"/>
+            </svg>
+            <h2 className="text-[14px] font-semibold text-[#353a44]">Add new cardholder</h2>
+          </div>
+          <button 
+            onClick={handleClose}
+            className="w-6 h-6 flex items-center justify-center rounded hover:bg-[#f5f6f8] transition-colors"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M1.45647 1.45696C1.84374 1.06969 2.47163 1.06969 2.8589 1.45696L6.99935 5.59741L11.1398 1.45696C11.5271 1.06969 12.155 1.06969 12.5422 1.45696C12.9295 1.84423 12.9295 2.47211 12.5422 2.85938L8.40178 6.99984L12.5422 11.1403C12.9295 11.5276 12.9295 12.1554 12.5422 12.5427C12.155 12.93 11.5271 12.93 11.1398 12.5427L6.99935 8.40227L2.8589 12.5427C2.47163 12.93 1.84374 12.93 1.45647 12.5427C1.0692 12.1554 1.0692 11.5276 1.45647 11.1403L5.59692 6.99984L1.45647 2.85938C1.0692 2.47211 1.0692 1.84423 1.45647 1.45696Z" fill="#474E5A"/>
+            </svg>
+          </button>
+        </div>
+        
+        {step === 'success' ? (
+          <>
+            {/* Success Content */}
+            <div className="px-5 py-6">
+              {/* Green Checkmark */}
+              <div className="w-10 h-10 rounded-full bg-[#cbf4c9] flex items-center justify-center mb-4">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 10.5L8 14.5L16 6.5" stroke="#0e6245" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              
+              <h3 className="text-[16px] font-semibold text-[#353a44] mb-1">Cardholder created.</h3>
+              <p className="text-[14px] text-[#6c7688]">You can start creating cards for this cardholder.</p>
+            </div>
+            
+            {/* Footer */}
+            <div className="flex items-center justify-end px-5 py-4">
+              <button
+                onClick={handleClose}
+                className="px-4 py-2 text-[14px] font-medium text-white bg-[#635bff] rounded-md hover:bg-[#5651e5] transition-colors shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
+              >
+                Done
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Form Content */}
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+          {/* Cardholder Legal Name */}
+          <div>
+            <label className="block text-[13px] font-medium text-[#353a44] mb-1">Cardholder legal name</label>
+            <p className="text-[12px] text-[#6c7688] mb-2">Enter the full legal name as shown on government-issued documents.</p>
+            <div className="flex gap-3">
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First name"
+                className="flex-1 h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] placeholder-[#8792a2] focus:outline-none focus:border-[#635bff] focus:ring-1 focus:ring-[#635bff] transition-colors"
+              />
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last name"
+                className="flex-1 h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] placeholder-[#8792a2] focus:outline-none focus:border-[#635bff] focus:ring-1 focus:ring-[#635bff] transition-colors"
+              />
+            </div>
+          </div>
+          
+          {/* Name on Card */}
+          <div>
+            <label className="block text-[13px] font-medium text-[#353a44] mb-1">Name on card</label>
+            <input
+              type="text"
+              value={nameOnCard}
+              onChange={(e) => setNameOnCard(e.target.value)}
+              className="w-full h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] placeholder-[#8792a2] focus:outline-none focus:border-[#635bff] focus:ring-1 focus:ring-[#635bff] transition-colors"
+            />
+          </div>
+          
+          {/* Email */}
+          <div>
+            <label className="block text-[13px] font-medium text-[#353a44] mb-1">Email</label>
+            <p className="text-[12px] text-[#6c7688] mb-2">Contact information is required for two-step authentication, digital wallets, and alerts about suspicious transactions.</p>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] placeholder-[#8792a2] focus:outline-none focus:border-[#635bff] focus:ring-1 focus:ring-[#635bff] transition-colors"
+            />
+          </div>
+          
+          {/* Phone Number */}
+          <div>
+            <label className="block text-[13px] font-medium text-[#353a44] mb-1">Phone number</label>
+            <div className="flex">
+              <button className="flex items-center gap-1.5 h-10 px-3 border border-[#d8dee4] border-r-0 rounded-l-lg bg-white hover:bg-[#f5f6f8] transition-colors">
+                <svg width="20" height="15" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20.9979 17.9982H2.99971C1.34301 17.9982 0 16.6552 0 14.9985V8.99912L0 2.99971C0 1.34302 1.34301 0 2.99971 0H11.9988H20.9979C22.6546 0 23.9977 1.34301 23.9977 2.99971V14.9985C23.9977 16.6552 22.6546 17.9982 20.9979 17.9982Z" fill="#E25950"/>
+                  <rect y="1.6362" width="23.9977" height="1.6362" fill="#F6F9FC"/>
+                  <rect y="4.90861" width="23.9977" height="1.6362" fill="#F6F9FC"/>
+                  <rect y="8.18102" width="23.9977" height="1.6362" fill="#F6F9FC"/>
+                  <rect y="11.4534" width="23.9977" height="1.6362" fill="#F6F9FC"/>
+                  <rect y="14.7258" width="23.9977" height="1.6362" fill="#F6F9FC"/>
+                  <path opacity="0.1" d="M20.9979 17.9982H2.99971C1.34301 17.9982 0 16.6552 0 14.9985V9.74905H1.49985V14.9985C1.49985 15.8269 2.17136 16.4984 2.99971 16.4984H20.9979C21.8263 16.4984 22.4978 15.8269 22.4978 14.9985V2.99971C22.4978 2.17136 21.8263 1.49985 20.9979 1.49985H11.9988V0H20.9979C22.6546 0 23.9977 1.34301 23.9977 2.99971V14.9985C23.9977 16.6552 22.6546 17.9982 20.9979 17.9982Z" fill="#E25950"/>
+                  <path d="M0 9.82404V2.80687C0 1.25668 1.19379 0 2.66641 0H11.9988V9.82404H0Z" fill="#43458B"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M2.22196 0.0005146C2.49644 -0.00963843 2.75451 0.131071 2.89465 0.367293C3.03479 0.603515 3.03458 0.897449 2.8941 1.13347C2.75363 1.36949 2.49536 1.50984 2.2209 1.49929C1.81801 1.48382 1.49947 1.15257 1.49976 0.749391C1.50004 0.346215 1.81906 0.0154181 2.22196 0.0005146Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M5.22172 0.0005146C5.49619 -0.00963843 5.75426 0.131071 5.8944 0.367293C6.03455 0.603515 6.03434 0.897449 5.89386 1.13347C5.75338 1.36949 5.49511 1.50984 5.22065 1.49929C4.81777 1.48382 4.49923 1.15257 4.49951 0.749391C4.4998 0.346215 4.81881 0.0154181 5.22172 0.0005146Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M8.22147 0.0005146C8.49595 -0.00963843 8.75402 0.131071 8.89416 0.367293C9.0343 0.603515 9.03409 0.897449 8.89362 1.13347C8.75314 1.36949 8.49487 1.50984 8.22041 1.49929C7.81753 1.48382 7.49898 1.15257 7.49927 0.749391C7.49955 0.346215 7.81857 0.0154181 8.22147 0.0005146Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M11.2212 0.0005146C11.4957 -0.00963843 11.7538 0.131071 11.8939 0.367293C12.0341 0.603515 12.0338 0.897449 11.8934 1.13347C11.7529 1.36949 11.4946 1.50984 11.2202 1.49929C10.8173 1.48382 10.4987 1.15257 10.499 0.749391C10.4993 0.346215 10.8183 0.0154181 11.2212 0.0005146Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M0.722205 1.66535C0.996683 1.6552 1.25475 1.79591 1.39489 2.03213C1.53504 2.26835 1.53483 2.56229 1.39435 2.79831C1.25387 3.03433 0.995603 3.17467 0.72114 3.16413C0.318258 3.14865 -0.000286359 2.8174 1.93177e-07 2.41423C0.000286745 2.01105 0.319302 1.68026 0.722205 1.66535Z" fill="white"/>
+                  <path d="M4.49961 2.41476C4.49961 2.82893 4.16386 3.16469 3.74968 3.16469C3.33551 3.16469 2.99976 2.82893 2.99976 2.41476C2.99976 2.00059 3.33551 1.66484 3.74968 1.66484C4.16386 1.66484 4.49961 2.00059 4.49961 2.41476Z" fill="white"/>
+                  <path d="M7.49937 2.41476C7.49937 2.82893 7.16361 3.16469 6.74944 3.16469C6.33527 3.16469 5.99951 2.82893 5.99951 2.41476C5.99951 2.00059 6.33527 1.66484 6.74944 1.66484C7.16361 1.66484 7.49937 2.00059 7.49937 2.41476Z" fill="white"/>
+                  <path d="M10.4989 2.41476C10.4989 2.82893 10.1631 3.16469 9.74895 3.16469C9.33478 3.16469 8.99902 2.82893 8.99902 2.41476C8.99902 2.00059 9.33478 1.66484 9.74895 1.66484C10.1631 1.66484 10.4989 2.00059 10.4989 2.41476Z" fill="white"/>
+                  <path d="M2.27796 4.82899C2.00349 4.83935 1.74531 4.69882 1.60499 4.4627C1.46468 4.22657 1.46468 3.93263 1.60499 3.6965C1.74531 3.46038 2.00349 3.31985 2.27796 3.33021C2.68084 3.34541 2.99961 3.67643 2.99961 4.0796C2.99961 4.48277 2.68084 4.81378 2.27796 4.82899Z" fill="white"/>
+                  <path d="M5.2777 4.82899C5.00323 4.83934 4.74506 4.69881 4.60474 4.46269C4.46443 4.22657 4.46443 3.93263 4.60474 3.69651C4.74506 3.46039 5.00323 3.31986 5.2777 3.33021C5.68059 3.3454 5.99937 3.67642 5.99937 4.0796C5.99937 4.48277 5.68059 4.8138 5.2777 4.82899Z" fill="white"/>
+                  <path d="M8.27745 4.82899C8.00298 4.83934 7.74481 4.69881 7.6045 4.46269C7.46419 4.22657 7.46419 3.93263 7.6045 3.69651C7.74481 3.46039 8.00298 3.31986 8.27745 3.33021C8.68034 3.3454 8.99912 3.67642 8.99912 4.0796C8.99912 4.48277 8.68034 4.8138 8.27745 4.82899Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M11.2212 3.33019C11.4957 3.32004 11.7538 3.46075 11.8939 3.69697C12.0341 3.93319 12.0338 4.22712 11.8934 4.46315C11.7529 4.69917 11.4946 4.83951 11.2202 4.82897C10.8173 4.81349 10.4987 4.48224 10.499 4.07907C10.4993 3.67589 10.8183 3.34509 11.2212 3.33019Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M0.722205 4.99503C0.996683 4.98487 1.25475 5.12558 1.39489 5.36181C1.53504 5.59803 1.53483 5.89196 1.39435 6.12799C1.25387 6.36401 0.995603 6.50435 0.72114 6.49381C0.318258 6.47833 -0.000286359 6.14708 1.93177e-07 5.74391C0.000286745 5.34073 0.319302 5.00993 0.722205 4.99503Z" fill="white"/>
+                  <path d="M4.49961 5.74444C4.49961 6.15861 4.16386 6.49436 3.74968 6.49436C3.33551 6.49436 2.99976 6.15861 2.99976 5.74444C2.99976 5.33027 3.33551 4.99451 3.74968 4.99451C4.16386 4.99451 4.49961 5.33027 4.49961 5.74444Z" fill="white"/>
+                  <path d="M7.49937 5.74444C7.49937 6.15861 7.16361 6.49436 6.74944 6.49436C6.33527 6.49436 5.99951 6.15861 5.99951 5.74444C5.99951 5.33027 6.33527 4.99451 6.74944 4.99451C7.16361 4.99451 7.49937 5.33027 7.49937 5.74444Z" fill="white"/>
+                  <path d="M10.4989 5.74444C10.4989 6.15861 10.1631 6.49436 9.74895 6.49436C9.33478 6.49436 8.99902 6.15861 8.99902 5.74444C8.99902 5.33027 9.33478 4.99451 9.74895 4.99451C10.1631 4.99451 10.4989 5.33027 10.4989 5.74444Z" fill="white"/>
+                  <path d="M2.22196 6.65987C2.49644 6.64972 2.75451 6.79043 2.89465 7.02665C3.03479 7.26287 3.03458 7.5568 2.8941 7.79283C2.75363 8.02885 2.49536 8.16919 2.2209 8.15865C1.81801 8.14317 1.49947 7.81192 1.49976 7.40875C1.50004 7.00557 1.81906 6.67477 2.22196 6.65987Z" fill="white"/>
+                  <path d="M5.22172 6.65987C5.49619 6.64972 5.75426 6.79043 5.8944 7.02665C6.03455 7.26287 6.03434 7.5568 5.89386 7.79283C5.75338 8.02885 5.49511 8.16919 5.22065 8.15865C4.81777 8.14317 4.49923 7.81192 4.49951 7.40875C4.4998 7.00557 4.81881 6.67477 5.22172 6.65987Z" fill="white"/>
+                  <path d="M8.22147 6.65987C8.49595 6.64972 8.75402 6.79043 8.89416 7.02665C9.0343 7.26287 9.03409 7.5568 8.89362 7.79283C8.75314 8.02885 8.49487 8.16919 8.22041 8.15865C7.81753 8.14317 7.49898 7.81192 7.49927 7.40875C7.49955 7.00557 7.81857 6.67477 8.22147 6.65987Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M11.2212 6.65987C11.4957 6.64972 11.7538 6.79043 11.8939 7.02665C12.0341 7.26287 12.0338 7.5568 11.8934 7.79283C11.7529 8.02885 11.4946 8.16919 11.2202 8.15865C10.8173 8.14317 10.4987 7.81192 10.499 7.40875C10.4993 7.00557 10.8183 6.67477 11.2212 6.65987Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M0.722205 8.32471C0.996683 8.31455 1.25475 8.45526 1.39489 8.69148C1.53504 8.92771 1.53483 9.22164 1.39435 9.45766C1.25387 9.69369 0.995603 9.83403 0.72114 9.82348C0.318258 9.80801 -0.000286359 9.47676 1.93177e-07 9.07358C0.000286745 8.67041 0.319302 8.33961 0.722205 8.32471Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M3.72196 8.32471C3.99644 8.31455 4.25451 8.45526 4.39465 8.69148C4.53479 8.92771 4.53458 9.22164 4.3941 9.45766C4.25363 9.69369 3.99536 9.83403 3.7209 9.82348C3.31801 9.80801 2.99947 9.47676 2.99976 9.07358C3.00004 8.67041 3.31906 8.33961 3.72196 8.32471Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M6.72172 8.32471C6.99619 8.31455 7.25426 8.45526 7.3944 8.69148C7.53455 8.92771 7.53434 9.22164 7.39386 9.45766C7.25338 9.69369 6.99511 9.83403 6.72065 9.82348C6.31777 9.80801 5.99923 9.47676 5.99951 9.07358C5.9998 8.67041 6.31881 8.33961 6.72172 8.32471Z" fill="white"/>
+                  <path opacity="0.5" fillRule="evenodd" clipRule="evenodd" d="M9.72123 8.32471C9.99571 8.31455 10.2538 8.45526 10.3939 8.69148C10.5341 8.92771 10.5338 9.22164 10.3934 9.45766C10.2529 9.69369 9.99463 9.83403 9.72016 9.82348C9.31728 9.80801 8.99874 9.47676 8.99902 9.07358C8.99931 8.67041 9.31833 8.33961 9.72123 8.32471Z" fill="white"/>
+                </svg>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M1.76222 7.43599C2.00468 7.16659 2.41963 7.14476 2.68902 7.38722L5.99993 10.3671L9.31108 7.3872C9.58048 7.14475 9.99542 7.1666 10.2379 7.436C10.4803 7.7054 10.4585 8.12034 10.1891 8.3628L6.43891 11.7378C6.31413 11.8501 6.15703 11.9062 5.99993 11.9062C5.84281 11.9063 5.68569 11.8501 5.5609 11.7378L1.81099 8.36278C1.5416 8.12032 1.51976 7.70538 1.76222 7.43599Z" fill="#474E5A"/>
+                  <path fillRule="evenodd" clipRule="evenodd" d="M5.5609 0.262219C5.68569 0.149903 5.84281 0.0937465 5.99993 0.09375C6.15703 0.0937535 6.31413 0.149905 6.43891 0.262204L10.1891 3.6372C10.4585 3.87966 10.4803 4.2946 10.2379 4.564C9.99542 4.8334 9.58048 4.85525 9.31108 4.6128L5.99993 1.63289L2.68902 4.61278C2.41963 4.85524 2.00468 4.83341 1.76222 4.56401C1.51976 4.29462 1.5416 3.87968 1.81099 3.63722L5.5609 0.262219Z" fill="#474E5A"/>
+                </svg>
+                <span className="text-[14px] text-[#353a44]">{countryCode}</span>
+              </button>
+              <input
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className="flex-1 h-10 px-3 border border-[#d8dee4] border-l-0 rounded-r-lg text-[14px] text-[#353a44] placeholder-[#8792a2] focus:outline-none focus:border-[#635bff] focus:ring-1 focus:ring-[#635bff] transition-colors"
+              />
+            </div>
+          </div>
+          
+          {/* Date of Birth */}
+          <div>
+            <label className="block text-[13px] font-medium text-[#353a44] mb-1">Date of birth</label>
+            <input
+              type="text"
+              value={dateOfBirth}
+              onChange={(e) => setDateOfBirth(e.target.value)}
+              placeholder="MM/DD/YYYY"
+              className="w-[140px] h-10 px-3 border border-[#d8dee4] rounded-lg text-[14px] text-[#353a44] placeholder-[#8792a2] focus:outline-none focus:border-[#635bff] focus:ring-1 focus:ring-[#635bff] transition-colors"
+            />
+          </div>
+          
+          {/* Billing Address */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[13px] font-medium text-[#353a44]">Billing address</label>
+              <button className="text-[#6c7688] hover:text-[#353a44] transition-colors">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.5 1.5L12.5 3.5M1.5 12.5L2 10L10.5 1.5L12.5 3.5L4 12L1.5 12.5Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            <div className="p-3 bg-[#f5f6f8] rounded-lg">
+              <p className="text-[12px] text-[#6c7688] mb-0.5">Business address</p>
+              <p className="text-[13px] text-[#353a44]">112 NE 8th Ave</p>
+              <p className="text-[13px] text-[#353a44]">Portland, OR 97232</p>
+            </div>
+          </div>
+        </div>
+        
+            {/* Footer */}
+            <div className="flex items-center justify-end gap-2 px-5 py-4 shrink-0">
+              <button
+                onClick={onBack || handleClose}
+                className="px-4 py-2 text-[14px] font-medium text-[#353a44] bg-white border border-[#d8dee4] rounded-md hover:bg-[#f5f6f8] transition-colors shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
+              >
+                Back
+              </button>
+              <button
+                onClick={() => setStep('success')}
+                className="px-4 py-2 text-[14px] font-medium text-white bg-[#635bff] rounded-md hover:bg-[#5651e5] transition-colors shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
+              >
+                Create cardholder
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // Add Funds Modal Component
 const AddFundsModal = ({ isOpen, onClose, onAddFunds }) => {
-  const [amount, setAmount] = useState('100');
+  const [amount, setAmount] = useState('0');
   const [step, setStep] = useState('select'); // 'select' or 'review'
   const [statementDescriptor, setStatementDescriptor] = useState('');
   const [internalNote, setInternalNote] = useState('');
@@ -353,6 +969,7 @@ const AddFundsModal = ({ isOpen, onClose, onAddFunds }) => {
 
   const handleClose = () => {
     setStep('select');
+    setAmount('0'); // Reset amount to default
     onClose();
   };
 
@@ -365,7 +982,7 @@ const AddFundsModal = ({ isOpen, onClose, onAddFunds }) => {
   };
   
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center">
       {/* Gray Background Overlay */}
       <div 
         className="absolute inset-0 bg-black/40"
@@ -408,15 +1025,22 @@ const AddFundsModal = ({ isOpen, onClose, onAddFunds }) => {
                   type="text"
                   value={amount}
                   onChange={(e) => {
-                    const val = e.target.value.replace(/[^0-9]/g, '');
-                    setAmount(val);
+                    let val = e.target.value.replace(/[^0-9]/g, '');
+                    // If current value is '0' (placeholder), replace it with new input
+                    if (amount === '0' && val.length > 1) {
+                      val = val.slice(1); // Remove the leading '0'
+                    }
+                    // Don't allow empty, use '0' as minimum
+                    setAmount(val || '0');
                   }}
                   autoFocus
-                  className="text-[48px] font-semibold text-[#353a44] leading-none bg-transparent border-none outline-none text-center caret-[#353a44]"
+                  className={`text-[48px] font-semibold leading-none bg-transparent border-none outline-none text-center ${
+                    amount === '0' ? 'text-[#D8DEE4] caret-[#353a44]' : 'text-[#353a44] caret-[#353a44]'
+                  }`}
                   style={{ width: `${Math.max(amount.length, 1) * 29}px` }}
                 />
                 <div 
-                  className="h-[4px] bg-[#353a44] rounded-sm"
+                  className={`h-[4px] rounded-sm ${amount === '0' ? 'bg-[#D8DEE4]' : 'bg-[#353a44]'}`}
                   style={{ width: `${Math.max(amount.length, 1) * 29}px` }}
                 />
               </div>
@@ -652,14 +1276,39 @@ const AddFundsModal = ({ isOpen, onClose, onAddFunds }) => {
 };
 
 // Main Issuing Home View Component
-const IssuingHomeView = () => {
+const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [compareEnabled, setCompareEnabled] = useState(true);
   const [selectedAccount, setSelectedAccount] = useState({ id: '1', label: 'Financial account 1' });
   const [isCreateMenuOpen, setIsCreateMenuOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [isAddFundsOpen, setIsAddFundsOpen] = useState(false);
-  const [fundsAvailable, setFundsAvailable] = useState(100.00);
+  const [isCreateCardOpen, setIsCreateCardOpen] = useState(false);
+  const [isCreateCardholderOpen, setIsCreateCardholderOpen] = useState(false);
+  const [fundsAvailable, setFundsAvailable] = useState(0.00);
+  
+  // Sync external AddFunds state with internal state
+  React.useEffect(() => {
+    if (externalAddFundsOpen) {
+      setIsAddFundsOpen(true);
+    }
+  }, [externalAddFundsOpen]);
+  
+  // Handle closing - notify parent if external control is being used
+  const handleAddFundsClose = () => {
+    setIsAddFundsOpen(false);
+    if (onExternalAddFundsClose) {
+      onExternalAddFundsClose();
+    }
+  };
+  
+  // Handle funds added successfully
+  const handleFundsAdded = (amount) => {
+    setFundsAvailable(prev => prev + amount);
+    if (onAddFundsComplete) {
+      onAddFundsComplete();
+    }
+  };
   
   const financialAccountOptions = [
     { id: '1', label: 'Financial account 1' },
@@ -687,6 +1336,7 @@ const IssuingHomeView = () => {
             {/* Create Button - Changes based on active tab, hidden for transactions/disputes */}
             {activeTab === 'cards' ? (
               <button 
+                onClick={() => setIsCreateCardOpen(true)}
                 className="px-3 py-1.5 bg-[#635bff] hover:bg-[#5851ea] text-white font-medium text-sm rounded-md flex items-center gap-1.5 shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
               >
                 <svg width="12" height="12" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -701,6 +1351,7 @@ const IssuingHomeView = () => {
               </button>
             ) : activeTab === 'cardholders' ? (
               <button 
+                onClick={() => setIsCreateCardholderOpen(true)}
                 className="px-3 py-1.5 bg-[#635bff] hover:bg-[#5851ea] text-white font-medium text-sm rounded-md flex items-center gap-1.5 shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
               >
                 <svg width="12" height="12" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -737,7 +1388,7 @@ const IssuingHomeView = () => {
                       <button
                         onClick={() => {
                           setIsCreateMenuOpen(false);
-                          // Handle create card action
+                          setIsCreateCardOpen(true);
                         }}
                         className="w-full px-4 py-2 text-left text-[14px] text-[#353a44] hover:bg-[#f5f6f8] transition-colors"
                       >
@@ -746,7 +1397,7 @@ const IssuingHomeView = () => {
                       <button
                         onClick={() => {
                           setIsCreateMenuOpen(false);
-                          // Handle create cardholder action
+                          setIsCreateCardholderOpen(true);
                         }}
                         className="w-full px-4 py-2 text-left text-[14px] text-[#353a44] hover:bg-[#f5f6f8] transition-colors"
                       >
@@ -1330,19 +1981,13 @@ const IssuingHomeView = () => {
                 <div className="w-20 py-2"></div>
                 <div className="w-32 py-2">Description</div>
                 <div className="flex-1 py-2">Card</div>
-                <div className="w-24 py-2">Date</div>
+                <div className="w-24 py-2 text-right pr-4">Date</div>
                 <div className="w-10 flex-shrink-0 py-2"></div>
               </div>
               
               {/* Table Body */}
               {[
                 { amount: '$10.00', currency: 'USD', status: 'Posted', description: 'Rocket Rides', cardName: 'Jenny Rosen', last4: '0005', date: 'Jan 14' },
-                { amount: '$25.50', currency: 'USD', status: 'Posted', description: 'Coffee Shop', cardName: 'Cam Sackett', last4: '2345', date: 'Jan 13' },
-                { amount: '$142.00', currency: 'USD', status: 'Pending', description: 'Office Supplies', cardName: 'Lulu Siegel', last4: '1726', date: 'Jan 12' },
-                { amount: '$89.99', currency: 'USD', status: 'Posted', description: 'Software Sub', cardName: 'Steven Johnson', last4: '8893', date: 'Jan 11' },
-                { amount: '$1,250.00', currency: 'USD', status: 'Posted', description: 'Cloud Services', cardName: 'Katie Litz', last4: '2787', date: 'Jan 10' },
-                { amount: '$45.00', currency: 'USD', status: 'Declined', description: 'Restaurant', cardName: 'Mathilde Jeakins', last4: '5211', date: 'Jan 9' },
-                { amount: '$320.00', currency: 'USD', status: 'Posted', description: 'Travel Booking', cardName: 'Runa Cameron', last4: '8432', date: 'Jan 8' },
               ].map((transaction, i) => (
                 <div key={i} className="flex items-center h-9 border-b border-[#e3e8ee]">
                   <div className="w-24 pl-4">
@@ -1364,9 +2009,9 @@ const IssuingHomeView = () => {
                     </span>
                   </div>
                   <div className="w-32 text-[14px] text-[#353a44]">{transaction.description}</div>
-                  <div className="flex-1 text-[14px] text-[#353a44]">••••{transaction.last4}</div>
-                  <div className="w-24 text-[14px] text-[#353a44]">{transaction.date}</div>
-                  <div className="w-10 flex-shrink-0 flex items-center justify-end pr-4">
+                  <div className="flex-1 text-[14px] text-[#353a44]">{transaction.cardName} •••• {transaction.last4}</div>
+                  <div className="w-24 text-[14px] text-[#353a44] text-right pr-4">{transaction.date}</div>
+                  <div className="w-10 flex-shrink-0 flex items-center justify-center">
                     <button className="text-[#6c7688] hover:text-[#353a44]">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1.5 7.5C2.32843 7.5 3 6.82843 3 6C3 5.17157 2.32843 4.5 1.5 4.5C0.671573 4.5 0 5.17157 0 6C0 6.82843 0.671573 7.5 1.5 7.5Z" fill="#6C7688"/>
@@ -1377,6 +2022,11 @@ const IssuingHomeView = () => {
                   </div>
                 </div>
               ))}
+              
+              {/* Footer */}
+              <div className="py-3 text-[12px] text-[#6c7688]">
+                Viewing 1–1 results
+              </div>
             </div>
           </div>
         )}
@@ -1927,8 +2577,28 @@ const IssuingHomeView = () => {
       {/* Add Funds Modal */}
       <AddFundsModal 
         isOpen={isAddFundsOpen} 
-        onClose={() => setIsAddFundsOpen(false)}
-        onAddFunds={(amount) => setFundsAvailable(prev => prev + amount)}
+        onClose={handleAddFundsClose}
+        onAddFunds={handleFundsAdded}
+      />
+      
+      {/* Create Card Modal */}
+      <CreateCardModal
+        isOpen={isCreateCardOpen}
+        onClose={() => setIsCreateCardOpen(false)}
+        onAddNewCardholder={() => {
+          setIsCreateCardOpen(false);
+          setIsCreateCardholderOpen(true);
+        }}
+      />
+      
+      {/* Create Cardholder Modal */}
+      <CreateCardholderModal
+        isOpen={isCreateCardholderOpen}
+        onClose={() => setIsCreateCardholderOpen(false)}
+        onBack={() => {
+          setIsCreateCardholderOpen(false);
+          setIsCreateCardOpen(true);
+        }}
       />
     </div>
   );

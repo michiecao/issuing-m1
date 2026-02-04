@@ -1,36 +1,46 @@
 import React, { useState } from 'react';
+import gradientBg from '../../assets/balances-modal-bg.svg';
+import modalPreviewGradient from '../../assets/modal-preview-gradient.svg';
+import createCardPopover from '../../assets/create-card-popover.svg';
+
+// Feature icons for the modal
+import modalIconCard from '../../assets/modal-icon-card.svg';
+import modalIconConvert from '../../assets/modal-icon-convert.svg';
+import modalIconRecurring from '../../assets/modal-icon-recurring.svg';
+import modalIconUsage from '../../assets/modal-icon-usage.svg';
+import createCardIcon from '../../assets/create-card-icon.svg';
+import convertIcon from '../../assets/convert-icon.svg';
+import lightningBoltIcon from '../../assets/lightning-bolt-icon.svg';
+import sendIcon from '../../assets/send-icon.svg';
+import topupIcon from '../../assets/topup-icon.svg';
+import reportIcon from '../../assets/report-icon.svg';
+import reportIcon1 from '../../assets/report-icon-1.svg';
+import reportIcon2 from '../../assets/report-icon-2.svg';
+import reportIcon3 from '../../assets/report-icon-3.svg';
+import reportIcon4 from '../../assets/report-icon-4.svg';
+import flagUS from '../../assets/flag-us.svg';
+import flagGB from '../../assets/flag-gb.svg';
+import flagEU from '../../assets/flag-eu.svg';
 
 // Icons
 const InstantPayoutIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8 2V14M8 2L4 6M8 2L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
+  <img src={lightningBoltIcon} alt="" className="w-4 h-4" />
 );
 
 const TransferIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M2 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M14 11H2M2 11L6 7M2 11L6 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
+  <img src={convertIcon} alt="" className="w-4 h-4" />
 );
 
 const AddFundsIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
+  <img src={topupIcon} alt="" className="w-4 h-4" />
 );
 
 const SendIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M14 2L7 9M14 2L10 14L7 9M14 2L2 6L7 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
+  <img src={sendIcon} alt="" className="w-4 h-4" />
 );
 
 const CreateCardIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="1.5" y="3.5" width="13" height="9" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-    <path d="M8 6V10M6 8H10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
+  <img src={createCardIcon} alt="" className="w-4 h-4" />
 );
 
 const MoreDotsIcon = () => (
@@ -51,8 +61,8 @@ const GlobeIcon = () => (
 );
 
 const ChevronDownIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M0.381282 4.38128C0.72299 4.03957 1.27701 4.03957 1.61872 4.38128L8 10.7626L14.3813 4.38128C14.723 4.03957 15.277 4.03957 15.6187 4.38128C15.9604 4.72299 15.9604 5.27701 15.6187 5.61872L8.61872 12.6187C8.27701 12.9604 7.72299 12.9604 7.38128 12.6187L0.381282 5.61872C0.0395728 5.27701 0.0395728 4.72299 0.381282 4.38128Z" fill="currentColor"/>
   </svg>
 );
 
@@ -70,64 +80,104 @@ const ArrowRightIcon = () => (
 );
 
 const CardIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="1.5" y="3.5" width="13" height="9" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-    <path d="M1.5 6.5H14.5" stroke="currentColor" strokeWidth="1.5"/>
-  </svg>
+  <img src={reportIcon} alt="" className="w-8 h-8" />
 );
 
 const PersonIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="8" cy="4.5" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
-    <path d="M3 13.5C3 11.0147 5.23858 9 8 9C10.7614 9 13 11.0147 13 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
+  <img src={reportIcon1} alt="" className="w-8 h-8" />
 );
 
 const IntegrateIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-    <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-    <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-    <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-  </svg>
+  <img src={reportIcon2} alt="" className="w-8 h-8" />
 );
 
 const ReportIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="2.5" y="1.5" width="11" height="13" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-    <path d="M5 5H11M5 8H11M5 11H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
+  <img src={reportIcon3} alt="" className="w-8 h-8" />
+);
+
+const ReportIcon2 = () => (
+  <img src={reportIcon4} alt="" className="w-8 h-8" />
 );
 
 // Action Button Component
-const ActionButton = ({ icon: Icon, label }) => (
-  <button className="flex items-center gap-1.5 px-3 py-[7px] bg-white border border-[#d8dee4] rounded-md text-[13px] font-medium text-[#353a44] hover:bg-[#f7f8f9] transition-colors shadow-[0_1px_1px_rgba(33,37,44,0.08)]">
+const ActionButton = ({ icon: Icon, label, onClick }) => (
+  <button 
+    onClick={onClick}
+    className="flex items-center gap-1.5 px-3 py-[7px] bg-[#f5f6f8] rounded-full text-[13px] font-medium text-[#353a44] hover:bg-[#e8eaed] transition-colors"
+  >
     <Icon />
     <span>{label}</span>
   </button>
 );
 
+// Create Card Popover Modal Component
+const CreateCardPopoverModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/40"
+        onClick={onClose}
+      />
+      
+      {/* Modal Content */}
+      <div className="relative">
+        <img 
+          src={createCardPopover}
+          alt="Create card options"
+          className="max-w-[400px] cursor-pointer"
+          onClick={onClose}
+        />
+      </div>
+    </div>
+  );
+};
+
 // Currency Pill Component
-const CurrencyPill = ({ flag, code, amount }) => (
-  <div className="flex items-center gap-1.5 px-2 py-1 bg-white/60 rounded-md text-[12px]">
-    <span>{flag}</span>
-    <span className="text-[#353a44] font-medium">{code}</span>
-    <span className="text-[#596171]">{amount}</span>
-  </div>
-);
+const flagMap = {
+  'USD': flagUS,
+  'GBP': flagGB,
+  'EUR': flagEU,
+};
+
+const CurrencyPill = ({ flag, code, amount }) => {
+  const flagSrc = flagMap[code];
+  return (
+    <div className="h-[48px] flex flex-col items-start justify-center px-2 bg-white/60 rounded-md text-[12px]">
+      <div className="flex items-center gap-1">
+        {flagSrc ? (
+          <img src={flagSrc} alt="" className="w-4 h-4" />
+        ) : (
+          <span>{flag}</span>
+        )}
+        <span className="text-[#353a44] font-medium">{code}</span>
+      </div>
+      <span className="text-[#596171]">{amount}</span>
+    </div>
+  );
+};
 
 // Balance Card Component
 const BalanceCard = ({ title, amount, subtitle, currencies, actions, hasLock, gradient }) => (
-  <div className={`flex-1 rounded-xl p-4 min-w-[200px] ${gradient}`}>
-    <div className="flex items-start justify-between mb-1">
-      <h3 className="text-[13px] font-medium text-[#353a44]">{title}</h3>
-      {hasLock && <LockIcon className="text-[#6c7688]" />}
+  <div className={`w-[229px] rounded-xl p-4 flex flex-col ${gradient}`}>
+    {/* Fixed height header section to align currencies across cards */}
+    <div className="h-[72px] mb-4">
+      <div className="flex items-start justify-between mb-1">
+        <h3 className="text-[13px] font-medium text-[#353a44]">{title}</h3>
+        {hasLock && (
+          <div className="w-[30px] h-[30px] rounded-full bg-white flex items-center justify-center">
+            <LockIcon className="text-[#6c7688]" />
+          </div>
+        )}
+      </div>
+      <div className="text-[24px] font-semibold text-[#353a44] tracking-[-0.5px] mb-0.5">{amount}</div>
+      {subtitle && <div className="text-[12px] text-[#596171]">{subtitle}</div>}
     </div>
-    <div className="text-[24px] font-semibold text-[#353a44] tracking-[-0.5px] mb-0.5">{amount}</div>
-    {subtitle && <div className="text-[12px] text-[#596171] mb-3">{subtitle}</div>}
     
     {currencies && (
-      <div className="flex flex-wrap gap-1.5 mb-3">
+      <div className="grid grid-cols-2 gap-1.5 mb-3">
         {currencies.map((currency, index) => (
           <CurrencyPill key={index} {...currency} />
         ))}
@@ -137,7 +187,7 @@ const BalanceCard = ({ title, amount, subtitle, currencies, actions, hasLock, gr
     {actions && (
       <div className="flex gap-2 mt-auto pt-2">
         {actions.map((action, index) => (
-          <button key={index} className="w-7 h-7 flex items-center justify-center rounded-md bg-white/60 hover:bg-white/80 text-[#596171] transition-colors">
+          <button key={index} className="w-7 h-7 flex items-center justify-center rounded-md hover:bg-black/5 text-[#596171] transition-colors">
             {action}
           </button>
         ))}
@@ -146,15 +196,15 @@ const BalanceCard = ({ title, amount, subtitle, currencies, actions, hasLock, gr
   </div>
 );
 
-// Status Badge Component
+// Status Badge Component - using same colors as Badge component
 const StatusBadge = ({ status }) => {
   const styles = {
-    'In transit': 'bg-[#fef6e7] text-[#b45309] border-[#fcd34d]',
-    'Paid': 'bg-[#ecfdf5] text-[#059669] border-[#6ee7b7]',
+    'In transit': 'text-yellow-700 bg-yellow-50 border-yellow-200',
+    'Paid': 'text-green-700 bg-green-50 border-green-200',
   };
   
   return (
-    <span className={`inline-flex px-2 py-0.5 text-[11px] font-medium rounded border ${styles[status] || 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+    <span className={`inline-flex items-center px-1.5 py-0.5 text-xs font-medium rounded-sm border ${styles[status] || 'text-gray-600 bg-gray-50 border-gray-200'}`}>
       {status}
     </span>
   );
@@ -162,32 +212,32 @@ const StatusBadge = ({ status }) => {
 
 // Activity Row Component
 const ActivityRow = ({ amount, status, description, date }) => (
-  <tr className="border-b border-[#e3e8ee] last:border-b-0">
-    <td className="py-3 pr-4">
+  <tr className="border-b border-[#e3e8ee] last:border-b-0 h-[36px]">
+    <td className="py-2 pr-4">
       <div className="flex items-center gap-2">
         <span className="text-[14px] font-medium text-[#353a44]">{amount}</span>
         <StatusBadge status={status} />
       </div>
     </td>
-    <td className="py-3 pr-4">
+    <td className="py-2 pr-4">
       <div className="flex items-center gap-1 text-[14px] text-[#596171]">
         <span>{description.from}</span>
         <ArrowRightIcon />
         <span>{description.to}</span>
       </div>
     </td>
-    <td className="py-3 text-[14px] text-[#596171] text-right">{date}</td>
+    <td className="py-2 text-[14px] text-[#596171] text-right">{date}</td>
   </tr>
 );
 
 // Upcoming Item Component
 const UpcomingItem = ({ month, day, amount, description }) => (
-  <div className="flex gap-3 p-3 bg-[#f7f8f9] rounded-lg">
-    <div className="flex flex-col items-center justify-center w-12 h-12 bg-white rounded-lg border border-[#e3e8ee]">
-      <span className="text-[10px] font-semibold text-[#596171] uppercase">{month}</span>
+  <div className="flex bg-white border border-[#d8dee4] rounded-lg overflow-hidden">
+    <div className="flex flex-col items-center justify-center w-14 bg-[#EFECFC] py-3">
+      <span className="text-[10px] font-semibold text-[#353a44] uppercase">{month}</span>
       <span className="text-[18px] font-semibold text-[#353a44] leading-none">{day}</span>
     </div>
-    <div className="flex-1">
+    <div className="flex-1 p-3">
       <div className="text-[14px] font-semibold text-[#353a44]">{amount}</div>
       <div className="text-[12px] text-[#596171]">{description}</div>
     </div>
@@ -196,17 +246,135 @@ const UpcomingItem = ({ month, day, amount, description }) => (
 
 // Resource Link Component
 const ResourceLink = ({ icon: Icon, label }) => (
-  <a href="#" className="flex items-center gap-3 text-[14px] text-[#353a44] hover:text-[#533afd] transition-colors">
-    <div className="w-5 h-5 flex items-center justify-center text-[#6c7688]">
+  <a href="#" className="flex items-center gap-3 text-[14px] font-semibold text-[#353a44] hover:text-[#533afd] transition-colors">
+    <div className="w-8 h-8 flex items-center justify-center text-[#6c7688]">
       <Icon />
     </div>
     <span>{label}</span>
   </a>
 );
 
+
+// Create Cards Modal Component - Updated to match Figma design
+const CreateCardsModal = ({ isOpen, onClose, onGetStarted }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-[rgba(182,192,205,0.7)]"
+        onClick={onClose}
+      />
+      
+      {/* Modal - 960x640 per Figma */}
+      <div className="relative flex bg-white rounded-xl shadow-[0px_15px_35px_rgba(48,49,61,0.08),0px_5px_15px_rgba(0,0,0,0.12)] w-[960px] h-[640px] overflow-hidden">
+        {/* Close Button - Top right of entire modal */}
+        <button 
+          onClick={onClose}
+          className="absolute top-6 right-6 w-3 h-3 flex items-center justify-center text-[#6c7688] hover:text-[#353a44] transition-colors z-20"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1L11 11M1 11L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        </button>
+        
+        {/* Left Panel - Content (480px including 48px padding on each side = 384px content) */}
+        <div className="w-[480px] p-12 flex flex-col">
+          <h2 className="text-[28px] font-bold text-[#21252c] leading-[36px] tracking-[0.38px] mb-6">
+            Create cards to manage expenses
+          </h2>
+          
+          <div className="flex flex-col gap-4 flex-1">
+            {/* Feature 1 - Virtual/Physical cards */}
+            <div className="flex gap-2 items-center">
+              <div className="w-11 h-11 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-3">
+                <img src={modalIconCard} alt="" className="w-5 h-5" />
+              </div>
+              <p className="text-[20px] text-[#353a44] leading-[28px] tracking-[0.3px]">
+                Create <span className="font-bold">virtual</span> or <span className="font-bold">physical</span> cards for your team in just a few clicks.
+              </p>
+            </div>
+            
+            {/* Feature 2 - Multiple currencies */}
+            <div className="flex gap-2 items-center">
+              <div className="w-11 h-11 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-3">
+                <img src={modalIconConvert} alt="" className="w-5 h-5" />
+              </div>
+              <p className="text-[20px] text-[#353a44] leading-[28px] tracking-[0.3px]">
+                Spend in <span className="font-bold">multiple currencies</span> straight from your <span className="font-bold">financial account</span> balance.
+              </p>
+            </div>
+            
+            {/* Feature 3 - Manage subscriptions */}
+            <div className="flex gap-2 items-center">
+              <div className="w-11 h-11 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-3">
+                <img src={modalIconRecurring} alt="" className="w-5 h-5" />
+              </div>
+              <p className="text-[20px] text-[#353a44] leading-[28px] tracking-[0.3px]">
+                <span className="font-bold">Manage</span> subscriptions, expenses, and bills.
+              </p>
+            </div>
+            
+            {/* Feature 4 - Spend limits */}
+            <div className="flex gap-2 items-center">
+              <div className="w-11 h-11 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-3">
+                <img src={modalIconUsage} alt="" className="w-5 h-5" />
+              </div>
+              <p className="text-[20px] text-[#353a44] leading-[28px] tracking-[0.3px]">
+                Set spend <span className="font-bold">limits</span>, track <span className="font-bold">usage</span>, and manage team cards.
+              </p>
+            </div>
+          </div>
+          
+          {/* Get Started Button - Per Figma specs */}
+          <button 
+            onClick={onGetStarted || onClose}
+            className="w-full min-h-[40px] py-2 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-[16px] leading-6 tracking-[-0.31px] rounded-md transition-colors shadow-[0px_1px_1px_0px_rgba(47,14,99,0.32)]"
+          >
+            Get started
+          </button>
+        </div>
+        
+        {/* Right Panel - Illustration (480px) */}
+        <div className="w-[480px] h-full relative overflow-hidden">
+          {/* Gradient Background */}
+          <img 
+            src={modalPreviewGradient}
+            alt=""
+            className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] object-cover rounded-lg"
+          />
+          {/* Illustration overlay - centered and scaled down */}
+          <div className="absolute inset-0 flex items-center justify-center p-8">
+            <img 
+              src={new URL('../../assets/cards-modal-illustration.svg', import.meta.url).href}
+              alt="Cards illustration"
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Main Balances View Component
-const BalancesView = () => {
+const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal }) => {
   const [activeTab, setActiveTab] = useState('payments');
+  const [isCreateCardsModalOpen, setIsCreateCardsModalOpen] = useState(showCreateCardsModal);
+  const [isCreateCardPopoverOpen, setIsCreateCardPopoverOpen] = useState(false);
+  
+  // Sync with prop changes
+  React.useEffect(() => {
+    setIsCreateCardsModalOpen(showCreateCardsModal);
+  }, [showCreateCardsModal]);
+  
+  const handleCloseCreateCardsModal = () => {
+    setIsCreateCardsModalOpen(false);
+    if (onCloseCreateCardsModal) {
+      onCloseCreateCardsModal();
+    }
+  };
 
   const activityData = [
     { amount: '$44,792.05', status: 'In transit', description: { from: 'Payments balance', to: 'Wells Fargo Bank' }, date: 'Sep 26' },
@@ -219,24 +387,24 @@ const BalancesView = () => {
   return (
     <div className="flex-1 bg-white">
       {/* Main Content */}
-      <div className="p-8 max-w-[1200px]">
+      <div className="p-8">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-4">
           <h1 className="text-[28px] font-semibold text-[#353a44] tracking-[-0.5px]">
-            Balances <span className="font-normal text-[#596171]">$113,049.82</span>
+            Balances <span className="font-normal text-[#353A44]">$113,049.82</span>
           </h1>
         </div>
 
         {/* Action Buttons Row */}
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-2 mb-4">
           <ActionButton icon={InstantPayoutIcon} label="Instant payout" />
           <ActionButton icon={TransferIcon} label="Transfer" />
           <ActionButton icon={AddFundsIcon} label="Add funds" />
           <ActionButton icon={SendIcon} label="Send" />
-          <ActionButton icon={CreateCardIcon} label="Create card" />
+          <ActionButton icon={CreateCardIcon} label="Create card" onClick={() => setIsCreateCardPopoverOpen(true)} />
           <ActionButton icon={MoreDotsIcon} label="More" />
           <div className="ml-auto">
-            <button className="flex items-center gap-1.5 px-3 py-[7px] bg-white border border-[#d8dee4] rounded-md text-[13px] font-medium text-[#353a44] hover:bg-[#f7f8f9] transition-colors shadow-[0_1px_1px_rgba(33,37,44,0.08)]">
+            <button className="flex items-center gap-1.5 px-3 py-[7px] bg-white border border-[#d8dee4] rounded-full text-[13px] font-medium text-[#353a44] hover:bg-[#f7f8f9] transition-colors">
               <GlobeIcon />
               <span>All currencies</span>
               <ChevronDownIcon />
@@ -245,8 +413,14 @@ const BalancesView = () => {
         </div>
 
         {/* Balance Cards Section */}
-        <div className="rounded-2xl p-4 mb-8" style={{ background: 'linear-gradient(135deg, #e8f4f8 0%, #f0e6f6 50%, #fef3e2 100%)' }}>
-          <div className="flex gap-4">
+        <div className="rounded-2xl p-4 mb-8 relative overflow-hidden">
+          {/* Gradient Background */}
+          <img 
+            src={gradientBg}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="flex gap-3 relative z-10">
             {/* Payments Balance Card */}
             <BalanceCard
               title="Payments balance"
@@ -366,11 +540,24 @@ const BalancesView = () => {
               <ResourceLink icon={PersonIcon} label="Manage recipients" />
               <ResourceLink icon={IntegrateIcon} label="Integrate with accounting app" />
               <ResourceLink icon={ReportIcon} label="Balance summary report" />
-              <ResourceLink icon={ReportIcon} label="Financial account report" />
+              <ResourceLink icon={ReportIcon2} label="Financial account report" />
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Create Cards Modal */}
+      <CreateCardsModal 
+        isOpen={isCreateCardsModalOpen} 
+        onClose={handleCloseCreateCardsModal}
+        onGetStarted={handleCloseCreateCardsModal}
+      />
+      
+      {/* Create Card Popover Modal */}
+      <CreateCardPopoverModal 
+        isOpen={isCreateCardPopoverOpen}
+        onClose={() => setIsCreateCardPopoverOpen(false)}
+      />
     </div>
   );
 };
