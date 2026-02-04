@@ -512,6 +512,97 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
 };
 
 // Step 3: Pricing Content
+// Owner Information Content - "Provide more information" step
+// Owner/KYC Information Content - "Provide more information" step
+const OwnerInfoContent = ({ onContinue }) => (
+  <div className="w-full max-w-[580px] px-4">
+    {/* Page Header */}
+    <div className="mb-8">
+      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
+        Provide more information
+      </h1>
+      <p className="text-[16px] text-[#596171] leading-[24px]">
+        Before you can start issuing cards, Stripe needs more information from you.
+      </p>
+    </div>
+    
+    {/* Placeholder Box */}
+    <div className="bg-[#f5f6f8] rounded-lg h-[360px] w-full mb-8" />
+    
+    {/* Continue Button */}
+    <div className="flex justify-center">
+      <button 
+        onClick={onContinue}
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+      >
+        Continue
+      </button>
+    </div>
+  </div>
+);
+
+// Card Holders Content - "Describe card holders" step
+const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHolder }) => (
+  <div className="w-full max-w-[580px] px-4">
+    {/* Page Header */}
+    <div className="mb-8">
+      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
+        Who do you want to issue cards for?
+      </h1>
+      <p className="text-[16px] text-[#596171] leading-[24px]">
+        Choose who will hold and use the cards.
+      </p>
+    </div>
+    
+    {/* Card Holder Options */}
+    <div className="space-y-[9px] mb-8">
+      <button
+        onClick={() => setSelectedCardHolder('business')}
+        className={`w-full text-left px-[14px] py-[10px] rounded-lg transition-colors ${
+          selectedCardHolder === 'business' 
+            ? 'border-2 border-[#675dff] bg-white' 
+            : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
+        }`}
+      >
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">My business</h4>
+        <p className="text-[14px] text-[#596171] leading-5">Example: employees or agents of your business</p>
+      </button>
+      <button
+        onClick={() => setSelectedCardHolder('platforms')}
+        className={`w-full text-left px-[14px] py-[10px] rounded-lg transition-colors ${
+          selectedCardHolder === 'platforms' 
+            ? 'border-2 border-[#675dff] bg-white' 
+            : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
+        }`}
+      >
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Businesses of my platform</h4>
+        <p className="text-[14px] text-[#596171] leading-5">Example: LLC or S-corp entities using your platform</p>
+      </button>
+      <button
+        onClick={() => setSelectedCardHolder('consumers')}
+        className={`w-full text-left px-[14px] py-[10px] rounded-lg transition-colors ${
+          selectedCardHolder === 'consumers' 
+            ? 'border-2 border-[#675dff] bg-white' 
+            : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
+        }`}
+      >
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Consumers on my platform</h4>
+        <p className="text-[14px] text-[#596171] leading-5">Example: Individuals using your platform</p>
+      </button>
+    </div>
+    
+    {/* Continue Button */}
+    <div className="flex justify-center">
+      <button 
+        onClick={onContinue}
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+      >
+        Continue
+      </button>
+    </div>
+  </div>
+);
+
 const PricingContent = ({ onContinue }) => (
   <div className="w-full max-w-[580px] px-4">
     {/* Page Header */}
@@ -794,6 +885,64 @@ const SuccessContent = ({ onStartIntegrating, onViewDocs }) => (
   </div>
 );
 
+// Declined Content (Step 7 for declined path)
+const DeclinedContent = ({ onClose }) => (
+  <div className="w-full max-w-[580px] px-4 flex flex-col items-center text-center">
+    {/* Warning Icon */}
+    <div className="w-16 h-16 rounded-full bg-[#fef3cd] flex items-center justify-center mb-6">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 10V18M16 22V22.01" stroke="#B45309" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M3.77 22.91L13.88 5.17C14.05 4.88 14.29 4.64 14.58 4.48C14.87 4.32 15.19 4.23 15.52 4.23C15.85 4.23 16.17 4.32 16.46 4.48C16.75 4.64 16.99 4.88 17.16 5.17L27.27 22.91C27.44 23.2 27.53 23.53 27.53 23.87C27.53 24.21 27.44 24.54 27.27 24.83C27.1 25.12 26.86 25.36 26.57 25.52C26.28 25.68 25.95 25.77 25.62 25.77H5.42C5.09 25.77 4.76 25.68 4.47 25.52C4.18 25.36 3.94 25.12 3.77 24.83C3.6 24.54 3.51 24.21 3.51 23.87C3.51 23.53 3.6 23.2 3.77 22.91Z" stroke="#B45309" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </div>
+    
+    {/* Page Header */}
+    <div className="mb-6">
+      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
+        We can't approve your application right now
+      </h1>
+      <p className="text-[16px] text-[#596171] leading-[24px]">
+        Based on the information provided, we're unable to approve your Issuing application at this time. This decision was made based on our review of your business information and compliance requirements.
+      </p>
+    </div>
+    
+    {/* Info Box */}
+    <div className="w-full bg-[#f5f6f8] rounded-lg p-6 mb-6 text-left">
+      <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">What happens next?</h3>
+      <ul className="space-y-2 text-[14px] text-[#596171]">
+        <li className="flex items-start gap-2">
+          <span className="text-[#596171] mt-1">•</span>
+          <span>You'll receive an email with more details about this decision within 1-2 business days.</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="text-[#596171] mt-1">•</span>
+          <span>If you believe this decision was made in error, you can contact our support team.</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="text-[#596171] mt-1">•</span>
+          <span>You may reapply after 90 days with updated business information.</span>
+        </li>
+      </ul>
+    </div>
+    
+    {/* Buttons */}
+    <div className="flex flex-col gap-4 w-full">
+      <button 
+        onClick={onClose}
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+      >
+        Return to dashboard
+      </button>
+      <a 
+        href="#"
+        className="w-full py-3 text-[#533afd] font-semibold text-base hover:underline text-center"
+      >
+        Contact support
+      </a>
+    </div>
+  </div>
+);
+
 // Right Sidebar Callout for Step 2
 const UseCaseCallout = () => (
   <div className="w-[278px] bg-[#f5f6f8] rounded-lg p-4">
@@ -810,43 +959,88 @@ const UseCaseCallout = () => (
 );
 
 // Main Modal Component
-const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onViewDocs }) => {
-  const [currentStep, setCurrentStep] = useState(0);
+const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onViewDocs, initialStep = 0, onboardingPath = 'happy' }) => {
+  const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
+  const [selectedCardHolder, setSelectedCardHolder] = useState(null);
   const [description, setDescription] = useState('');
   const [agreedTerms, setAgreedTerms] = useState(false);
+  
+  // Declined path has fewer steps (no "Describe card holders" step)
+  const hasCardHoldersStep = onboardingPath !== 'declined';
+  const maxStep = hasCardHoldersStep ? 7 : 6;
+  const processingStep = hasCardHoldersStep ? 6 : 5;
+  const finalStep = hasCardHoldersStep ? 7 : 6;
+  
+  // Reset to initial step when modal opens with a new initialStep
+  React.useEffect(() => {
+    if (isOpen) {
+      setCurrentStep(initialStep);
+    }
+  }, [isOpen, initialStep]);
 
-  // Auto-transition from processing (step 5) to success (step 6) after 5 seconds
+  // Auto-transition from processing to success/declined after 5 seconds
   useEffect(() => {
-    if (currentStep === 5) {
+    if (currentStep === processingStep) {
       const timer = setTimeout(() => {
-        setCurrentStep(6);
+        setCurrentStep(finalStep);
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [currentStep]);
+  }, [currentStep, processingStep, finalStep]);
 
   if (!isOpen) return null;
 
-  // Task list shows 5 items now with "Choose setup type" as first step
-  // Step 0: Choose setup type
-  // Step 1: Review your information
-  // Step 2: Describe use case
-  // Step 3: Review pricing
-  // Step 4: Review and submit
-  // Step 5: Processing screen (task list hidden)
-  // Step 6: Success screen (task list hidden)
-  const steps = [
-    { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
-    { label: 'Review your information', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
-    { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
-    { label: 'Review pricing', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
-    { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
-  ];
+  // Step flow:
+  // Happy/KYC paths (8 steps):
+  //   0: Choose setup type
+  //   1: Review your information (happy) OR Provide more information (kyc)
+  //   2: Describe use case
+  //   3: Describe card holders
+  //   4: Review pricing
+  //   5: Review and submit
+  //   6: Processing
+  //   7: Success
+  // Declined path (7 steps - no card holders):
+  //   0: Choose setup type
+  //   1: Provide more information
+  //   2: Describe use case
+  //   3: Review pricing
+  //   4: Review and submit
+  //   5: Processing
+  //   6: Declined
+  
+  // Build steps array based on path
+  const getSteps = () => {
+    const step1Label = (onboardingPath === 'kyc' || onboardingPath === 'declined') 
+      ? 'Provide more information' 
+      : 'Review your information';
+    
+    if (hasCardHoldersStep) {
+      return [
+        { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
+        { label: step1Label, status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
+        { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
+        { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
+        { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
+        { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending' },
+      ];
+    } else {
+      return [
+        { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
+        { label: step1Label, status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
+        { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
+        { label: 'Review pricing', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
+        { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
+      ];
+    }
+  };
+  
+  const steps = getSteps();
 
   const handleContinue = () => {
-    if (currentStep < 6) {
+    if (currentStep < maxStep) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -857,8 +1051,11 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
     }
   };
 
-  const isProcessingScreen = currentStep === 5;
-  const isSuccessScreen = currentStep === 6;
+  // Processing and final screens
+  const isProcessingScreen = currentStep === processingStep;
+  const isFinalScreen = currentStep === finalStep;
+  const isSuccessScreen = isFinalScreen && onboardingPath !== 'declined';
+  const isDeclinedScreen = isFinalScreen && onboardingPath === 'declined';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -873,7 +1070,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 shrink-0">
           <h2 className="font-bold text-[16px] text-[#353a44] tracking-[-0.31px]">Set up Issuing</h2>
-          {isSuccessScreen ? (
+          {isFinalScreen ? (
             <button 
               onClick={onComplete || onClose}
               className="px-3 py-1.5 text-sm text-[#353a44] border border-[#d8dee4] rounded-md hover:bg-gray-50 transition-colors"
@@ -901,9 +1098,9 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
         
         {/* Content - Three column layout with centered main content */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Left Sidebar - Task List (hidden on processing and success screens) */}
+          {/* Left Sidebar - Task List (hidden on processing and final screens) */}
           <div className="w-[278px] pt-6 px-8 shrink-0">
-            {!isProcessingScreen && !isSuccessScreen && (
+            {!isProcessingScreen && !isFinalScreen && (
               <div className="space-y-0">
                 {steps.map((step, index) => (
                   <TaskListItem
@@ -927,8 +1124,12 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                   setSelectedSetupType={setSelectedSetupType}
                 />
               )}
-              {currentStep === 1 && (
+              {/* Step 1: Review info (happy) or Provide more info (kyc/declined) */}
+              {currentStep === 1 && onboardingPath === 'happy' && (
                 <ReviewInfoContent onContinue={handleContinue} />
+              )}
+              {currentStep === 1 && (onboardingPath === 'kyc' || onboardingPath === 'declined') && (
+                <OwnerInfoContent onContinue={handleContinue} />
               )}
               {currentStep === 2 && (
                 <UseCaseContent 
@@ -939,26 +1140,62 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                   setDescription={setDescription}
                 />
               )}
-              {currentStep === 3 && (
-                <PricingContent onContinue={handleContinue} />
-              )}
-              {currentStep === 4 && (
-                <SubmitReviewContent
-                  onSubmit={handleContinue}
-                  selectedUseCase={selectedUseCase}
-                  description={description}
-                  agreedTerms={agreedTerms}
-                  setAgreedTerms={setAgreedTerms}
-                />
-              )}
-              {currentStep === 5 && (
-                <ProcessingContent />
-              )}
-              {currentStep === 6 && (
-                <SuccessContent 
-                  onStartIntegrating={handleStartIntegratingClick} 
-                  onViewDocs={onViewDocs || onComplete || onClose} 
-                />
+              
+              {/* Path-dependent steps after Use Case */}
+              {hasCardHoldersStep ? (
+                <>
+                  {/* Happy/KYC path: includes Describe card holders step */}
+                  {currentStep === 3 && (
+                    <CardHoldersContent 
+                      onContinue={handleContinue}
+                      selectedCardHolder={selectedCardHolder}
+                      setSelectedCardHolder={setSelectedCardHolder}
+                    />
+                  )}
+                  {currentStep === 4 && (
+                    <PricingContent onContinue={handleContinue} />
+                  )}
+                  {currentStep === 5 && (
+                    <SubmitReviewContent
+                      onSubmit={handleContinue}
+                      selectedUseCase={selectedUseCase}
+                      description={description}
+                      agreedTerms={agreedTerms}
+                      setAgreedTerms={setAgreedTerms}
+                    />
+                  )}
+                  {currentStep === 6 && (
+                    <ProcessingContent />
+                  )}
+                  {currentStep === 7 && (
+                    <SuccessContent 
+                      onStartIntegrating={handleStartIntegratingClick} 
+                      onViewDocs={onViewDocs || onComplete || onClose} 
+                    />
+                  )}
+                </>
+              ) : (
+                <>
+                  {/* Declined path: no card holders step */}
+                  {currentStep === 3 && (
+                    <PricingContent onContinue={handleContinue} />
+                  )}
+                  {currentStep === 4 && (
+                    <SubmitReviewContent
+                      onSubmit={handleContinue}
+                      selectedUseCase={selectedUseCase}
+                      description={description}
+                      agreedTerms={agreedTerms}
+                      setAgreedTerms={setAgreedTerms}
+                    />
+                  )}
+                  {currentStep === 5 && (
+                    <ProcessingContent />
+                  )}
+                  {currentStep === 6 && (
+                    <DeclinedContent onClose={onClose} />
+                  )}
+                </>
               )}
             </div>
           </div>
