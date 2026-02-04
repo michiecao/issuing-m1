@@ -4,6 +4,7 @@ import IssuingHomeView from './IssuingHomeView';
 import QuickstartGuideView, { BlueprintPanel, SetupGuide } from './QuickstartGuideView';
 import BalancesView from './BalancesView';
 import PrototypeControlPanel from '../../components/PrototypeControlPanel';
+import SandboxBanner from '../../components/SandboxBanner';
 
 // Icons as inline SVGs - matching Sail UI / Stripe Dashboard icons from Figma
 const HomeIcon = () => (
@@ -229,6 +230,7 @@ const DashboardView = () => {
   const [addFundsCompleted, setAddFundsCompleted] = useState(false);
   const [showSetupGuide, setShowSetupGuide] = useState(false);
   const [setupGuideCompletedTasks, setSetupGuideCompletedTasks] = useState(1);
+  const [isSandboxMode, setIsSandboxMode] = useState(false);
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
@@ -243,6 +245,19 @@ const DashboardView = () => {
     setAddFundsCompleted(false);
     setShowSetupGuide(false);
     setSetupGuideCompletedTasks(1);
+    setIsSandboxMode(false);
+  };
+  
+  // Handle "Explore in sandbox" button click
+  const handleExploreSandbox = () => {
+    setIsSandboxMode(true);
+    setIsModalOpen(true);
+  };
+  
+  // Handle exiting sandbox mode
+  const handleExitSandbox = () => {
+    setIsSandboxMode(false);
+    handleResetPrototype();
   };
   
   // Handle exiting the blueprint - show setup guide with completed tasks
@@ -328,91 +343,98 @@ const DashboardView = () => {
   // Render Quickstart Guide as a standalone full-page view (no dashboard sidebar)
   if (showQuickstartGuide) {
     return (
-      <div className="flex h-screen bg-white">
-        <QuickstartGuideView onExit={() => setShowQuickstartGuide(false)} />
+      <div className={`flex flex-col h-screen ${isSandboxMode ? 'bg-[#1a1f36]' : 'bg-white'}`}>
+        {isSandboxMode && <SandboxBanner onExit={handleExitSandbox} />}
+        <div className={`flex flex-1 ${isSandboxMode ? 'mt-[52px] bg-white rounded-t-[12px] overflow-hidden' : ''}`}>
+          <QuickstartGuideView onExit={() => setShowQuickstartGuide(false)} isSandboxMode={isSandboxMode} onExitSandbox={handleExitSandbox} />
         
-        {/* Prototype Control Panel */}
-        <PrototypeControlPanel>
-          <div className="space-y-2">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Onboarding path</p>
-            <div className="flex flex-col gap-1">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="onboardingPath"
-                  value="happy"
-                  checked={onboardingPath === 'happy'}
-                  onChange={(e) => setOnboardingPath(e.target.value)}
-                  className="w-4 h-4 text-blue-600"
-                />
-                <span className="text-sm text-gray-700">Happy path</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="onboardingPath"
-                  value="kyc"
-                  checked={onboardingPath === 'kyc'}
-                  onChange={(e) => setOnboardingPath(e.target.value)}
-                  className="w-4 h-4 text-blue-600"
-                />
-                <span className="text-sm text-gray-700">Needs KYC</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="onboardingPath"
-                  value="declined"
-                  checked={onboardingPath === 'declined'}
-                  onChange={(e) => setOnboardingPath(e.target.value)}
-                  className="w-4 h-4 text-blue-600"
-                />
-                <span className="text-sm text-gray-700">Declined</span>
-              </label>
+          {/* Prototype Control Panel */}
+          <PrototypeControlPanel>
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Onboarding path</p>
+              <div className="flex flex-col gap-1">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="onboardingPath"
+                    value="happy"
+                    checked={onboardingPath === 'happy'}
+                    onChange={(e) => setOnboardingPath(e.target.value)}
+                    className="w-4 h-4 text-blue-600"
+                  />
+                  <span className="text-sm text-gray-700">Happy path</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="onboardingPath"
+                    value="kyc"
+                    checked={onboardingPath === 'kyc'}
+                    onChange={(e) => setOnboardingPath(e.target.value)}
+                    className="w-4 h-4 text-blue-600"
+                  />
+                  <span className="text-sm text-gray-700">Needs KYC</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="onboardingPath"
+                    value="declined"
+                    checked={onboardingPath === 'declined'}
+                    onChange={(e) => setOnboardingPath(e.target.value)}
+                    className="w-4 h-4 text-blue-600"
+                  />
+                  <span className="text-sm text-gray-700">Declined</span>
+                </label>
+              </div>
             </div>
-          </div>
-          <div className="border-t border-gray-200 pt-3 space-y-1">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Jump to step</p>
-            <div className="flex flex-col gap-1">
-              <button
-                onClick={handleJumpToLanding}
-                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-              >
-                1. Landing view
-              </button>
-              <button
-                onClick={handleJumpToSuccess}
-                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-              >
-                2. {onboardingPath === 'declined' ? 'Declined view' : '"You\'re ready" view'}
-              </button>
-              {onboardingPath !== 'declined' && (
+            <div className="border-t border-gray-200 pt-3 space-y-1">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Jump to step</p>
+              <div className="flex flex-col gap-1">
                 <button
-                  onClick={handleJumpToDashboard}
+                  onClick={handleJumpToLanding}
                   className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
                 >
-                  3. Issuing dashboard
+                  1. Landing view
                 </button>
-              )}
+                <button
+                  onClick={handleJumpToSuccess}
+                  className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+                >
+                  2. {onboardingPath === 'declined' ? 'Declined view' : '"You\'re ready" view'}
+                </button>
+                {onboardingPath !== 'declined' && (
+                  <button
+                    onClick={handleJumpToDashboard}
+                    className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+                  >
+                    3. Issuing dashboard
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-          <div className="border-t border-gray-200 pt-3">
-            <button
-              onClick={handleResetPrototype}
-              className="w-full px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 border border-gray-300 hover:bg-gray-100"
-            >
-              Reset prototype
-            </button>
-          </div>
-        </PrototypeControlPanel>
+            <div className="border-t border-gray-200 pt-3">
+              <button
+                onClick={handleResetPrototype}
+                className="w-full px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 border border-gray-300 hover:bg-gray-100"
+              >
+                Reset prototype
+              </button>
+            </div>
+          </PrototypeControlPanel>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-white">
-      {/* Sidebar */}
-      <div className="w-[228px] border-r border-[#ebeef1] flex flex-col h-full shrink-0 bg-white">
+    <div className={`flex flex-col h-screen ${isSandboxMode ? 'bg-[#1a1f36]' : 'bg-white'}`}>
+      {/* Sandbox Banner - shown when in sandbox mode */}
+      {isSandboxMode && <SandboxBanner onExit={handleExitSandbox} />}
+      
+      <div className={`flex flex-1 min-h-0 ${isSandboxMode ? 'mt-[52px] bg-white rounded-t-[12px] overflow-hidden' : ''}`}>
+        {/* Sidebar */}
+        <div className="w-[228px] border-r border-[#ebeef1] flex flex-col h-full shrink-0 bg-white">
         {/* Account Header */}
         <div className="h-[60px] flex items-center px-5">
           <button className="flex items-center gap-2 hover:opacity-80 transition-opacity">
@@ -513,6 +535,8 @@ const DashboardView = () => {
           <BalancesView 
             showCreateCardsModal={showBalancesCreateCardsModal}
             onCloseCreateCardsModal={() => setShowBalancesCreateCardsModal(false)}
+            isSandboxMode={isSandboxMode}
+            onExitSandbox={handleExitSandbox}
           />
         ) : isOnboardingComplete ? (
           /* Issuing Home View - shown after onboarding */
@@ -525,6 +549,8 @@ const DashboardView = () => {
                 // Re-expand the blueprint overlay after adding funds
                 setIsBlueprintMinimized(false);
               }}
+              isSandboxMode={isSandboxMode}
+              onExitSandbox={handleExitSandbox}
             />
             <SetupGuide 
               isOpen={showBlueprintOverlay || showSetupGuide} 
@@ -568,7 +594,10 @@ const DashboardView = () => {
                       >
                         Get started
                       </button>
-                      <button className="px-4 py-2.5 bg-white hover:bg-gray-50 text-[#353a44] font-medium text-[14px] rounded-md border border-[#d8dee4] transition-colors shadow-[0_1px_1px_rgba(33,37,44,0.16)]">
+                      <button 
+                        onClick={handleExploreSandbox}
+                        className="px-4 py-2.5 bg-white hover:bg-gray-50 text-[#353a44] font-medium text-[14px] rounded-md border border-[#d8dee4] transition-colors shadow-[0_1px_1px_rgba(33,37,44,0.16)]"
+                      >
                         Explore in sandbox
                       </button>
                     </div>
@@ -614,6 +643,8 @@ const DashboardView = () => {
         onGoToBalances={handleGoToBalances}
         initialStep={modalInitialStep}
         onboardingPath={onboardingPath}
+        isSandboxMode={isSandboxMode}
+        onExitSandbox={handleExitSandbox}
       />
 
       {/* Prototype Control Panel */}
@@ -696,6 +727,7 @@ const DashboardView = () => {
           </button>
         </div>
       </PrototypeControlPanel>
+      </div>
     </div>
   );
 };

@@ -1276,7 +1276,7 @@ const AddFundsModal = ({ isOpen, onClose, onAddFunds }) => {
 };
 
 // Main Issuing Home View Component
-const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete }) => {
+const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete, isSandboxMode = false, onExitSandbox }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [compareEnabled, setCompareEnabled] = useState(true);
   const [selectedAccount, setSelectedAccount] = useState({ id: '1', label: 'Financial account 1' });

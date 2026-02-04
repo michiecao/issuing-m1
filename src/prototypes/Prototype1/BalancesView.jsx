@@ -359,7 +359,7 @@ const CreateCardsModal = ({ isOpen, onClose, onGetStarted }) => {
 };
 
 // Main Balances View Component
-const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal }) => {
+const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, isSandboxMode = false, onExitSandbox }) => {
   const [activeTab, setActiveTab] = useState('payments');
   const [isCreateCardsModalOpen, setIsCreateCardsModalOpen] = useState(showCreateCardsModal);
   const [isCreateCardPopoverOpen, setIsCreateCardPopoverOpen] = useState(false);

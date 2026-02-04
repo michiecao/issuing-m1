@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SandboxBanner from '../../components/SandboxBanner';
 
 // Edit Icon
 const EditIcon = () => (
@@ -1092,7 +1093,7 @@ const isNonBusinessCardholder = (cardHolder) => {
 };
 
 // Main Modal Component
-const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy' }) => {
+const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
@@ -1235,17 +1236,22 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const isDeclinedScreen = isFinalScreen && isDeclinedFlow && !showDashboardSuccess;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-[rgba(182,192,205,0.7)]"
-        onClick={onClose}
-      />
+    <div className="fixed inset-0 z-50 flex flex-col">
+      {/* Sandbox Banner - shown when in sandbox mode */}
+      {isSandboxMode && <SandboxBanner onExit={onExitSandbox} />}
       
-      {/* Dialog - With padding around edges */}
-      <div className="relative bg-white rounded-lg shadow-[0px_15px_35px_rgba(48,49,61,0.08),0px_5px_15px_rgba(0,0,0,0.12)] w-full h-full max-h-[calc(100vh-32px)] flex flex-col overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 py-4 shrink-0">
+      <div className={`flex-1 flex items-center justify-center p-4 ${isSandboxMode ? 'mt-[52px]' : ''}`}>
+        {/* Backdrop */}
+        <div 
+          className="absolute inset-0 bg-[rgba(182,192,205,0.7)]"
+          onClick={onClose}
+          style={isSandboxMode ? { top: '52px' } : {}}
+        />
+        
+        {/* Dialog - With padding around edges */}
+        <div className="relative bg-white rounded-lg shadow-[0px_15px_35px_rgba(48,49,61,0.08),0px_5px_15px_rgba(0,0,0,0.12)] w-full h-full max-h-[calc(100vh-32px-52px)] flex flex-col overflow-hidden" style={!isSandboxMode ? { maxHeight: 'calc(100vh - 32px)' } : {}}>
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-4 shrink-0">
           <h2 className="font-bold text-[16px] text-[#353a44] tracking-[-0.31px]">Set up Issuing</h2>
           {isFinalScreen ? (
             <button 
@@ -1383,6 +1389,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
             {currentStep === 0 && !showDashboardSuccess && <CustomSetupCallout />}
             {currentStep === 2 && !showDashboardSuccess && <UseCaseCallout />}
           </div>
+        </div>
         </div>
       </div>
     </div>

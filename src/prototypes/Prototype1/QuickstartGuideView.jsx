@@ -719,7 +719,7 @@ const BlueprintPanel = ({ isOpen, onClose, isMinimized = false, onMinimizeChange
 };
 
 // Quickstart Guide Full Page View (Docs-style)
-const QuickstartGuideView = ({ onExit }) => {
+const QuickstartGuideView = ({ onExit, isSandboxMode = false, onExitSandbox }) => {
   const [isBlueprintOpen, setIsBlueprintOpen] = useState(false);
 
   return (
