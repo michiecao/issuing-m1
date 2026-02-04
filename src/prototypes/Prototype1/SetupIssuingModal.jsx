@@ -1080,20 +1080,15 @@ const UseCaseCallout = () => (
   </div>
 );
 
-// Helper to check if user should be declined based on their selections
-const shouldUserBeDeclined = (useCase, cardHolder) => {
-  // Decline if user selected a specialized use case
+// Check if use case triggers immediate decline
+const isSpecializedUseCase = (useCase) => {
   const specializedUseCases = ['fleet', 'insurance', 'bnpl'];
-  if (specializedUseCases.includes(useCase)) {
-    return true;
-  }
-  
-  // Decline if user selected anything other than "My business" for cardholders
-  if (cardHolder && cardHolder !== 'business') {
-    return true;
-  }
-  
-  return false;
+  return specializedUseCases.includes(useCase);
+};
+
+// Check if cardholder selection triggers decline
+const isNonBusinessCardholder = (cardHolder) => {
+  return cardHolder && cardHolder !== 'business';
 };
 
 // Main Modal Component
@@ -1106,7 +1101,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const [agreedTerms, setAgreedTerms] = useState(false);
   const [showDashboardSuccess, setShowDashboardSuccess] = useState(false);
   
-  // Track if user has been declined (computed after cardholders step)
+  // Track if user has been declined (computed immediately when decline criteria is met)
   // null = not yet determined, true = declined, false = approved
   const [isDeclined, setIsDeclined] = useState(null);
   
@@ -1114,11 +1109,11 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const isDirectDeclinePath = onboardingPath === 'declined';
   
   // Step counts depend on whether user is declined
-  // Declined flow: steps 0-3 normal, then step 4 = processing, step 5 = declined
+  // Declined flow: step 4 = processing, step 5 = declined screen
   // Normal flow: steps 0-7 (includes pricing, review, processing, success)
   const isDeclinedFlow = isDeclined === true || isDirectDeclinePath;
   const maxStep = isDeclinedFlow ? 5 : 7;
-  const processingStep = isDeclinedFlow ? 4 : 6;
+  const processingStep = isDeclinedFlow ? 4 : 6; // Processing step for both flows
   const finalStep = isDeclinedFlow ? 5 : 7;
   
   // Reset state when modal opens
@@ -1137,38 +1132,35 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
     }
   }, [isOpen, initialStep, isDirectDeclinePath]);
 
-  // Auto-transition from processing to success/declined after 5 seconds
+  // Auto-transition from processing to success/declined after 3 seconds
   useEffect(() => {
     if (currentStep === processingStep) {
       const timer = setTimeout(() => {
         setCurrentStep(finalStep);
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [currentStep, processingStep, finalStep]);
 
   if (!isOpen) return null;
 
-  // Step flow:
-  // All paths go through steps 0-3:
+  // Step flow with immediate decline feedback:
   //   0: Choose setup type
   //   1: Review your information (happy) OR Provide more information (kyc)
   //   2: Describe use case
+  //      → If specialized use case (fleet, insurance, bnpl) selected → go to processing → declined
   //   3: Describe card holders
-  // 
-  // After step 3, we check decline criteria:
-  //   - If user selected specialized use case (fleet, insurance, bnpl) → DECLINE
-  //   - If user selected non-business cardholder (platforms, consumers) → DECLINE
+  //      → If non-business cardholder (platforms, consumers) selected → go to processing → declined
   //
-  // Declined flow (after step 3):
-  //   4: Processing
-  //   5: Declined screen
-  //
-  // Normal flow (after step 3):
+  // Approved flow (after step 3):
   //   4: Review pricing
   //   5: Review and submit
   //   6: Processing
   //   7: Success
+  //
+  // Declined flow:
+  //   4: Processing (5 seconds)
+  //   5: Declined screen
   
   // Build steps array for sidebar
   const getSteps = () => {
@@ -1191,13 +1183,24 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const steps = getSteps();
 
   const handleContinue = () => {
-    // After step 3 (Cardholders), check if user should be declined
-    if (currentStep === 3 && isDeclined === null) {
-      const shouldDecline = shouldUserBeDeclined(selectedUseCase, selectedCardHolder);
-      setIsDeclined(shouldDecline);
-      // Continue to next step (which will now be appropriate based on decline status)
-      setCurrentStep(4);
-      return;
+    // After step 2 (Use Case), check for specialized use case - decline with processing
+    if (currentStep === 2) {
+      if (isSpecializedUseCase(selectedUseCase)) {
+        setIsDeclined(true);
+        setCurrentStep(4); // Go to processing screen first
+        return;
+      }
+    }
+    
+    // After step 3 (Cardholders), check for non-business cardholder - decline with processing
+    if (currentStep === 3) {
+      if (isNonBusinessCardholder(selectedCardHolder)) {
+        setIsDeclined(true);
+        setCurrentStep(4); // Go to processing screen first
+        return;
+      }
+      // If we reach here, user is approved
+      setIsDeclined(false);
     }
     
     if (currentStep < maxStep) {
