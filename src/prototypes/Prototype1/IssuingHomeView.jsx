@@ -1637,20 +1637,12 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                     <h3 className="text-[14px] font-semibold text-[#353a44] mb-1">Add to your digital wallet</h3>
                     <p className="text-[13px] text-[#596171] mb-3">Add card to your digital wallet to start using immediately.</p>
                     <div className="flex flex-col gap-2">
-                      <button className="h-10 px-4 bg-black text-white rounded-md flex items-center justify-center gap-2 text-[13px] font-medium">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M8 1L10.5 6H5.5L8 1Z" fill="white"/>
-                          <path d="M5.5 6H10.5L12 11H4L5.5 6Z" fill="#4285F4"/>
-                          <path d="M4 11L5.5 6L2 8L4 11Z" fill="#EA4335"/>
-                          <path d="M12 11L10.5 6L14 8L12 11Z" fill="#34A853"/>
-                          <path d="M4 11H12L10 15H6L4 11Z" fill="#FBBC05"/>
-                        </svg>
+                      <button className="h-10 px-4 bg-black text-white rounded-md flex items-center justify-start gap-2 text-[13px] font-medium">
+                        <img src={googleWalletIcon} alt="Google Wallet" className="w-4 h-[14px]" />
                         Add to Google Wallet
                       </button>
-                      <button className="h-10 px-4 bg-black text-white rounded-md flex items-center justify-center gap-2 text-[13px] font-medium">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12.5 2.5C11.5 1.5 10 1 8 1C6 1 4.5 1.5 3.5 2.5C2.5 3.5 2 5 2 7C2 9 2.5 10.5 3.5 11.5L8 16L12.5 11.5C13.5 10.5 14 9 14 7C14 5 13.5 3.5 12.5 2.5Z" fill="white"/>
-                        </svg>
+                      <button className="h-10 px-4 bg-black text-white rounded-md flex items-center justify-start gap-2 text-[13px] font-medium">
+                        <img src={appleWalletIcon} alt="Apple Wallet" className="w-[20px] h-[15px]" />
                         Add to Apple Wallet
                       </button>
                     </div>
@@ -1706,16 +1698,18 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                     </button>
                   </div>
                   <p className="text-[13px] text-[#596171] mb-4">Manage spending limits and card restrictions.</p>
-                  <div className="flex items-center gap-3">
-                    <div className="relative w-10 h-10">
-                      <svg className="w-10 h-10 transform -rotate-90">
-                        <circle cx="20" cy="20" r="16" fill="none" stroke="#e3e8ee" strokeWidth="3"/>
-                        <circle cx="20" cy="20" r="16" fill="none" stroke="#635bff" strokeWidth="3" strokeDasharray="100" strokeDashoffset="100"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-[14px] font-semibold text-[#353a44]">$0.00</p>
-                      <p className="text-[13px] text-[#596171]">$1,000.00 monthly limit</p>
+                  <div className="border border-[#e3e8ee] rounded-lg p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-10 h-10">
+                        <svg className="w-10 h-10 transform -rotate-90">
+                          <circle cx="20" cy="20" r="16" fill="none" stroke="#e3e8ee" strokeWidth="3"/>
+                          <circle cx="20" cy="20" r="16" fill="none" stroke="#635bff" strokeWidth="3" strokeDasharray="100" strokeDashoffset="100"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-[14px] font-semibold text-[#353a44]">$0.00</p>
+                        <p className="text-[13px] text-[#596171]">$1,000.00 monthly limit</p>
+                      </div>
                     </div>
                   </div>
                 </div>

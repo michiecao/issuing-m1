@@ -819,12 +819,9 @@ const ProcessingContent = () => (
     <div className="mb-4">
       <Spinner />
     </div>
-    <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-      Reviewing your details...
+    <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px]">
+      One moment...
     </h1>
-    <p className="text-[16px] text-[#596171] leading-[24px]">
-      We're checking your submission. This usually takes less than a minute.
-    </p>
   </div>
 );
 
@@ -1043,7 +1040,6 @@ const DeclinedContent = ({ onClose, onSubmitForm }) => {
     businessExpenseCard: '',
     estimatedVolume: '',
     funding: '',
-    useCase: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -1085,10 +1081,10 @@ const DeclinedContent = ({ onClose, onSubmitForm }) => {
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-          Let's discuss your use case
+          We'd like to learn more
         </h1>
         <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
-          We'd like to learn more about your card program. Fill out this form and we'll be in touch.
+          Based on your use case, we'll need a bit more information before we can get you started. Fill out this form and our team will reach out to discuss next steps.
         </p>
       </div>
       
@@ -1230,19 +1226,6 @@ const DeclinedContent = ({ onClose, onSubmitForm }) => {
             { value: 'not-startup', label: 'Not a startup' },
           ]}
         />
-
-        {/* Use Case Textarea */}
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-[16px] text-[#353a44] leading-6 tracking-[-0.31px]">
-            Use case
-          </label>
-          <textarea
-            value={formData.useCase}
-            onChange={(e) => updateField('useCase', e.target.value)}
-            placeholder="e.g. We want to issue virtual cards to our sales team for client entertainment expenses."
-            className="w-full min-h-[68px] px-2 py-1 border border-[#d8dee4] rounded-md text-[14px] text-[#353a44] placeholder-[#6c7688] leading-5 tracking-[-0.15px] resize-y focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
-          />
-        </div>
       </div>
       
       {/* Submit Button */}
@@ -1265,10 +1248,10 @@ const DeclinedSidebarContent = () => (
         Supported use cases
       </h4>
       <p className="text-[14px] text-[#596171] leading-5 tracking-[-0.15px] mb-4">
-        Learn about the card programs Issuing supports.
+        View use cases you can set up today without additional review.
       </p>
       <a href="#" className="text-[14px] font-semibold text-[#533afd] hover:underline">
-        View documentation
+        Learn more
       </a>
     </div>
     
@@ -1278,10 +1261,10 @@ const DeclinedSidebarContent = () => (
         Explore in sandbox
       </h4>
       <p className="text-[14px] text-[#596171] leading-5 tracking-[-0.15px] mb-4">
-        Test the Issuing API and dashboard in a sandbox environment.
+        You can still explore and build with our APIs while you wait.
       </p>
       <a href="#" className="text-[14px] font-semibold text-[#533afd] hover:underline">
-        Go to sandbox
+        Start exploring
       </a>
     </div>
   </div>
@@ -1309,7 +1292,7 @@ const DashboardSetupSuccessContent = ({ onGoToBalances }) => (
     {/* Header */}
     <div className="mb-6">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-        You're all set
+        You're ready to create your first card
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
         You can start creating cards and tracking expenses in your redesigned Balances page.
@@ -1318,7 +1301,7 @@ const DashboardSetupSuccessContent = ({ onGoToBalances }) => (
 
     {/* What's New Section */}
     <div className="mb-6">
-      <p className="text-[14px] text-[#596171] leading-5 mb-4">Here's what's new:</p>
+      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px] mb-4">Here's what's new:</p>
       
       <FeatureHighlight icon={BalanceIcon} title="Financial accounts">
         Your cards spend from your financial account balance. You can also store funds in multiple currencies and send payouts.
