@@ -286,16 +286,6 @@ const DashboardView = () => {
     setIsModalOpen(true);
   };
 
-  // Jump to specific onboarding modal step
-  const handleJumpToModalStep = (step) => {
-    setIsOnboardingComplete(false);
-    setShowQuickstartGuide(false);
-    setShowBlueprintOverlay(false);
-    setIsBlueprintMinimized(false);
-    setModalInitialStep(step);
-    setModalKey(prev => prev + 1);
-    setIsModalOpen(true);
-  };
   
   // Jump to Issuing dashboard view (with charts) - shows blueprint minimized
   const handleJumpToDashboard = () => {
@@ -407,55 +397,6 @@ const DashboardView = () => {
                 </label>
               </div>
             </div>
-            {onboardingPath === 'happy' && (
-              <div className="border-t border-gray-200 pt-3 space-y-1">
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Onboarding modal screens</p>
-                <div className="flex flex-col gap-1">
-                  <button
-                    onClick={() => handleJumpToModalStep(0)}
-                    className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-                  >
-                    Choose setup type
-                  </button>
-                  <button
-                    onClick={() => handleJumpToModalStep(2)}
-                    className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-                  >
-                    Describe use case
-                  </button>
-                  <button
-                    onClick={() => handleJumpToModalStep(3)}
-                    className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-                  >
-                    Choose cardholders
-                  </button>
-                  <button
-                    onClick={() => handleJumpToModalStep(4)}
-                    className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-                  >
-                    Review pricing
-                  </button>
-                  <button
-                    onClick={() => handleJumpToModalStep(5)}
-                    className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-                  >
-                    Review and submit
-                  </button>
-                  <button
-                    onClick={() => handleJumpToModalStep(6)}
-                    className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-                  >
-                    Processing
-                  </button>
-                  <button
-                    onClick={() => handleJumpToModalStep(7)}
-                    className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-                  >
-                    Success
-                  </button>
-                </div>
-              </div>
-            )}
             <div className="border-t border-gray-200 pt-3 space-y-1">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Jump to step</p>
               <div className="flex flex-col gap-1">
@@ -767,55 +708,6 @@ const DashboardView = () => {
             </label>
           </div>
         </div>
-        {onboardingPath === 'happy' && (
-          <div className="border-t border-gray-200 pt-3 space-y-1">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Onboarding modal screens</p>
-            <div className="flex flex-col gap-1">
-              <button
-                onClick={() => handleJumpToModalStep(0)}
-                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-              >
-                Choose setup type
-              </button>
-              <button
-                onClick={() => handleJumpToModalStep(2)}
-                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-              >
-                Describe use case
-              </button>
-              <button
-                onClick={() => handleJumpToModalStep(3)}
-                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-              >
-                Choose cardholders
-              </button>
-              <button
-                onClick={() => handleJumpToModalStep(4)}
-                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-              >
-                Review pricing
-              </button>
-              <button
-                onClick={() => handleJumpToModalStep(5)}
-                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-              >
-                Review and submit
-              </button>
-              <button
-                onClick={() => handleJumpToModalStep(6)}
-                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-              >
-                Processing
-              </button>
-              <button
-                onClick={() => handleJumpToModalStep(7)}
-                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-              >
-                Success
-              </button>
-            </div>
-          </div>
-        )}
         <div className="border-t border-gray-200 pt-3 space-y-1">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Jump to step</p>
           <div className="flex flex-col gap-1">

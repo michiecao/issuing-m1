@@ -67,7 +67,7 @@ const HomePage = () => (
           Issuing M1 Prototypes
         </h1>
         <p className="text-lg text-gray-600">
-          Prototype explorations for Issuing M1.
+          Prototype explorations for Issuing M1. Reach out to @mcao and @imanb for feedback or questions.
         </p>
       </div>
 
