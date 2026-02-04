@@ -194,7 +194,7 @@ const SetupTypeCard = ({ title, description, features, onContinue, illustration 
   <div className="bg-white border border-[#d8dee4] rounded-lg p-6 w-full">
     <div className="flex gap-6">
       {/* Left side - Illustration */}
-      <div className="w-[140px] self-stretch shrink-0">
+      <div className="w-[140px] min-h-[140px] shrink-0">
         {illustration}
       </div>
       
@@ -204,7 +204,7 @@ const SetupTypeCard = ({ title, description, features, onContinue, illustration 
         <p className="text-[14px] text-[#596171] leading-5 mt-0.5 mb-3">{description}</p>
         
         {/* Feature list */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 min-h-[96px]">
           {features.map((feature, index) => (
             <FeatureItem key={index}>{feature}</FeatureItem>
           ))}
@@ -256,11 +256,11 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
     <div className="flex flex-col gap-4">
       <SetupTypeCard
         title="Manage in dashboard"
-        description="You create cards and track spending in the dashboard."
+        description="Create cards and manage your business in the Stripe dashboard."
         features={[
-          'Best for small businesses',
+          'Best for personal use',
+          'No access to Issuing APIs',
           'No code required',
-          'No Issuing API access',
           'Free',
         ]}
         illustration={<DashboardIllustration />}
@@ -271,13 +271,12 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
       />
       
       <SetupTypeCard
-        title="Build with the API"
-        description="You write the code—Stripe handles the rest."
+        title="Build with Stripe Issuing APIs"
+        description="You write the code - Stripe handles the rest."
         features={[
-          'Best for fintechs and startups',
-          'Issuing API access',
-          'US Commercial Program',
-          'Prepaid Mastercard',
+          'Best for building a program at scale',
+          'Access to Issuing APIs',
+          'US Commercial Prepaid Mastercard',
           'Pay as you go',
         ]}
         illustration={<CodeEditorIllustration />}
@@ -287,6 +286,11 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         }}
       />
     </div>
+    
+    {/* Need more flexibility text */}
+    <p className="mt-6 text-[14px] text-[#596171] leading-5">
+      Need custom card programs, pricing, or integrations? <a href="#" className="text-[#533afd] hover:underline">Contact us</a>
+    </p>
   </div>
 );
 
@@ -433,7 +437,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
         <div className="space-y-[9px]">
           <UseCaseOption
             title="Corporate expense management"
-            description="Let employees or contractors make purchases on your business' behalf"
+            description="Let employees or contractors make purchases on your business' behalf."
             selected={selectedUseCase === 'corporate'}
             onClick={() => setSelectedUseCase('corporate')}
           />
@@ -456,7 +460,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
           onClick={() => setMoreOptionsExpanded(!moreOptionsExpanded)}
           className="flex items-center gap-1 mt-4 text-[#596171] hover:text-[#474e5a]"
         >
-          <ChevronDownIcon className={`transition-transform duration-200 ${moreOptionsExpanded ? '' : '-rotate-90'}`} />
+          <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${moreOptionsExpanded ? '' : '-rotate-90'}`} />
           <span className="font-semibold text-sm">Specialized use cases</span>
         </button>
         
@@ -912,12 +916,12 @@ const SuccessContent = ({ onStartIntegrating, onViewDocs }) => (
     {/* Features Section */}
     <div className="mb-8">
       <div className="space-y-6">
-        <FeatureHighlight icon={BalanceIcon} title="Financial accounts">
-          The cards you create pull from your financial account balance. Add funds to your balance and spend easily.
-        </FeatureHighlight>
-        
         <FeatureHighlight icon={ApiIcon} title="Stripe Issuing APIs">
           Create and manage cards programatically. Start integrating with the quickstart guide or view the Issuing API docs.
+        </FeatureHighlight>
+        
+        <FeatureHighlight icon={BalanceIcon} title="Financial accounts">
+          The cards you create pull from your financial account balance. Add funds to your balance and spend easily.
         </FeatureHighlight>
       </div>
     </div>
@@ -980,40 +984,305 @@ const ResourceLink = ({ icon: Icon, children, href = "#" }) => (
   </a>
 );
 
-// Declined Content (Step 6 for declined path)
-const DeclinedContent = ({ onClose }) => (
-  <div className="w-full max-w-[580px] px-4">
-    {/* Page Header */}
-    <div className="mb-6">
-      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-3">
-        We're not able to support this use case
-      </h1>
-      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px] mb-4">
-        Thanks for providing details about your business. Based on what you've told us, Stripe can't support this type of card program. If you've think we've got it wrong, reach out to Stripe support and we're happy to discuss.
-      </p>
-      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
-        In the meantime, explore supported use cases or continue testing Issuing in your sandbox.
-      </p>
+// Form Text Input Component
+const FormInput = ({ label, placeholder, value, onChange, className = '' }) => (
+  <div className={`flex flex-col gap-1 ${className}`}>
+    <label className="font-semibold text-[14px] text-[#353a44] leading-5 tracking-[-0.15px]">
+      {label}
+    </label>
+    <input
+      type="text"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className="w-full h-10 px-3 border border-[#d8dee4] rounded-md text-[16px] text-[#353a44] placeholder-[#6c7688] leading-6 tracking-[-0.31px] focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
+    />
+  </div>
+);
+
+// Form Select Component
+const FormSelect = ({ label, description, value, onChange, options, placeholder = 'Select one' }) => (
+  <div className="flex flex-col gap-1">
+    <div className="flex flex-col">
+      <label className="font-semibold text-[14px] text-[#353a44] leading-5 tracking-[-0.15px]">
+        {label}
+      </label>
+      {description && (
+        <span className="text-[12px] text-[#596171] leading-4">{description}</span>
+      )}
     </div>
-    
-    {/* Return to Dashboard Button */}
-    <div className="mb-8">
+    <div className="relative">
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full h-10 px-2 pr-8 border border-[#d8dee4] rounded-md text-[16px] text-[#353a44] font-semibold leading-6 tracking-[-0.31px] bg-white appearance-none cursor-pointer focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff] shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
+      >
+        <option value="">{placeholder}</option>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>{opt.label}</option>
+        ))}
+      </select>
+      <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+        <ChevronDownIcon className="w-4 h-4 text-[#474e5a]" />
+      </div>
+    </div>
+  </div>
+);
+
+// Declined Content (Step 6 for declined path)
+const DeclinedContent = ({ onClose, onSubmitForm }) => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    workEmail: '',
+    companyWebsite: '',
+    country: 'us',
+    customers: '',
+    customerLocation: '',
+    crypto: '',
+    businessExpenseCard: '',
+    estimatedVolume: '',
+    funding: '',
+    useCase: '',
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const updateField = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = () => {
+    setIsSubmitted(true);
+    if (onSubmitForm) {
+      onSubmitForm(formData);
+    }
+  };
+
+  // Show thank you state after submission
+  if (isSubmitted) {
+    return (
+      <div className="w-full max-w-[520px]">
+        <div className="mb-8">
+          <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-3">
+            Thanks for your interest
+          </h1>
+          <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
+            We'll be in touch soon to discuss your use case.
+          </p>
+        </div>
+        <button 
+          onClick={onClose}
+          className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+        >
+          Return to dashboard
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full max-w-[520px]">
+      {/* Page Header */}
+      <div className="mb-8">
+        <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
+          Let's discuss your use case
+        </h1>
+        <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
+          We'd like to learn more about your card program. Fill out this form and we'll be in touch.
+        </p>
+      </div>
+      
+      {/* Form Fields */}
+      <div className="flex flex-col gap-4 mb-8">
+        {/* First Name & Last Name - Side by side */}
+        <div className="flex gap-6">
+          <FormInput
+            label="First name"
+            placeholder="Jane"
+            value={formData.firstName}
+            onChange={(v) => updateField('firstName', v)}
+            className="flex-1"
+          />
+          <FormInput
+            label="Last name"
+            placeholder="Diaz"
+            value={formData.lastName}
+            onChange={(v) => updateField('lastName', v)}
+            className="flex-1"
+          />
+        </div>
+
+        {/* Work Email */}
+        <FormInput
+          label="Work email"
+          placeholder="jane@company.com"
+          value={formData.workEmail}
+          onChange={(v) => updateField('workEmail', v)}
+        />
+
+        {/* Company Website */}
+        <FormInput
+          label="Company website"
+          placeholder="https://company.com"
+          value={formData.companyWebsite}
+          onChange={(v) => updateField('companyWebsite', v)}
+        />
+
+        {/* Country/Region */}
+        <FormSelect
+          label="Country/Region"
+          value={formData.country}
+          onChange={(v) => updateField('country', v)}
+          placeholder="Select country"
+          options={[
+            { value: 'us', label: 'United States' },
+            { value: 'gb', label: 'United Kingdom' },
+            { value: 'eu', label: 'European Union' },
+            { value: 'ca', label: 'Canada' },
+            { value: 'au', label: 'Australia' },
+            { value: 'other', label: 'Other' },
+          ]}
+        />
+
+        {/* Customers */}
+        <FormSelect
+          label="Customers"
+          description="Who will use the cards or funds?"
+          value={formData.customers}
+          onChange={(v) => updateField('customers', v)}
+          options={[
+            { value: 'employees', label: 'Employees of my business' },
+            { value: 'businesses', label: 'Businesses on my platform' },
+            { value: 'consumers', label: 'Consumers on my platform' },
+            { value: 'contractors', label: 'Contractors' },
+            { value: 'other', label: 'Other' },
+          ]}
+        />
+
+        {/* Customer Location */}
+        <FormSelect
+          label="Customer location"
+          description="Where do you plan to issue cards or distribute funds?"
+          value={formData.customerLocation}
+          onChange={(v) => updateField('customerLocation', v)}
+          options={[
+            { value: 'us', label: 'United States' },
+            { value: 'eu', label: 'Europe' },
+            { value: 'global', label: 'Global' },
+            { value: 'other', label: 'Other' },
+          ]}
+        />
+
+        {/* Crypto */}
+        <FormSelect
+          label="Crypto"
+          description="Will the cards or funds be used for a crypto use case?"
+          value={formData.crypto}
+          onChange={(v) => updateField('crypto', v)}
+          options={[
+            { value: 'yes', label: 'Yes' },
+            { value: 'no', label: 'No' },
+          ]}
+        />
+
+        {/* Business expense card */}
+        <FormSelect
+          label="Business expense card"
+          description="Are you looking for a corporate card for your business?"
+          value={formData.businessExpenseCard}
+          onChange={(v) => updateField('businessExpenseCard', v)}
+          options={[
+            { value: 'yes', label: 'Yes' },
+            { value: 'no', label: 'No' },
+          ]}
+        />
+
+        {/* Estimated Volume */}
+        <FormSelect
+          label="Estimated volume"
+          description="How much do you expect to finance or spend on cards per month?"
+          value={formData.estimatedVolume}
+          onChange={(v) => updateField('estimatedVolume', v)}
+          placeholder="Select monthly amount"
+          options={[
+            { value: 'under10k', label: 'Under $10,000' },
+            { value: '10k-50k', label: '$10,000 - $50,000' },
+            { value: '50k-100k', label: '$50,000 - $100,000' },
+            { value: '100k-500k', label: '$100,000 - $500,000' },
+            { value: '500k-1m', label: '$500,000 - $1,000,000' },
+            { value: 'over1m', label: 'Over $1,000,000' },
+          ]}
+        />
+
+        {/* Funding */}
+        <FormSelect
+          label="Funding"
+          description="If you're a startup, how much funding have you raised to date?"
+          value={formData.funding}
+          onChange={(v) => updateField('funding', v)}
+          placeholder="Select amount"
+          options={[
+            { value: 'bootstrapped', label: 'Bootstrapped' },
+            { value: 'pre-seed', label: 'Pre-seed' },
+            { value: 'seed', label: 'Seed' },
+            { value: 'seriesA', label: 'Series A' },
+            { value: 'seriesB', label: 'Series B+' },
+            { value: 'not-startup', label: 'Not a startup' },
+          ]}
+        />
+
+        {/* Use Case Textarea */}
+        <div className="flex flex-col gap-1">
+          <label className="font-semibold text-[16px] text-[#353a44] leading-6 tracking-[-0.31px]">
+            Use case
+          </label>
+          <textarea
+            value={formData.useCase}
+            onChange={(e) => updateField('useCase', e.target.value)}
+            placeholder="e.g. We want to issue virtual cards to our sales team for client entertainment expenses."
+            className="w-full min-h-[68px] px-2 py-1 border border-[#d8dee4] rounded-md text-[14px] text-[#353a44] placeholder-[#6c7688] leading-5 tracking-[-0.15px] resize-y focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
+          />
+        </div>
+      </div>
+      
+      {/* Submit Button */}
       <button 
-        onClick={onClose}
+        onClick={handleSubmit}
         className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
-        Return to dashboard
+        Submit
       </button>
     </div>
+  );
+};
+
+// Right sidebar callout for declined view
+const DeclinedSidebarContent = () => (
+  <div className="flex flex-col gap-5">
+    {/* Supported Use Cases Callout */}
+    <div className="bg-[#f5f6f8] rounded-lg p-4">
+      <h4 className="font-bold text-[16px] text-[#3d3d3d] leading-6 tracking-[-0.31px] mb-1">
+        Supported use cases
+      </h4>
+      <p className="text-[14px] text-[#596171] leading-5 tracking-[-0.15px] mb-4">
+        Learn about the card programs Issuing supports.
+      </p>
+      <a href="#" className="text-[14px] font-semibold text-[#533afd] hover:underline">
+        View documentation
+      </a>
+    </div>
     
-    {/* Resources Section */}
-    <div>
-      <h3 className="font-bold text-[16px] text-[#353a44] leading-6 mb-4">Resources</h3>
-      <div className="flex flex-col gap-3">
-        <ResourceLink icon={ContactIcon}>Contact Stripe support</ResourceLink>
-        <ResourceLink icon={SupportedUseCasesIcon}>See supportable use cases</ResourceLink>
-        <ResourceLink icon={SandboxIcon}>Explore Issuing in sandbox</ResourceLink>
-      </div>
+    {/* Explore in Sandbox Callout */}
+    <div className="bg-[#f5f6f8] rounded-lg p-4">
+      <h4 className="font-bold text-[16px] text-[#3d3d3d] leading-6 tracking-[-0.31px] mb-1">
+        Explore in sandbox
+      </h4>
+      <p className="text-[14px] text-[#596171] leading-5 tracking-[-0.15px] mb-4">
+        Test the Issuing API and dashboard in a sandbox environment.
+      </p>
+      <a href="#" className="text-[14px] font-semibold text-[#533afd] hover:underline">
+        Go to sandbox
+      </a>
     </div>
   </div>
 );
@@ -1165,15 +1434,24 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   
   // Build steps array for sidebar
   const getSteps = () => {
-    const step1Label = onboardingPath === 'kyc' 
-      ? 'Provide more information' 
-      : 'Review your information';
-    
     // Show full expected flow in sidebar
     // If user gets declined, they'll see processing/declined screens which hide the sidebar
+    
+    // For happy path, skip "Review your information" step
+    if (onboardingPath === 'happy') {
+      return [
+        { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
+        { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
+        { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
+        { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
+        { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending' },
+      ];
+    }
+    
+    // For KYC path, include "Provide more information" step
     return [
       { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending' },
-      { label: step1Label, status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
+      { label: 'Provide more information', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending' },
       { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending' },
       { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending' },
       { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending' },
@@ -1184,6 +1462,12 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const steps = getSteps();
 
   const handleContinue = () => {
+    // For happy path, skip from step 0 directly to step 2 (skip "Review your information")
+    if (currentStep === 0 && onboardingPath === 'happy') {
+      setCurrentStep(2);
+      return;
+    }
+    
     // After step 2 (Use Case), check for specialized use case - decline with processing
     if (currentStep === 2) {
       if (isSpecializedUseCase(selectedUseCase)) {
@@ -1253,7 +1537,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-4 shrink-0">
           <h2 className="font-bold text-[16px] text-[#353a44] tracking-[-0.31px]">Set up Issuing</h2>
-          {isFinalScreen ? (
+          {(isFinalScreen && !isDeclinedScreen) ? (
             <button 
               onClick={onComplete || onClose}
               className="px-3 py-1.5 text-sm text-[#353a44] border border-[#d8dee4] rounded-md hover:bg-gray-50 transition-colors"
@@ -1386,8 +1670,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           
           {/* Right Sidebar - Contextual content */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
-            {currentStep === 0 && !showDashboardSuccess && <CustomSetupCallout />}
             {currentStep === 2 && !showDashboardSuccess && <UseCaseCallout />}
+            {isDeclinedScreen && <DeclinedSidebarContent />}
           </div>
         </div>
         </div>

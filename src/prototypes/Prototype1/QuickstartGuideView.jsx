@@ -155,7 +155,7 @@ const SetupGuide = ({ isOpen, completedTasks = 1, isPanelMinimized = false, hide
     { label: 'Enable Issuing', completed: completedTasks >= 1 },
     { label: 'Add funds', completed: completedTasks >= 2 },
     { label: 'Create a cardholder', completed: completedTasks >= 3 },
-    { label: 'Create a virtual card', completed: completedTasks >= 4 },
+    { label: 'Create a card', completed: completedTasks >= 4 },
     { label: 'Spend with card', completed: completedTasks >= 5 },
   ];
   
@@ -593,7 +593,7 @@ const BlueprintPanel = ({ isOpen, onClose, isMinimized = false, onMinimizeChange
                   <span className="w-5 h-5 rounded-full bg-[#2d3348] text-white text-xs flex items-center justify-center shrink-0">3</span>
                   <div>
                     <h3 className="text-white font-semibold">Create and activate a card</h3>
-                    <p className="text-sm text-[#8792a2]">Create a virtual card and attach it to the cardholder, then activate it for use.</p>
+                    <p className="text-sm text-[#8792a2]">Create a card and attach it to the cardholder, then activate it for use.</p>
                   </div>
                 </div>
                 <div className="ml-10 space-y-2">
@@ -836,7 +836,7 @@ const QuickstartGuideView = ({ onExit, isSandboxMode = false, onExitSandbox }) =
                 <div className="bg-[#f5f6f8] rounded-lg h-20" />
               </div>
               <div>
-                <h3 className="font-bold text-[16px] text-[#353a44] leading-6 mb-2">Create a virtual card</h3>
+                <h3 className="font-bold text-[16px] text-[#353a44] leading-6 mb-2">Create a card</h3>
                 <div className="bg-[#f5f6f8] rounded-lg h-20" />
               </div>
               <div>
