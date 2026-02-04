@@ -5,6 +5,7 @@ import QuickstartGuideView, { BlueprintPanel, SetupGuide } from './QuickstartGui
 import BalancesView from './BalancesView';
 import PrototypeControlPanel from '../../components/PrototypeControlPanel';
 import SandboxBanner from '../../components/SandboxBanner';
+import ProjectContextModal from '../../components/ProjectContextModal';
 
 // Icons as inline SVGs - matching Sail UI / Stripe Dashboard icons from Figma
 const HomeIcon = () => (
@@ -231,6 +232,7 @@ const DashboardView = () => {
   const [showSetupGuide, setShowSetupGuide] = useState(false);
   const [setupGuideCompletedTasks, setSetupGuideCompletedTasks] = useState(1);
   const [isSandboxMode, setIsSandboxMode] = useState(false);
+  const [showProjectContext, setShowProjectContext] = useState(false);
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
@@ -350,7 +352,13 @@ const DashboardView = () => {
         
           {/* Prototype Control Panel */}
           <PrototypeControlPanel>
-            <div className="space-y-2">
+            <button
+              onClick={() => setShowProjectContext(true)}
+              className="w-full px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 border border-gray-300 hover:bg-gray-100"
+            >
+              View project context
+            </button>
+            <div className="border-t border-gray-200 pt-3 space-y-2">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Onboarding path</p>
               <div className="flex flex-col gap-1">
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -422,6 +430,12 @@ const DashboardView = () => {
               </button>
             </div>
           </PrototypeControlPanel>
+
+          {/* Project Context Modal */}
+          <ProjectContextModal 
+            isOpen={showProjectContext} 
+            onClose={() => setShowProjectContext(false)} 
+          />
         </div>
       </div>
     );
@@ -649,7 +663,13 @@ const DashboardView = () => {
 
       {/* Prototype Control Panel */}
       <PrototypeControlPanel>
-        <div className="space-y-2">
+        <button
+          onClick={() => setShowProjectContext(true)}
+          className="w-full px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 border border-gray-300 hover:bg-gray-100"
+        >
+          View project context
+        </button>
+        <div className="border-t border-gray-200 pt-3 space-y-2">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Onboarding path</p>
           <div className="flex flex-col gap-1">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -727,6 +747,12 @@ const DashboardView = () => {
           </button>
         </div>
       </PrototypeControlPanel>
+
+      {/* Project Context Modal */}
+      <ProjectContextModal 
+        isOpen={showProjectContext} 
+        onClose={() => setShowProjectContext(false)} 
+      />
       </div>
     </div>
   );
