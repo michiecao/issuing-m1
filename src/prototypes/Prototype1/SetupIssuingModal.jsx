@@ -250,7 +250,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         Choose the offering that fits your needs
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
-        You can change your plan later as your program grows.
+        You can change your setup later as your program grows.
       </p>
     </div>
     
@@ -258,7 +258,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
     <div className="flex flex-col gap-3">
       <SetupTypeCard
         title="Starter"
-        description="For simple programs, no code required"
+        description={<>Get started instantly.<br />no code needed</>}
         features={[
           'Create up to 5 cards',
           'Create up to 5 cardholders',
@@ -270,7 +270,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
       
       <SetupTypeCard
         title="Growth"
-        description="For programs ready to scale"
+        description="Scale quickly with code"
         features={[
           'Create up to 50 cards',
           'Create up to 50 cardholders',
@@ -283,7 +283,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
       
       <SetupTypeCard
         title="Enterprise"
-        description="For programs needing full control"
+        description="Build with full control and flexibility"
         features={[
           'Create unlimited cards',
           'Create unlimited cardholders',
@@ -300,7 +300,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
       <button 
         onClick={onContinue}
         disabled={!selectedSetupType}
-        className={`w-full py-3 font-semibold text-sm rounded-md transition-colors text-white ${
+        className={`w-full py-3 font-bold text-[16px] rounded-md transition-colors text-white ${
           !selectedSetupType
             ? 'bg-[#625afa]/50 cursor-not-allowed'
             : 'bg-[#625afa] hover:bg-[#5650e0]'
@@ -352,7 +352,7 @@ const ConfirmSetupContent = ({ onContinue }) => (
     <div className="mb-4">
       <button 
         onClick={onContinue}
-        className="w-full py-2.5 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_0px_rgba(47,14,99,0.32)]"
+        className="w-full py-2.5 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_0px_rgba(47,14,99,0.32)]"
       >
         Continue
       </button>
@@ -418,7 +418,7 @@ const ReviewInfoContent = ({ onContinue }) => (
     <div className="flex justify-center">
       <button 
         onClick={onContinue}
-        className="w-full py-3 bg-[#625afa] hover:bg-[#5650e0] text-white font-medium text-sm rounded-md transition-colors"
+        className="w-full py-3 bg-[#625afa] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors"
       >
         Continue
       </button>
@@ -428,7 +428,7 @@ const ReviewInfoContent = ({ onContinue }) => (
 
 // Disabled Continue Button styles - stays purple when disabled per Figma design
 const continueButtonClasses = (disabled) => 
-  `w-full py-3 font-medium text-sm rounded-md transition-colors text-white ${
+  `w-full py-3 font-bold text-[16px] rounded-md transition-colors text-white ${
     disabled 
       ? 'bg-[#533afd]/50 cursor-not-allowed' 
       : 'bg-[#533afd] hover:bg-[#4730d9]'
@@ -473,7 +473,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
           />
           <UseCaseOption
             title="Other"
-            description="My use case isn't listed here."
+            description=""
             selected={selectedUseCase === 'other'}
             onClick={() => setSelectedUseCase('other')}
           />
@@ -512,7 +512,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
           </div>
         )}
       </div>
-      
+
       {/* Description Textarea */}
       <div className="mb-8">
         <label className="block font-semibold text-[16px] text-[#353a44] mb-2">
@@ -562,7 +562,7 @@ const OwnerInfoContent = ({ onContinue }) => (
     <div className="flex justify-center">
       <button 
         onClick={onContinue}
-        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
         Continue
       </button>
@@ -570,13 +570,13 @@ const OwnerInfoContent = ({ onContinue }) => (
   </div>
 );
 
-// Card Holders Content - "Describe card holders" step
+// Card Holders Content - "Who will be your cardholders" step
 const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHolder }) => (
   <div className="w-full max-w-[580px] px-4">
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        What type of program are you trying to launch?
+        Who will be your cardholders?
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px]">
         Choose who will hold and use the cards.
@@ -593,8 +593,8 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Cards for my business</h4>
-        <p className="text-[14px] text-[#596171] leading-5">For yourself, employees, or contractors</p>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Employees or contractors</h4>
+        <p className="text-[14px] text-[#596171] leading-5">For yourself, your team, or agents of your business</p>
       </button>
       <button
         onClick={() => setSelectedCardHolder('platforms')}
@@ -604,7 +604,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Cards for businesses on my platform</h4>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Businesses on my platform</h4>
         <p className="text-[14px] text-[#596171] leading-5">For business entities that use your platform</p>
       </button>
       <button
@@ -615,7 +615,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Cards for consumers</h4>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Consumers on my platform</h4>
         <p className="text-[14px] text-[#596171] leading-5">For individual end-users of your platform</p>
       </button>
     </div>
@@ -624,7 +624,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
     <div className="flex justify-center">
       <button 
         onClick={onContinue}
-        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
         Continue
       </button>
@@ -651,7 +651,7 @@ const PricingContent = ({ onContinue }) => (
     <div className="flex justify-center">
       <button 
         onClick={onContinue}
-        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
         Continue
       </button>
@@ -722,45 +722,71 @@ const SubmitReviewContent = ({
       {/* Business Details */}
       <div className="mb-6">
         <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Business details</h3>
-        <InfoCard title="Acme Inc." onEdit={() => {}}>
-          <div className="text-sm text-[#596171] leading-5 space-y-0">
-            <p>www.acme.com</p>
-            <p>101 SW Water Ave</p>
-            <p>Portland, OR 97211</p>
-            <p>http://acme.inc</p>
-            <p>(123)456-7890</p>
+        <div className="border border-[#d5dbe1] rounded-lg p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="font-semibold text-[14px] text-[#353a44]">Acme Inc.</h4>
+            <button className="text-[14px] font-semibold text-[#533afd] hover:underline">Edit</button>
           </div>
-          <div className="mt-4">
-            <p className="font-semibold text-[16px] text-[#353a44]">Other information provided</p>
-            <p className="text-sm text-[#596171]">EIN, DBA, Industry, number of employees, estimated annual revenue, end of fiscal year</p>
+          <div className="space-y-3">
+            <div>
+              <p className="text-[12px] text-[#6c7688] leading-4">URL</p>
+              <a href="#" className="text-[14px] text-[#533afd] hover:underline inline-flex items-center gap-1">
+                https://acme.inc
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.5 2H2.5C1.94772 2 1.5 2.44772 1.5 3V9.5C1.5 10.0523 1.94772 10.5 2.5 10.5H9C9.55228 10.5 10 10.0523 10 9.5V8.5M7 2H10V5M10 2L5 7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </a>
+            </div>
+            <div>
+              <p className="text-[12px] text-[#6c7688] leading-4">Other information provided</p>
+              <p className="text-[14px] text-[#414552]">DBA, Product description, Industry</p>
+            </div>
           </div>
-        </InfoCard>
+        </div>
       </div>
-      
-      {/* Business Owners */}
+
+      {/* Management and ownership */}
       <div className="mb-6">
-        <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Business owners</h3>
-        <InfoCard title="Cedar Andrews (you)" onEdit={() => {}}>
-          <div className="text-sm text-[#596171] leading-5 space-y-0">
-            <p>Co-founder and CEO</p>
-            <p>cedar@grotto.com</p>
-            <p>354 Oyster Point Blvd, South San Francisco CA 94080</p>
+        <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Management and ownership</h3>
+        <div className="border border-[#d5dbe1] rounded-lg p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="font-semibold text-[14px] text-[#353a44]">Cedar Andrews</h4>
+            <button className="text-[14px] font-semibold text-[#533afd] hover:underline">Edit</button>
           </div>
-          <div className="mt-4">
-            <p className="font-semibold text-[16px] text-[#353a44]">Other information provided</p>
-            <p className="text-sm text-[#596171]">EISSNIN, Job title, Phone</p>
+          <div className="space-y-3">
+            <div>
+              <p className="text-[12px] text-[#6c7688] leading-4">Role</p>
+              <p className="text-[14px] text-[#414552]">Account representative and Owner</p>
+            </div>
+            <div>
+              <p className="text-[12px] text-[#6c7688] leading-4">Email address</p>
+              <p className="text-[14px] text-[#414552]">cedar@acme.com</p>
+            </div>
+            <div>
+              <p className="text-[12px] text-[#6c7688] leading-4">Date of birth</p>
+              <p className="text-[14px] text-[#414552]">Born on 15 March 1985</p>
+            </div>
+            <div>
+              <p className="text-[12px] text-[#6c7688] leading-4">Address</p>
+              <p className="text-[14px] text-[#414552]">354 Oyster Point Blvd</p>
+              <p className="text-[14px] text-[#414552]">South San Francisco, CA 94080 US</p>
+            </div>
+            <div>
+              <p className="text-[12px] text-[#6c7688] leading-4">Other information provided</p>
+              <p className="text-[14px] text-[#414552]">Nationality, SSN, Job title, Phone</p>
+            </div>
           </div>
-        </InfoCard>
+        </div>
       </div>
 
       {/* Program Details */}
       <div className="mb-6">
         <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Program details</h3>
-        <div className="border border-[#d5dbe1] rounded-lg p-6">
+        <div className="border border-[#d5dbe1] rounded-lg p-4">
           <div className="flex flex-col gap-4">
             <div>
               <div className="flex items-center justify-between">
-                <h4 className="font-semibold text-[16px] text-[#353a44]">Card program</h4>
+                <h4 className="font-semibold text-[14px] text-[#353a44]">Card program</h4>
                 <button className="text-[#6c7688] hover:text-[#474e5a] p-1">
                   <EditIcon />
                 </button>
@@ -768,7 +794,7 @@ const SubmitReviewContent = ({
               <p className="text-sm text-[#414552] leading-5">{getUseCaseDisplayName(selectedUseCase)}</p>
             </div>
             <div>
-              <h4 className="font-semibold text-[16px] text-[#353a44]">Program description</h4>
+              <h4 className="font-semibold text-[14px] text-[#353a44]">Program description</h4>
               <p className="text-sm text-[#414552] leading-5">{description || 'Description'}</p>
             </div>
           </div>
@@ -902,7 +928,7 @@ const ApiCodeIllustration = () => (
 );
 
 // Step 5: Success Screen - "You're ready to start building"
-const SuccessContent = ({ onStartIntegrating, onViewDocs }) => (
+const SuccessContent = ({ onStartIntegrating, onViewDocs, selectedUseCase }) => (
   <div className="w-full max-w-[580px] px-4">
     {/* API Code Illustration */}
     <div className="mb-8">
@@ -931,18 +957,49 @@ const SuccessContent = ({ onStartIntegrating, onViewDocs }) => (
         </FeatureHighlight>
       </div>
     </div>
+
+    {/* Use Case Disclaimer */}
+    {(selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') && (
+      <div className="mb-8 border border-[#e3e8ee] rounded-lg p-5 bg-[#f7f8fa]">
+        <p className="font-bold text-[16px] text-[#353a44] leading-6 mb-2">
+          {selectedUseCase === 'b2b' ? 'B2B program guidelines' : 'On-demand services guidelines'}
+        </p>
+        <p className="text-[16px] text-[#596171] leading-6 mb-3">
+          Before using your cards, make sure you:
+        </p>
+        <ul className="text-[16px] text-[#596171] leading-6 space-y-1.5 list-disc pl-5 mb-3">
+          {selectedUseCase === 'b2b' ? (
+            <>
+              <li>Use cards for business-to-business transactions only</li>
+              <li>Limit purchases to a single industry category (e.g., travel or e-commerce)</li>
+              <li>Inform customers that you handle refunds and disputes</li>
+            </>
+          ) : (
+            <>
+              <li>Use cards for business-to-business transactions only</li>
+              <li>Limit purchases to a single industry category (e.g., travel or e-commerce)</li>
+              <li>Only make purchases as part of the services you provide your customers</li>
+            </>
+          )}
+        </ul>
+        <p className="text-[16px] text-[#596171] leading-6">
+          Questions?{' '}
+          <a href="#" className="text-[#533afd] hover:underline">Contact us</a>.
+        </p>
+      </div>
+    )}
     
     {/* Buttons */}
     <div className="flex flex-col gap-4">
       <button 
         onClick={onStartIntegrating}
-        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
         Start integrating
       </button>
       <button 
         onClick={onViewDocs}
-        className="w-full py-3 bg-white hover:bg-gray-50 text-[#353a44] font-semibold text-base rounded-md border border-[#d8dee4] transition-colors shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
+        className="w-full py-3 bg-white hover:bg-gray-50 text-[#353a44] font-bold text-[16px] rounded-md border border-[#d8dee4] transition-colors shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
       >
         View Issuing docs
       </button>
@@ -1077,7 +1134,7 @@ const DeclinedContent = ({ onClose, onSubmitForm }) => {
         </div>
         <button 
           onClick={onClose}
-          className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+          className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
         >
           Return to dashboard
         </button>
@@ -1240,7 +1297,7 @@ const DeclinedContent = ({ onClose, onSubmitForm }) => {
       {/* Submit Button */}
       <button 
         onClick={handleSubmit}
-        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
         Submit
       </button>
@@ -1320,7 +1377,7 @@ const DashboardSetupSuccessContent = ({ onGoToBalances }) => (
     {/* Go to Balances Button */}
     <button 
       onClick={onGoToBalances}
-      className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-base rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+      className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
     >
       Go to Balances
     </button>
@@ -1372,10 +1429,10 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   
   // Step counts depend on whether user is declined
   // Declined flow: step 4 = processing, step 5 = declined screen
-  // Normal flow: steps 0-6 (use case, setup type, review, processing, success)
+  // Normal flow: steps 0-6 (use case, cardholders, setup type, review, processing, success)
   const isDeclinedFlow = isDeclined === true || isDirectDeclinePath;
   const maxStep = isDeclinedFlow ? 5 : 6;
-  const processingStep = isDeclinedFlow ? 4 : 5; // Processing step for both flows
+  const processingStep = isDeclinedFlow ? 4 : 5;
   const finalStep = isDeclinedFlow ? 5 : 6;
   
   // Reset state when modal opens
@@ -1432,7 +1489,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
     if (onboardingPath === 'happy') {
       return [
         { label: 'Describe use case', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
-        { label: 'Choose program type', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
+        { label: 'Choose cardholders', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
         { label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
         { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
       ];
@@ -1442,7 +1499,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
     return [
       { label: 'Describe use case', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
       { label: 'Provide more information', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
-      { label: 'Choose program type', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
+      { label: 'Choose cardholders', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
       { label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
       { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
     ];
@@ -1465,14 +1522,14 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       }
     }
     
-    // After step 2 (Program Type / Cardholders), check for non-business cardholder - decline with processing
+    // After step 2 (Cardholders), check for non-business cardholder - decline with processing
     if (currentStep === 2) {
       if (isNonBusinessCardholder(selectedCardHolder)) {
         setIsDeclined(true);
         setCurrentStep(4); // Go to processing screen first
         return;
       }
-      // If we reach here, user is approved (past all decline gates)
+      // Past all decline gates
       setIsDeclined(false);
     }
     
@@ -1581,6 +1638,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
               {/* Regular flow - hidden when dashboard success is shown */}
               {!showDashboardSuccess && (
                 <>
+                  {/* Step 0: Describe use case */}
                   {currentStep === 0 && (
                     <UseCaseContent 
                       onContinue={handleContinue}
@@ -1597,6 +1655,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                   {currentStep === 1 && onboardingPath === 'kyc' && (
                     <OwnerInfoContent onContinue={handleContinue} />
                   )}
+                  {/* Step 2: Who will be your cardholders */}
                   {currentStep === 2 && (
                     <CardHoldersContent 
                       onContinue={handleContinue}
@@ -1604,8 +1663,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                       setSelectedCardHolder={setSelectedCardHolder}
                     />
                   )}
-                  
-                  {/* Step 3: Choose setup type (same for all paths) */}
+                  {/* Step 3: Choose setup type */}
                   {currentStep === 3 && (
                     <ChooseSetupTypeContent
                       onContinue={handleContinue}
@@ -1644,7 +1702,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                       {currentStep === 6 && (
                         <SuccessContent 
                           onStartIntegrating={handleStartIntegratingClick} 
-                          onViewDocs={onViewDocs || onComplete || onClose} 
+                          onViewDocs={onViewDocs || onComplete || onClose}
+                          selectedUseCase={selectedUseCase}
                         />
                       )}
                     </>

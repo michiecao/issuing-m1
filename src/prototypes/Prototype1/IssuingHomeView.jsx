@@ -1279,7 +1279,7 @@ const AddFundsModal = ({ isOpen, onClose, onAddFunds }) => {
 const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete, isSandboxMode = false, onExitSandbox }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [compareEnabled, setCompareEnabled] = useState(true);
-  const [selectedAccount, setSelectedAccount] = useState({ id: '1', label: 'Financial account 1' });
+  const [selectedAccount, setSelectedAccount] = useState({ id: '1', label: 'Starter program' });
   const [isCreateMenuOpen, setIsCreateMenuOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [isAddFundsOpen, setIsAddFundsOpen] = useState(false);
@@ -1311,8 +1311,9 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
   };
   
   const financialAccountOptions = [
-    { id: '1', label: 'Financial account 1' },
-    { id: '2', label: 'Financial account 2' },
+    { id: '1', label: 'Starter program' },
+    { id: '2', label: 'Growth program #1' },
+    { id: '3', label: 'Growth program #2' },
   ];
   
   const tabs = [
@@ -1432,6 +1433,14 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             {/* Filter Bar and Actions */}
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2 flex-wrap">
+                <FilterChipDropdown 
+                  label="Issuing program" 
+                  value={selectedAccount.label}
+                  options={financialAccountOptions}
+                  onSelect={setSelectedAccount}
+                  hasSeparator={true}
+                  hasCloseIcon={true}
+                />
                 <FilterChip label="Cardholder" isInactive={true} />
                 <FilterChip label="Balance" isInactive={true} />
                 <FilterChip label="Last 4" isInactive={true} />
@@ -1480,19 +1489,19 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
               
               {/* Table Body */}
               {[
-                { id: 1, name: 'Cam Sackett', last4: '2345', status: 'Active', cardholder: 'Cam Sackett', balance: 'Financial account 1', created: 'May 13', spent: '$0.00', email: 'cam@cactuspractice.com', phone: '+1 (206) 772 7185', address: '472 Oyster Point Blvd, Cactus Practice, South Francisco, CA, EC2J 2JH, US', cardId: 'ic_1NwIp92eZvKYlo2C8kL1qZ3x' },
-                { id: 2, name: 'Ad spend', last4: '1726', status: 'Active', cardholder: 'Lulu Siegel', balance: 'Financial account 1', created: 'May 13', spent: '$5,293.93', email: 'lulu@cactuspractice.com', phone: '+1 (415) 555 0123', address: '100 Market St, San Francisco, CA, 94105, US', cardId: 'ic_2NwIp92eZvKYlo2C8kL2qZ4y' },
-                { id: 3, name: 'Steven Johnson', last4: '8893', status: 'Active', cardholder: 'Steven Johnson', balance: 'Financial account 2', created: 'May 13', spent: '$4,271.00', email: 'steven@cactuspractice.com', phone: '+1 (415) 555 0124', address: '200 Pine St, San Francisco, CA, 94104, US', cardId: 'ic_3NwIp92eZvKYlo2C8kL3qZ5z' },
-                { id: 4, name: 'Mathilde Jeakins', last4: '5211', status: 'Active', cardholder: 'Mathilde Jeakins', balance: 'Financial account 1', created: 'May 10', spent: '$3,235.00', email: 'mathilde@cactuspractice.com', phone: '+1 (415) 555 0125', address: '300 Bush St, San Francisco, CA, 94104, US', cardId: 'ic_4NwIp92eZvKYlo2C8kL4qZ6a' },
-                { id: 5, name: 'Tax', last4: '8432', status: 'Frozen', cardholder: 'Runa Cameron', balance: 'Financial account 2', created: 'May 9', spent: '$2,371.87', email: 'runa@cactuspractice.com', phone: '+1 (415) 555 0126', address: '400 Montgomery St, San Francisco, CA, 94104, US', cardId: 'ic_5NwIp92eZvKYlo2C8kL5qZ7b' },
-                { id: 6, name: 'AWS', last4: '2787', status: 'Active', cardholder: 'Katie Litz', balance: 'Financial account 1', created: 'May 6', spent: '$1,098.23', email: 'katie@cactuspractice.com', phone: '+1 (415) 555 0127', address: '500 Sansome St, San Francisco, CA, 94111, US', cardId: 'ic_6NwIp92eZvKYlo2C8kL6qZ8c' },
-                { id: 7, name: 'Figma', last4: '2283', status: 'Active', cardholder: 'Josiah Brown', balance: 'Financial account 2', created: 'Apr 17', spent: '$1,018.33', email: 'josiah@cactuspractice.com', phone: '+1 (415) 555 0128', address: '600 Battery St, San Francisco, CA, 94111, US', cardId: 'ic_7NwIp92eZvKYlo2C8kL7qZ9d' },
-                { id: 8, name: 'Runa Cameron', last4: '0987', status: 'Inactive', cardholder: 'Runa Cameron', balance: 'Financial account 1', created: 'May 29', spent: '$998.00', email: 'runa@cactuspractice.com', phone: '+1 (415) 555 0126', address: '400 Montgomery St, San Francisco, CA, 94104, US', cardId: 'ic_8NwIp92eZvKYlo2C8kL8qZAe' },
-                { id: 9, name: 'Gina Ogazi', last4: '1928', status: 'Active', cardholder: 'Gina Ogazia', balance: 'Financial account 2', created: 'May 29', spent: '$856.00', email: 'gina@cactuspractice.com', phone: '+1 (415) 555 0129', address: '700 Front St, San Francisco, CA, 94111, US', cardId: 'ic_9NwIp92eZvKYlo2C8kL9qZBf' },
-                { id: 10, name: 'Laura White', last4: '2267', status: 'Cancelled', cardholder: 'Laura White', balance: 'Financial account 1', created: 'Feb 14', spent: '$0.00', email: 'laura@cactuspractice.com', phone: '+1 (415) 555 0130', address: '800 Davis St, San Francisco, CA, 94111, US', cardId: 'ic_ANwIp92eZvKYlo2C8kLAqZCg' },
-                { id: 11, name: 'Hayley Hill', last4: '0019', status: 'Active', cardholder: 'Hayley Hill', balance: 'Financial account 2', created: 'Feb 10', spent: '$2,450.00', email: 'hayley@cactuspractice.com', phone: '+1 (415) 555 0131', address: '900 Washington St, San Francisco, CA, 94108, US', cardId: 'ic_BNwIp92eZvKYlo2C8kLBqZDh' },
-                { id: 12, name: 'Sarah Veshuna', last4: '2677', status: 'Active', cardholder: 'Sarah Veshuna', balance: 'Financial account 1', created: 'Jan 28', spent: '$1,125.00', email: 'sarah@cactuspractice.com', phone: '+1 (415) 555 0132', address: '1000 Clay St, San Francisco, CA, 94108, US', cardId: 'ic_CNwIp92eZvKYlo2C8kLCqZEi' },
-                { id: 13, name: 'Daryl Williams', last4: '5678', status: 'Expired', cardholder: 'Daryl Williams', balance: 'Financial account 2', created: 'Jan 15', spent: '$0.00', email: 'daryl@cactuspractice.com', phone: '+1 (415) 555 0133', address: '1100 Sacramento St, San Francisco, CA, 94108, US', cardId: 'ic_DNwIp92eZvKYlo2C8kLDqZFj' },
+                { id: 1, name: 'Cam Sackett', last4: '2345', status: 'Active', cardholder: 'Cam Sackett', balance: 'Starter program', created: 'May 13', spent: '$0.00', email: 'cam@cactuspractice.com', phone: '+1 (206) 772 7185', address: '472 Oyster Point Blvd, Cactus Practice, South Francisco, CA, EC2J 2JH, US', cardId: 'ic_1NwIp92eZvKYlo2C8kL1qZ3x' },
+                { id: 2, name: 'Ad spend', last4: '1726', status: 'Active', cardholder: 'Lulu Siegel', balance: 'Starter program', created: 'May 13', spent: '$5,293.93', email: 'lulu@cactuspractice.com', phone: '+1 (415) 555 0123', address: '100 Market St, San Francisco, CA, 94105, US', cardId: 'ic_2NwIp92eZvKYlo2C8kL2qZ4y' },
+                { id: 3, name: 'Steven Johnson', last4: '8893', status: 'Active', cardholder: 'Steven Johnson', balance: 'Growth program #1', created: 'May 13', spent: '$4,271.00', email: 'steven@cactuspractice.com', phone: '+1 (415) 555 0124', address: '200 Pine St, San Francisco, CA, 94104, US', cardId: 'ic_3NwIp92eZvKYlo2C8kL3qZ5z' },
+                { id: 4, name: 'Mathilde Jeakins', last4: '5211', status: 'Active', cardholder: 'Mathilde Jeakins', balance: 'Starter program', created: 'May 10', spent: '$3,235.00', email: 'mathilde@cactuspractice.com', phone: '+1 (415) 555 0125', address: '300 Bush St, San Francisco, CA, 94104, US', cardId: 'ic_4NwIp92eZvKYlo2C8kL4qZ6a' },
+                { id: 5, name: 'Tax', last4: '8432', status: 'Frozen', cardholder: 'Runa Cameron', balance: 'Growth program #1', created: 'May 9', spent: '$2,371.87', email: 'runa@cactuspractice.com', phone: '+1 (415) 555 0126', address: '400 Montgomery St, San Francisco, CA, 94104, US', cardId: 'ic_5NwIp92eZvKYlo2C8kL5qZ7b' },
+                { id: 6, name: 'AWS', last4: '2787', status: 'Active', cardholder: 'Katie Litz', balance: 'Starter program', created: 'May 6', spent: '$1,098.23', email: 'katie@cactuspractice.com', phone: '+1 (415) 555 0127', address: '500 Sansome St, San Francisco, CA, 94111, US', cardId: 'ic_6NwIp92eZvKYlo2C8kL6qZ8c' },
+                { id: 7, name: 'Figma', last4: '2283', status: 'Active', cardholder: 'Josiah Brown', balance: 'Growth program #1', created: 'Apr 17', spent: '$1,018.33', email: 'josiah@cactuspractice.com', phone: '+1 (415) 555 0128', address: '600 Battery St, San Francisco, CA, 94111, US', cardId: 'ic_7NwIp92eZvKYlo2C8kL7qZ9d' },
+                { id: 8, name: 'Runa Cameron', last4: '0987', status: 'Inactive', cardholder: 'Runa Cameron', balance: 'Starter program', created: 'May 29', spent: '$998.00', email: 'runa@cactuspractice.com', phone: '+1 (415) 555 0126', address: '400 Montgomery St, San Francisco, CA, 94104, US', cardId: 'ic_8NwIp92eZvKYlo2C8kL8qZAe' },
+                { id: 9, name: 'Gina Ogazi', last4: '1928', status: 'Active', cardholder: 'Gina Ogazia', balance: 'Growth program #1', created: 'May 29', spent: '$856.00', email: 'gina@cactuspractice.com', phone: '+1 (415) 555 0129', address: '700 Front St, San Francisco, CA, 94111, US', cardId: 'ic_9NwIp92eZvKYlo2C8kL9qZBf' },
+                { id: 10, name: 'Laura White', last4: '2267', status: 'Cancelled', cardholder: 'Laura White', balance: 'Starter program', created: 'Feb 14', spent: '$0.00', email: 'laura@cactuspractice.com', phone: '+1 (415) 555 0130', address: '800 Davis St, San Francisco, CA, 94111, US', cardId: 'ic_ANwIp92eZvKYlo2C8kLAqZCg' },
+                { id: 11, name: 'Hayley Hill', last4: '0019', status: 'Active', cardholder: 'Hayley Hill', balance: 'Growth program #1', created: 'Feb 10', spent: '$2,450.00', email: 'hayley@cactuspractice.com', phone: '+1 (415) 555 0131', address: '900 Washington St, San Francisco, CA, 94108, US', cardId: 'ic_BNwIp92eZvKYlo2C8kLBqZDh' },
+                { id: 12, name: 'Sarah Veshuna', last4: '2677', status: 'Active', cardholder: 'Sarah Veshuna', balance: 'Starter program', created: 'Jan 28', spent: '$1,125.00', email: 'sarah@cactuspractice.com', phone: '+1 (415) 555 0132', address: '1000 Clay St, San Francisco, CA, 94108, US', cardId: 'ic_CNwIp92eZvKYlo2C8kLCqZEi' },
+                { id: 13, name: 'Daryl Williams', last4: '5678', status: 'Expired', cardholder: 'Daryl Williams', balance: 'Growth program #1', created: 'Jan 15', spent: '$0.00', email: 'daryl@cactuspractice.com', phone: '+1 (415) 555 0133', address: '1100 Sacramento St, San Francisco, CA, 94108, US', cardId: 'ic_DNwIp92eZvKYlo2C8kLDqZFj' },
               ].map((card, i) => (
                 <div 
                   key={i} 
@@ -1792,6 +1801,14 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             {/* Filter Bar and Actions */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2 flex-wrap">
+                <FilterChipDropdown 
+                  label="Issuing program" 
+                  value={selectedAccount.label}
+                  options={financialAccountOptions}
+                  onSelect={setSelectedAccount}
+                  hasSeparator={true}
+                  hasCloseIcon={true}
+                />
                 <FilterChip label="Created" isInactive={true} />
                 <FilterChip label="Name" isInactive={true} />
                 <FilterChip label="Type" isInactive={true} />
@@ -1840,16 +1857,16 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
               
               {/* Table Body */}
               {[
-                { name: 'Cam Sackett', last4: '2345', spent: '$0.00', balance: 'Financial account 1', expiration: 'Sep 2028', created: 'May 13' },
-                { name: 'Lulu Siegel', last4: '1726', spent: '$5,293.93', balance: 'Financial account 1', expiration: 'Dec 2027', created: 'May 13' },
-                { name: 'Steven Johnson', last4: '8893', spent: '$4,271.00', balance: 'Financial account 2', expiration: 'Mar 2028', created: 'May 13' },
-                { name: 'Mathilde Jeakins', last4: '5211', spent: '$3,235.00', balance: 'Financial account 1', expiration: 'Jun 2028', created: 'May 10' },
-                { name: 'Runa Cameron', last4: '8432', spent: '$2,371.87', balance: 'Financial account 2', expiration: 'Aug 2027', created: 'May 9' },
-                { name: 'Katie Litz', last4: '2787', spent: '$1,098.23', balance: 'Financial account 1', expiration: 'Nov 2028', created: 'May 6' },
-                { name: 'Josiah Brown', last4: '2283', spent: '$1,018.33', balance: 'Financial account 2', expiration: 'Apr 2028', created: 'Apr 17' },
-                { name: 'Gina Ogazia', last4: '1928', spent: '$856.00', balance: 'Financial account 1', expiration: 'Oct 2027', created: 'May 29' },
-                { name: 'Laura White', last4: '2267', spent: '$0.00', balance: 'Financial account 1', expiration: 'Feb 2026', created: 'Feb 14' },
-                { name: 'Hayley Hill', last4: '0019', spent: '$2,450.00', balance: 'Financial account 2', expiration: 'Jan 2029', created: 'Feb 10' },
+                { name: 'Cam Sackett', last4: '2345', spent: '$0.00', balance: 'Starter program', expiration: 'Sep 2028', created: 'May 13' },
+                { name: 'Lulu Siegel', last4: '1726', spent: '$5,293.93', balance: 'Starter program', expiration: 'Dec 2027', created: 'May 13' },
+                { name: 'Steven Johnson', last4: '8893', spent: '$4,271.00', balance: 'Growth program #1', expiration: 'Mar 2028', created: 'May 13' },
+                { name: 'Mathilde Jeakins', last4: '5211', spent: '$3,235.00', balance: 'Starter program', expiration: 'Jun 2028', created: 'May 10' },
+                { name: 'Runa Cameron', last4: '8432', spent: '$2,371.87', balance: 'Growth program #1', expiration: 'Aug 2027', created: 'May 9' },
+                { name: 'Katie Litz', last4: '2787', spent: '$1,098.23', balance: 'Starter program', expiration: 'Nov 2028', created: 'May 6' },
+                { name: 'Josiah Brown', last4: '2283', spent: '$1,018.33', balance: 'Growth program #1', expiration: 'Apr 2028', created: 'Apr 17' },
+                { name: 'Gina Ogazia', last4: '1928', spent: '$856.00', balance: 'Starter program', expiration: 'Oct 2027', created: 'May 29' },
+                { name: 'Laura White', last4: '2267', spent: '$0.00', balance: 'Starter program', expiration: 'Feb 2026', created: 'Feb 14' },
+                { name: 'Hayley Hill', last4: '0019', spent: '$2,450.00', balance: 'Growth program #1', expiration: 'Jan 2029', created: 'Feb 10' },
               ].map((cardholder, i) => (
                 <div key={i} className="flex items-center h-9 border-b border-[#e3e8ee]">
                   <div className="w-8 flex items-center justify-center">
@@ -1937,6 +1954,14 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             {/* Filter Bar and Actions */}
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2 flex-wrap">
+                <FilterChipDropdown 
+                  label="Issuing program" 
+                  value={selectedAccount.label}
+                  options={financialAccountOptions}
+                  onSelect={setSelectedAccount}
+                  hasSeparator={true}
+                  hasCloseIcon={true}
+                />
                 <FilterChip label="Date" isInactive={true} />
                 <FilterChip label="Card ID" isInactive={true} />
                 <FilterChip label="Cardholder ID" isInactive={true} />
@@ -2047,6 +2072,14 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             {/* Filter Bar and Actions */}
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2 flex-wrap">
+                <FilterChipDropdown 
+                  label="Issuing program" 
+                  value={selectedAccount.label}
+                  options={financialAccountOptions}
+                  onSelect={setSelectedAccount}
+                  hasSeparator={true}
+                  hasCloseIcon={true}
+                />
                 <FilterChip label="Date" isInactive={true} />
                 <FilterChip label="Card" isInactive={true} />
                 <FilterChip label="Cardholder" isInactive={true} />
@@ -2387,7 +2420,7 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             {/* Filter Bar */}
             <div className="flex items-center gap-2 mb-6 flex-wrap">
               <FilterChipDropdown 
-                label="Financial account" 
+                label="Issuing program" 
                 value={selectedAccount.label}
                 options={financialAccountOptions}
                 onSelect={setSelectedAccount}
