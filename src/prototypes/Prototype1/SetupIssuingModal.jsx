@@ -199,39 +199,31 @@ const CodeEditorIllustration = () => (
   </div>
 );
 
-// Setup Type Card Component - Updated layout with illustration
-const SetupTypeCard = ({ title, description, features, onContinue, illustration }) => (
-  <div className="bg-white border border-[#d8dee4] rounded-lg p-6 w-full">
-    <div className="flex gap-6">
-      {/* Left side - Illustration */}
-      <div className="w-[140px] min-h-[178px] self-stretch shrink-0">
-        {illustration}
+// Setup Type Card Component - Horizontal layout with title/description left, features right
+const SetupTypeCard = ({ title, description, features, selected, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`w-full text-left rounded-lg py-4 px-4 transition-colors ${
+      selected 
+        ? 'border-2 border-[#675dff] bg-white' 
+        : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
+    }`}
+  >
+    <div className="flex justify-between">
+      {/* Left side - Title and description (fixed width for bullet alignment across cards) */}
+      <div className="w-[160px] shrink-0">
+        <h3 className="font-semibold text-[18px] text-[#353a44] leading-7 tracking-[-0.48px]">{title}</h3>
+        <p className="text-[14px] text-[#596171] leading-5 mt-0.5">{description}</p>
       </div>
       
-      {/* Right side - Text content */}
-      <div className="flex-1 flex flex-col">
-        <h3 className="font-semibold text-[18px] text-[#353a44] leading-7 tracking-[-0.48px]">{title}</h3>
-        <p className="text-[14px] text-[#596171] leading-5 mt-0.5 mb-3">{description}</p>
-        
-        {/* Feature list */}
-        <div className="flex flex-col gap-1 min-h-[96px]">
-          {features.map((feature, index) => (
-            <FeatureItem key={index}>{feature}</FeatureItem>
-          ))}
-        </div>
+      {/* Right side - Feature list, right-aligned with consistent width */}
+      <div className="flex flex-col gap-1 shrink-0 min-w-[260px]">
+        {features.map((feature, index) => (
+          <FeatureItem key={index}>{feature}</FeatureItem>
+        ))}
       </div>
     </div>
-    
-    {/* Continue button - full width purple */}
-    <div className="mt-4">
-      <button 
-        onClick={onContinue}
-        className="w-full py-2.5 bg-[#625afa] hover:bg-[#5650e0] text-white font-semibold text-sm rounded-md transition-colors"
-      >
-        Continue
-      </button>
-    </div>
-  </div>
+  </button>
 );
 
 // Right Sidebar Callout for Choose Setup Type step
@@ -249,58 +241,74 @@ const CustomSetupCallout = () => (
   </div>
 );
 
-// Step 0: Choose Setup Type Content
+// Step: Choose Setup Type Content
 const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupType, setSelectedSetupType }) => (
-  <div className="w-full max-w-[520px]">
+  <div className="w-full max-w-[580px] px-4">
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-        How do you want to get started?
+        Choose the offering that fits your needs
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
-        Choose the setup that best fits your needs.
+        You can change your plan later as your program grows.
       </p>
     </div>
     
     {/* Setup Type Cards */}
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       <SetupTypeCard
-        title="Build with Stripe Issuing APIs"
-        description="You write the code - Stripe handles the rest."
+        title="Starter"
+        description="For simple programs, no code required"
         features={[
-          'Best for building a program at scale',
-          'Access to Issuing APIs',
-          'US Commercial Prepaid Mastercard',
-          'Pay as you go',
+          'Create up to 5 cards',
+          'Create up to 5 cardholders',
+          'Manage via dashboard',
         ]}
-        illustration={<CodeEditorIllustration />}
-        onContinue={() => {
-          setSelectedSetupType('api');
-          onContinue();
-        }}
+        selected={selectedSetupType === 'starter'}
+        onClick={() => setSelectedSetupType('starter')}
       />
       
       <SetupTypeCard
-        title="Manage in dashboard"
-        description="Create cards and manage your business in the Stripe dashboard."
+        title="Growth"
+        description="For programs ready to scale"
         features={[
-          'Best for personal use',
-          'No access to Issuing APIs',
-          'No code required',
-          'Free',
+          'Create up to 50 cards',
+          'Create up to 50 cardholders',
+          'Manage via dashboard and API',
+          'Powered by US Commercial Prepaid',
         ]}
-        illustration={<DashboardIllustration />}
-        onContinue={() => {
-          setSelectedSetupType('dashboard');
-          onDashboardSetup();
-        }}
+        selected={selectedSetupType === 'growth'}
+        onClick={() => setSelectedSetupType('growth')}
+      />
+      
+      <SetupTypeCard
+        title="Enterprise"
+        description="For programs needing full control"
+        features={[
+          'Create unlimited cards',
+          'Create unlimited cardholders',
+          'Manage via dashboard and API',
+          'Powered by US Commercial Prepaid',
+        ]}
+        selected={selectedSetupType === 'enterprise'}
+        onClick={() => setSelectedSetupType('enterprise')}
       />
     </div>
     
-    {/* Need more flexibility text */}
-    <p className="mt-6 text-[14px] text-[#596171] leading-5">
-      Need custom card programs, pricing, or integrations? <a href="#" className="text-[#533afd] hover:underline">Contact us</a>
-    </p>
+    {/* Continue Button */}
+    <div className="mt-6">
+      <button 
+        onClick={onContinue}
+        disabled={!selectedSetupType}
+        className={`w-full py-3 font-semibold text-sm rounded-md transition-colors text-white ${
+          !selectedSetupType
+            ? 'bg-[#625afa]/50 cursor-not-allowed'
+            : 'bg-[#625afa] hover:bg-[#5650e0]'
+        }`}
+      >
+        Continue
+      </button>
+    </div>
   </div>
 );
 
@@ -463,6 +471,12 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
             selected={selectedUseCase === 'corporate'}
             onClick={() => setSelectedUseCase('corporate')}
           />
+          <UseCaseOption
+            title="Other"
+            description="My use case isn't listed here."
+            selected={selectedUseCase === 'other'}
+            onClick={() => setSelectedUseCase('other')}
+          />
         </div>
         
         {/* Additional Use Cases Toggle */}
@@ -562,7 +576,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        Who do you want to issue cards for?
+        What type of program are you trying to launch?
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px]">
         Choose who will hold and use the cards.
@@ -579,8 +593,8 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">My business</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Example: For yourself, employees or agents of your business</p>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Cards for my business</h4>
+        <p className="text-[14px] text-[#596171] leading-5">For yourself, employees, or contractors</p>
       </button>
       <button
         onClick={() => setSelectedCardHolder('platforms')}
@@ -590,8 +604,8 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Businesses on my platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Example: For LLC or S-corp entities using your platform</p>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Cards for businesses on my platform</h4>
+        <p className="text-[14px] text-[#596171] leading-5">For business entities that use your platform</p>
       </button>
       <button
         onClick={() => setSelectedCardHolder('consumers')}
@@ -601,8 +615,8 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Consumers on my platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Example: For individuals using your platform</p>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Cards for consumers</h4>
+        <p className="text-[14px] text-[#596171] leading-5">For individual end-users of your platform</p>
       </button>
     </div>
     
@@ -677,6 +691,7 @@ const getUseCaseDisplayName = (useCase) => {
     'fleet': 'Fleet',
     'insurance': 'Insurance',
     'bnpl': 'Buy now pay later',
+    'other': 'Other',
   };
   return names[useCase] || useCase || 'Not selected';
 };
@@ -756,22 +771,6 @@ const SubmitReviewContent = ({
               <h4 className="font-semibold text-[16px] text-[#353a44]">Program description</h4>
               <p className="text-sm text-[#414552] leading-5">{description || 'Description'}</p>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Pricing */}
-      <div className="mb-8">
-        <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Pricing</h3>
-        <div className="border border-[#d5dbe1] rounded-lg p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-semibold text-[16px] text-[#353a44]">—</p>
-              <p className="text-sm text-[#414552] leading-5">—</p>
-            </div>
-            <button className="text-[#6c7688] hover:text-[#474e5a] p-1">
-              <EditIcon />
-            </button>
           </div>
         </div>
       </div>
@@ -1373,11 +1372,11 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   
   // Step counts depend on whether user is declined
   // Declined flow: step 4 = processing, step 5 = declined screen
-  // Normal flow: steps 0-7 (includes pricing, review, processing, success)
+  // Normal flow: steps 0-6 (use case, setup type, review, processing, success)
   const isDeclinedFlow = isDeclined === true || isDirectDeclinePath;
-  const maxStep = isDeclinedFlow ? 5 : 7;
-  const processingStep = isDeclinedFlow ? 4 : 6; // Processing step for both flows
-  const finalStep = isDeclinedFlow ? 5 : 7;
+  const maxStep = isDeclinedFlow ? 5 : 6;
+  const processingStep = isDeclinedFlow ? 4 : 5; // Processing step for both flows
+  const finalStep = isDeclinedFlow ? 5 : 6;
   
   // Reset state when modal opens
   React.useEffect(() => {
@@ -1408,21 +1407,20 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   if (!isOpen) return null;
 
   // Step flow with immediate decline feedback:
-  //   0: Choose setup type
+  //   0: Choose program type (card holders)
   //   1: Review your information (happy) OR Provide more information (kyc)
   //   2: Describe use case
   //      → If specialized use case (fleet, insurance, bnpl) selected → go to processing → declined
-  //   3: Describe card holders
+  //   3: Choose setup type
   //      → If non-business cardholder (platforms, consumers) selected → go to processing → declined
   //
   // Approved flow (after step 3):
-  //   4: Review pricing
-  //   5: Review and submit
-  //   6: Processing
-  //   7: Success
+  //   4: Review and submit
+  //   5: Processing
+  //   6: Success
   //
   // Declined flow:
-  //   4: Processing (5 seconds)
+  //   4: Processing (3 seconds)
   //   5: Declined screen
   
   // Build steps array for sidebar
@@ -1430,54 +1428,51 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
     // Show full expected flow in sidebar
     // If user gets declined, they'll see processing/declined screens which hide the sidebar
     
-    // For happy path, skip "Review your information" step
+    // For happy path, skip "Provide more information" step
     if (onboardingPath === 'happy') {
       return [
-        { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
-        { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
-        { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
-        { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
-        { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending', stepNumber: 5 },
+        { label: 'Describe use case', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
+        { label: 'Choose program type', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
+        { label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
+        { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
       ];
     }
     
     // For KYC path, include "Provide more information" step
     return [
-      { label: 'Choose setup type', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
+      { label: 'Describe use case', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
       { label: 'Provide more information', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
-      { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
-      { label: 'Choose cardholders', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
-      { label: 'Review pricing', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
-      { label: 'Review and submit', status: currentStep === 5 ? 'active' : currentStep > 5 ? 'complete' : 'pending', stepNumber: 5 },
+      { label: 'Choose program type', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
+      { label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
+      { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
     ];
   };
   
   const steps = getSteps();
 
   const handleContinue = () => {
-    // For happy path, skip from step 0 directly to step 2 (skip "Review your information")
-    if (currentStep === 0 && onboardingPath === 'happy') {
-      setCurrentStep(2);
-      return;
-    }
-    
-    // After step 2 (Use Case), check for specialized use case - decline with processing
-    if (currentStep === 2) {
+    // After step 0 (Use Case), check for specialized use case - decline with processing
+    if (currentStep === 0) {
       if (isSpecializedUseCase(selectedUseCase)) {
         setIsDeclined(true);
         setCurrentStep(4); // Go to processing screen first
         return;
       }
+      // For happy path, skip from step 0 directly to step 2 (skip "Provide more information")
+      if (onboardingPath === 'happy') {
+        setCurrentStep(2);
+        return;
+      }
     }
     
-    // After step 3 (Cardholders), check for non-business cardholder - decline with processing
-    if (currentStep === 3) {
+    // After step 2 (Program Type / Cardholders), check for non-business cardholder - decline with processing
+    if (currentStep === 2) {
       if (isNonBusinessCardholder(selectedCardHolder)) {
         setIsDeclined(true);
         setCurrentStep(4); // Go to processing screen first
         return;
       }
-      // If we reach here, user is approved
+      // If we reach here, user is approved (past all decline gates)
       setIsDeclined(false);
     }
     
@@ -1587,11 +1582,12 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
               {!showDashboardSuccess && (
                 <>
                   {currentStep === 0 && (
-                    <ChooseSetupTypeContent
+                    <UseCaseContent 
                       onContinue={handleContinue}
-                      onDashboardSetup={handleDashboardSetup}
-                      selectedSetupType={selectedSetupType}
-                      setSelectedSetupType={setSelectedSetupType}
+                      selectedUseCase={selectedUseCase}
+                      setSelectedUseCase={setSelectedUseCase}
+                      description={description}
+                      setDescription={setDescription}
                     />
                   )}
                   {/* Step 1: Review info (happy) or Provide more info (kyc) */}
@@ -1602,21 +1598,20 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                     <OwnerInfoContent onContinue={handleContinue} />
                   )}
                   {currentStep === 2 && (
-                    <UseCaseContent 
-                      onContinue={handleContinue}
-                      selectedUseCase={selectedUseCase}
-                      setSelectedUseCase={setSelectedUseCase}
-                      description={description}
-                      setDescription={setDescription}
-                    />
-                  )}
-                  
-                  {/* Step 3: Cardholders (same for all paths) */}
-                  {currentStep === 3 && (
                     <CardHoldersContent 
                       onContinue={handleContinue}
                       selectedCardHolder={selectedCardHolder}
                       setSelectedCardHolder={setSelectedCardHolder}
+                    />
+                  )}
+                  
+                  {/* Step 3: Choose setup type (same for all paths) */}
+                  {currentStep === 3 && (
+                    <ChooseSetupTypeContent
+                      onContinue={handleContinue}
+                      onDashboardSetup={handleDashboardSetup}
+                      selectedSetupType={selectedSetupType}
+                      setSelectedSetupType={setSelectedSetupType}
                     />
                   )}
                   
@@ -1633,11 +1628,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                     </>
                   ) : (
                     <>
-                      {/* Normal flow: pricing → review → processing → success */}
+                      {/* Normal flow: review → processing → success */}
                       {currentStep === 4 && (
-                        <PricingContent onContinue={handleContinue} />
-                      )}
-                      {currentStep === 5 && (
                         <SubmitReviewContent
                           onSubmit={handleContinue}
                           selectedUseCase={selectedUseCase}
@@ -1646,10 +1638,10 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                           setAgreedTerms={setAgreedTerms}
                         />
                       )}
-                      {currentStep === 6 && (
+                      {currentStep === 5 && (
                         <ProcessingContent />
                       )}
-                      {currentStep === 7 && (
+                      {currentStep === 6 && (
                         <SuccessContent 
                           onStartIntegrating={handleStartIntegratingClick} 
                           onViewDocs={onViewDocs || onComplete || onClose} 
@@ -1664,7 +1656,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           
           {/* Right Sidebar - Contextual content */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
-            {currentStep === 2 && !showDashboardSuccess && <UseCaseCallout />}
+            {currentStep === 0 && !showDashboardSuccess && <UseCaseCallout />}
             {isDeclinedScreen && <DeclinedSidebarContent />}
           </div>
         </div>
