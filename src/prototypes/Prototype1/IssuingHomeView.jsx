@@ -2213,10 +2213,8 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
         
         {/* Transfers Tab View */}
         {activeTab === 'transfers' && (
-          <div className="flex items-center justify-center py-16">
-            <div className="w-full max-w-[600px] h-[300px] bg-[#f5f6f8] rounded-lg flex items-center justify-center">
-              <span className="text-[14px] text-[#6c7688]">Transfers content coming soon</span>
-            </div>
+          <div className="w-full h-[500px] bg-[#f5f6f8] rounded-lg flex items-center justify-center">
+            <span className="text-[14px] text-[#6c7688]">Transfers content coming soon</span>
           </div>
         )}
         
