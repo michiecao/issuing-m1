@@ -316,6 +316,11 @@ const DashboardView = () => {
     }, 500);
   };
 
+  const handleSimulatePurchase = () => {
+    setIsModalOpen(false);
+    setIsOnboardingComplete(true);
+  };
+
   // "View Issuing docs" -> Show Quickstart guide
   const handleViewIssuingDocs = () => {
     setIsModalOpen(false);
@@ -394,6 +399,17 @@ const DashboardView = () => {
                     className="w-4 h-4 text-blue-600"
                   />
                   <span className="text-sm text-gray-700">Declined</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="onboardingPath2"
+                    value="auto-create-card"
+                    checked={onboardingPath === 'auto-create-card'}
+                    onChange={(e) => setOnboardingPath(e.target.value)}
+                    className="w-4 h-4 text-blue-600"
+                  />
+                  <span className="text-sm text-gray-700">Auto-create card</span>
                 </label>
               </div>
             </div>
@@ -587,45 +603,46 @@ const DashboardView = () => {
           <div className="flex-1 overflow-y-auto px-6 pb-10 pt-6">
             <div className="w-full">
               {/* Hero Section */}
-              <div className="bg-[#f5f6f8] rounded-xl px-[72px] pt-[60px] pb-[40px] relative overflow-hidden mb-4 w-full">
+              <div className="bg-[#f5f6f8] rounded-xl px-[72px] py-[110px] relative overflow-hidden mb-4 w-full">
                 {/* Product Badge */}
                 <div className="absolute top-3 left-3 bg-white rounded-lg px-2 py-2">
                   <span className="text-[12px] font-semibold text-[#353a44] leading-[16px]">Issuing</span>
                 </div>
 
-                <div className="flex gap-4 items-center">
-                  {/* Left Content */}
-                  <div className="w-[500px] shrink-0">
-                    <h1 className="text-[40px] font-bold text-[#353a44] leading-[48px] tracking-[0.37px] mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+                {/* Content */}
+                <div className="flex flex-col gap-[22px] items-start relative z-10 w-[428px]">
+                  <div className="flex flex-col gap-2">
+                    <h1 className="text-[40px] font-bold text-[#353a44] leading-[48px] tracking-[0.37px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
                       Launch your card program in minutes
                     </h1>
-                    <p className="text-[20px] text-[#596171] leading-[28px] tracking-[0.3px] mb-[22px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+                    <p className="text-[20px] text-[#596171] leading-[28px] tracking-[0.3px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
                       Access powerful APIs to create, manage, and scale your card program.
                     </p>
-                    <div className="flex gap-4">
-                      <button 
-                        onClick={() => setIsModalOpen(true)}
-                        className="px-4 py-2.5 bg-[#635bff] hover:bg-[#5851ea] text-white font-medium text-[14px] rounded-md transition-colors shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
-                      >
-                        Get started
-                      </button>
-                      <button 
-                        onClick={handleExploreSandbox}
-                        className="px-4 py-2.5 bg-white hover:bg-gray-50 text-[#353a44] font-medium text-[14px] rounded-md border border-[#d8dee4] transition-colors shadow-[0_1px_1px_rgba(33,37,44,0.16)]"
-                      >
-                        Explore in sandbox
-                      </button>
-                    </div>
                   </div>
+                  <div className="flex gap-4">
+                    <button 
+                      onClick={() => setIsModalOpen(true)}
+                      className="px-4 py-2.5 bg-[#635bff] hover:bg-[#5851ea] text-white font-medium text-[14px] rounded-md transition-colors shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
+                    >
+                      Get started
+                    </button>
+                    <button 
+                      onClick={handleExploreSandbox}
+                      className="px-4 py-2.5 bg-white hover:bg-gray-50 text-[#353a44] font-medium text-[14px] rounded-md border border-[#d8dee4] transition-colors shadow-[0_1px_1px_rgba(33,37,44,0.16)]"
+                    >
+                      Explore in sandbox
+                    </button>
+                  </div>
+                </div>
 
-                  {/* Card Visual */}
-                  <div className="flex-1 flex items-center justify-center shrink-0">
-                    <img 
-                      src={new URL('../../assets/issuing-card-hero.png', import.meta.url).href}
-                      alt="Issuing card"
-                      className="w-[1000px] min-w-[600px] h-auto drop-shadow-2xl"
-                    />
-                  </div>
+                {/* Card Visual — absolutely positioned to the right */}
+                <div className="absolute right-[40px] top-1/2 -translate-y-[calc(50%-10px)]">
+                  <img 
+                    src={new URL('../../assets/issuing-card-hero.svg', import.meta.url).href}
+                    alt="Issuing card"
+                    className="w-[520px] h-auto"
+                    style={{ filter: 'drop-shadow(0px 20px 100px rgba(83,58,253,0.2)) drop-shadow(0px 20px 35px rgba(83,58,253,0.2)) drop-shadow(0px 5px 15px rgba(83,58,253,0.2))' }}
+                  />
                 </div>
               </div>
 
@@ -654,6 +671,7 @@ const DashboardView = () => {
         onClose={() => setIsModalOpen(false)}
         onComplete={handleOnboardingComplete}
         onStartIntegrating={handleStartIntegrating}
+        onSimulatePurchase={handleSimulatePurchase}
         onViewDocs={handleViewIssuingDocs}
         onGoToBalances={handleGoToBalances}
         initialStep={modalInitialStep}
@@ -705,6 +723,17 @@ const DashboardView = () => {
                 className="w-4 h-4 text-blue-600"
               />
               <span className="text-sm text-gray-700">Declined</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="onboardingPath"
+                value="auto-create-card"
+                checked={onboardingPath === 'auto-create-card'}
+                onChange={(e) => setOnboardingPath(e.target.value)}
+                className="w-4 h-4 text-blue-600"
+              />
+              <span className="text-sm text-gray-700">Auto-create card</span>
             </label>
           </div>
         </div>

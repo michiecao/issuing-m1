@@ -278,7 +278,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         icon="rocket"
         description="No integration required"
         features={[
-          'Up to 100 cards, 2 per cardholder',
+          'Up to 100 cards',
           'Dashboard access',
           'Stripe-branded physical card',
           'Shared BIN',
@@ -292,7 +292,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         icon="growth"
         description="Scale quickly with code"
         features={[
-          'Unlimited cards and cardholders (upon review)',
+          'Unlimited cards and cardholders',
           'Dashboard and Issuing API access',
           'Stripe-branded physical card',
           'Shared BIN',
@@ -1082,6 +1082,177 @@ const SuccessContent = ({ onStartIntegrating, onViewDocs, selectedUseCase }) => 
   </div>
 );
 
+// Virtual Card Visual for Auto-Create Card Success
+const VirtualCardVisual = () => {
+  const cardRef = React.useRef(null);
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const maxTilt = 15;
+    setTilt({
+      rotateX: (0.5 - y) * maxTilt,
+      rotateY: (x - 0.5) * maxTilt,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    setTilt({ rotateX: 0, rotateY: 0 });
+  };
+
+  return (
+    <div className="w-full rounded-xl border border-[#FEFEFE] bg-[#EFECFC] py-10 flex items-center justify-center" style={{ perspective: '800px' }}>
+      <div
+        ref={cardRef}
+        className="relative w-[300px]"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+          transition: isHovering ? 'transform 0.1s ease-out' : 'transform 0.4s ease-out',
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        {/* Shadow ambient */}
+        <div className="absolute -inset-4 rounded-3xl bg-[#533AFD]/[0.15] blur-2xl" />
+        {/* Card */}
+        <div
+          className="relative rounded-lg bg-[#533AFD] p-6 flex flex-col justify-between text-white overflow-hidden shadow-[8px_4px_8px_-1px_rgba(83,58,253,0.13),16px_16px_32px_-4px_rgba(83,58,253,0.13),24px_32px_56px_-8px_rgba(83,58,253,0.13)]"
+          style={{ aspectRatio: '85.6 / 54' }}
+        >
+        {/* Stripe parallelogram logo */}
+          <div className="relative z-10 flex justify-end">
+            <svg width="28" height="27" viewBox="0 0 115 113" fill="none">
+              <path d="M114.91 88.824L0 112.455V23.193L114.91 0V88.824Z" fill="white"/>
+            </svg>
+          </div>
+
+          {/* Card number */}
+          <div className="relative z-10">
+            <p className="font-mono text-[16px] tracking-[2px] opacity-90 whitespace-nowrap">•••• •••• •••• 4242</p>
+          </div>
+
+          {/* Bottom row */}
+          <div className="flex items-end justify-between relative z-10">
+            <div>
+              <p className="text-[9px] uppercase tracking-[1.5px] opacity-50 mb-0.5">Cardholder</p>
+              <p className="text-[14px] font-normal opacity-90">Cedar Andrews</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[9px] uppercase tracking-[1.5px] opacity-50 mb-0.5">Expires</p>
+              <p className="text-[14px] font-normal opacity-90">02/29</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Expandable detail section
+const ExpandableDetailSection = ({ title, children, defaultExpanded = false }) => {
+  const [expanded, setExpanded] = useState(defaultExpanded);
+
+  return (
+    <div className="border border-[#e3e8ee] rounded-lg">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#f9fafb] transition-colors rounded-lg"
+      >
+        <span className="font-semibold text-[14px] text-[#353a44]">{title}</span>
+        <ChevronDownIcon className={`text-[#6c7688] transition-transform duration-200 ${expanded ? '' : '-rotate-90'}`} />
+      </button>
+      <div className={`overflow-hidden transition-all duration-200 ${expanded ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="px-4 pb-3 pt-1 border-t border-[#e3e8ee]">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Key-value detail row
+const DetailRow = ({ label, value }) => (
+  <div className="flex justify-between py-1.5">
+    <span className="text-[13px] text-[#6c7688]">{label}</span>
+    <span className="text-[13px] text-[#353a44] font-medium">{value}</span>
+  </div>
+);
+
+// Auto-Create Card Success Screen
+const AutoCreateCardSuccessContent = ({ onSimulatePurchase }) => (
+  <div className="w-full max-w-[520px] px-4">
+    {/* Card Visual Hero */}
+    <div className="mb-9 pt-4">
+      <VirtualCardVisual />
+    </div>
+
+    {/* Headline */}
+    <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-4">
+      Everything you need to start building
+    </h1>
+
+    {/* Subtitle — frames the card as the enabler for building */}
+    <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px] mb-6">
+      Your virtual card, cardholder, and financial account are live and prefunded with{' '}
+      <span className="font-semibold text-[#353a44]">$10.00</span>&nbsp;&mdash; ready for your first API call.
+    </p>
+
+    {/* Expandable Details */}
+    <div className="flex flex-col gap-3 mb-6">
+      <ExpandableDetailSection title="API resources" defaultExpanded>
+        <div className="flex flex-col gap-2 pt-1">
+          <a href="#" className="group">
+            <span className="text-[13px] text-[#533afd] font-medium group-hover:underline">Issuing quickstart guide</span>
+          </a>
+          <a href="#" className="group">
+            <span className="text-[13px] text-[#533afd] font-medium group-hover:underline">Create and manage a card</span>
+          </a>
+          <a href="#" className="group">
+            <span className="text-[13px] text-[#533afd] font-medium group-hover:underline">Create and manage cardholders</span>
+          </a>
+          <a href="#" className="group">
+            <span className="text-[13px] text-[#533afd] font-medium group-hover:underline">Set up spending controls</span>
+          </a>
+        </div>
+      </ExpandableDetailSection>
+
+      <ExpandableDetailSection title="Card and cardholder details">
+        <DetailRow label="Card number" value="•••• •••• •••• 4242" />
+        <DetailRow label="Type" value="Virtual" />
+        <DetailRow
+          label="Status"
+          value={
+            <span className="inline-flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0e6245]" />
+              Active
+            </span>
+          }
+        />
+        <DetailRow label="Expires" value="02/29" />
+        <div className="border-t border-[#e3e8ee] my-1.5" />
+        <DetailRow label="Cardholder" value="Cedar Andrews" />
+        <DetailRow label="Email" value="cedar@acme.com" />
+        <DetailRow label="Company" value="Acme Inc." />
+      </ExpandableDetailSection>
+    </div>
+
+    {/* CTA */}
+    <button
+      onClick={onSimulatePurchase}
+      className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+    >
+      Simulate a test purchase
+    </button>
+  </div>
+);
+
 // Resource Link Icons with rounded background
 const ContactIcon = () => (
   <svg width="32" height="32" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1486,7 +1657,7 @@ const isNonBusinessCardholder = (cardHolder) => {
 };
 
 // Main Modal Component
-const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox }) => {
+const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
@@ -1561,7 +1732,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   // Build steps array for sidebar
   const getSteps = () => {
     // For happy path, skip "Provide more information" step
-    if (onboardingPath === 'happy') {
+    if (onboardingPath === 'happy' || onboardingPath === 'auto-create-card') {
       return [
         { label: 'Select cardholders', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
         { label: 'Describe use case', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
@@ -1689,7 +1860,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
             <h2 className="font-bold text-[16px] text-[#353a44] tracking-[-0.31px]">Set up Issuing</h2>
             {(isFinalScreen && !isDeclinedScreen) ? (
               <Button variant="secondary" size="md" onClick={onComplete || onClose}>
-                Exit
+                {onboardingPath === 'auto-create-card' ? 'Exit to dashboard' : 'Exit'}
               </Button>
             ) : isProcessingScreen ? (
               <div /> 
@@ -1816,11 +1987,17 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                         <ProcessingContent />
                       )}
                       {currentStep === 6 && (
-                        <SuccessContent 
-                          onStartIntegrating={handleStartIntegratingClick} 
-                          onViewDocs={onViewDocs || onComplete || onClose}
-                          selectedUseCase={selectedUseCase}
-                        />
+                        onboardingPath === 'auto-create-card' ? (
+                          <AutoCreateCardSuccessContent
+                            onSimulatePurchase={onSimulatePurchase}
+                          />
+                        ) : (
+                          <SuccessContent 
+                            onStartIntegrating={handleStartIntegratingClick} 
+                            onViewDocs={onViewDocs || onComplete || onClose}
+                            selectedUseCase={selectedUseCase}
+                          />
+                        )
                       )}
                     </>
                   )}
