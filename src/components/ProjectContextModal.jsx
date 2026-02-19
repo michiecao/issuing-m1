@@ -147,6 +147,23 @@ const ProjectContextModal = ({ isOpen, onClose }) => {
                 </Section>
               </div>
 
+              <div className="border-t border-[#e3e8ee] my-12" />
+
+              {/* User Paths */}
+              <div id="user-paths" className="scroll-mt-8">
+                <Section title="User paths">
+                  <div className="mt-6">
+                    <iframe
+                      style={{ border: '1px solid rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}
+                      width="100%"
+                      height="600"
+                      src="https://embed.figma.com/board/icTh1xLZBFM0QQBgAhEumK/Issuing-Onboarding-Questionnaire-Decision-Tree?node-id=0-1&embed-host=share"
+                      allowFullScreen
+                    />
+                  </div>
+                </Section>
+              </div>
+
               {/* Spacer at bottom for scroll */}
             <div className="h-16" />
 
