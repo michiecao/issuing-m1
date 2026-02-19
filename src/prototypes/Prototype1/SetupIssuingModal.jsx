@@ -264,7 +264,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-        Which setup works best for you today?
+        Pick the setup that best suits your needs
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
         You can upgrade anytime as your program grows.
@@ -474,6 +474,9 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
       
       {/* Use Case Selection */}
       <div className="mb-8">
+        <label className="block font-semibold text-[16px] text-[#353a44] mb-2">
+          Select a use case
+        </label>
         <div className="space-y-[9px]">
           <UseCaseOption
             title="B2B payments"
@@ -538,7 +541,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
       {/* Description Textarea */}
       <div className="mb-8">
         <label className="block font-semibold text-[16px] text-[#353a44] mb-2">
-          Tell us more about your card program
+          Describe your card program
         </label>
         <textarea
           value={description}
