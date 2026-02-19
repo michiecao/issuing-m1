@@ -132,7 +132,7 @@ const CheckIcon = () => (
 // Feature Item Component for setup type cards
 const FeatureItem = ({ children }) => (
   <div className="flex gap-2 items-center">
-    <CheckIcon />
+    <span className="w-[4px] h-[4px] rounded-full bg-[#596171] shrink-0" />
     <span className="text-[14px] text-[#596171] leading-5">{children}</span>
   </div>
 );
@@ -247,7 +247,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-        Choose the offering that fits your needs
+        Which offering best fits your needs?
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
         You can change your setup later as your program grows.
@@ -258,7 +258,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
     <div className="flex flex-col gap-3">
       <SetupTypeCard
         title="Starter"
-        description={<>Get started instantly.<br />no code needed</>}
+        description={<>Get started instantly,<br />no code needed</>}
         features={[
           'Create up to 5 cards',
           'Create up to 5 cardholders',
@@ -275,7 +275,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
           'Create up to 50 cards',
           'Create up to 50 cardholders',
           'Manage via dashboard and API',
-          'Powered by US Commercial Prepaid',
+          'Backed by US Commercial Prepaid',
         ]}
         selected={selectedSetupType === 'growth'}
         onClick={() => setSelectedSetupType('growth')}
@@ -288,7 +288,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
           'Create unlimited cards',
           'Create unlimited cardholders',
           'Manage via dashboard and API',
-          'Powered by US Commercial Prepaid',
+          'Backed by US Commercial Prepaid',
         ]}
         selected={selectedSetupType === 'enterprise'}
         onClick={() => setSelectedSetupType('enterprise')}
@@ -516,7 +516,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
       {/* Description Textarea */}
       <div className="mb-8">
         <label className="block font-semibold text-[16px] text-[#353a44] mb-2">
-          How will you use Issuing?
+          How will you use your cards?
         </label>
         <textarea
           value={description}
@@ -530,8 +530,8 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
       <div className="flex justify-center">
         <button 
           onClick={onContinue}
-          disabled={!selectedUseCase}
-          className={continueButtonClasses(!selectedUseCase)}
+          disabled={!selectedUseCase || !description.trim()}
+          className={continueButtonClasses(!selectedUseCase || !description.trim())}
         >
           Continue
         </button>
@@ -576,7 +576,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        Who will be your cardholders?
+        Who are you issuing cards to?
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px]">
         Choose who will hold and use the cards.
@@ -593,7 +593,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Employees or contractors</h4>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">My business</h4>
         <p className="text-[14px] text-[#596171] leading-5">For yourself, your team, or agents of your business</p>
       </button>
       <button
@@ -616,7 +616,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
         }`}
       >
         <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Consumers on my platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">For individual end-users of your platform</p>
+        <p className="text-[14px] text-[#596171] leading-5">For individual end users of your platform</p>
       </button>
     </div>
     
@@ -697,6 +697,52 @@ const getUseCaseDisplayName = (useCase) => {
 };
 
 
+// Terms of Service Modal
+const TermsOfServiceModal = ({ isOpen, onAccept, onCancel }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center">
+      <div className="absolute inset-0 bg-black/30" onClick={onCancel} />
+      <div className="relative bg-white rounded-xl shadow-[0px_15px_35px_rgba(48,49,61,0.08),0px_5px_15px_rgba(0,0,0,0.12)] w-full max-w-[480px] mx-4">
+        <div className="flex items-center justify-between px-6 pt-6 pb-2">
+          <h2 className="font-bold text-[22px] text-[#353a44] leading-7">Terms of Service</h2>
+          <button
+            onClick={onCancel}
+            className="p-1 text-[#6c7688] hover:text-[#353a44] transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div className="px-6 pt-2 pb-2">
+          <div className="border-t border-[#e3e8ee] mb-4" />
+          <p className="text-[14px] text-[#353a44] leading-5 mb-4">
+            By clicking Accept, you agree to the below documents and to receiving automated text messages, and you consent to electronic signature as set forth in the Issuing Bank Accountholder Terms.
+          </p>
+          <div className="flex flex-col gap-1 mb-6">
+            <a href="#" className="text-[14px] text-[#353a44] underline hover:text-[#533afd]">Issuing Accountholder Terms</a>
+            <a href="#" className="text-[14px] text-[#353a44] underline hover:text-[#533afd]">Issuing Bank Accountholder Terms: Spend Card</a>
+            <a href="#" className="text-[14px] text-[#353a44] underline hover:text-[#533afd]">Spend Card Apple Pay Terms and Conditions</a>
+          </div>
+          <p className="text-[14px] text-[#596171] leading-5 mb-6">
+            Card products are issued by Cross-River Bank.
+          </p>
+        </div>
+        <div className="px-6 pb-6">
+          <button
+            onClick={onAccept}
+            className="w-full py-2.5 bg-[#625afa] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors"
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Step 4: Submit Review Content
 const SubmitReviewContent = ({ 
   onSubmit, 
@@ -705,6 +751,7 @@ const SubmitReviewContent = ({
   agreedTerms,
   setAgreedTerms,
 }) => {
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const canSubmit = agreedTerms;
 
   return (
@@ -787,9 +834,7 @@ const SubmitReviewContent = ({
             <div>
               <div className="flex items-center justify-between">
                 <h4 className="font-semibold text-[14px] text-[#353a44]">Card program</h4>
-                <button className="text-[#6c7688] hover:text-[#474e5a] p-1">
-                  <EditIcon />
-                </button>
+                <button className="text-[14px] font-semibold text-[#533afd] hover:underline">Edit</button>
               </div>
               <p className="text-sm text-[#414552] leading-5">{getUseCaseDisplayName(selectedUseCase)}</p>
             </div>
@@ -797,14 +842,47 @@ const SubmitReviewContent = ({
               <h4 className="font-semibold text-[14px] text-[#353a44]">Program description</h4>
               <p className="text-sm text-[#414552] leading-5">{description || 'Description'}</p>
             </div>
+            {(selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') && (
+              <div className="bg-[#f7f8fa] rounded-lg p-4">
+                <p className="font-semibold text-[14px] text-[#353a44] leading-5 mb-2">
+                  Guidelines
+                </p>
+                <p className="text-[14px] text-[#596171] leading-5 mb-2">
+                  Before using your cards, make sure you:
+                </p>
+                <ul className="text-[14px] text-[#596171] leading-5 space-y-1 list-disc pl-5">
+                  {selectedUseCase === 'b2b' ? (
+                    <>
+                      <li>Use cards for business-to-business transactions only</li>
+                      <li>Limit purchases to a single industry category (e.g., travel or e-commerce)</li>
+                      <li>Inform customers that you handle refunds and disputes</li>
+                    </>
+                  ) : (
+                    <>
+                      <li>Use cards for business-to-business transactions only</li>
+                      <li>Limit purchases to a single industry category (e.g., travel or e-commerce)</li>
+                      <li>Only make purchases as part of the services you provide your customers</li>
+                    </>
+                  )}
+                </ul>
+              </div>
+            )}
           </div>
+        </div>
+      </div>
+
+      {/* Pricing */}
+      <div className="mb-6">
+        <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Pricing</h3>
+        <div className="border border-[#d5dbe1] rounded-lg p-4">
+          <div className="h-[72px] bg-[#f5f6f8] rounded" />
         </div>
       </div>
 
       {/* Agreement */}
       <div className="mb-8">
         <Checkbox checked={agreedTerms} onChange={setAgreedTerms}>
-          I agree to the <a href="#" className="text-[#533afd] hover:underline">E-sign policy</a> and <a href="#" className="text-[#533afd] hover:underline">Celtic Bank's privacy policy</a>
+          I agree to the <button type="button" onClick={(e) => { e.preventDefault(); setShowTermsModal(true); }} className="text-[#533afd] hover:underline">Issuing Terms of Service</button>, <a href="#" className="text-[#533afd] hover:underline">E-sign policy</a>, and <a href="#" className="text-[#533afd] hover:underline">Celtic Bank's privacy policy</a>
         </Checkbox>
       </div>
       
@@ -818,6 +896,13 @@ const SubmitReviewContent = ({
           Submit
         </button>
       </div>
+
+      {/* Terms of Service Modal */}
+      <TermsOfServiceModal
+        isOpen={showTermsModal}
+        onAccept={() => setShowTermsModal(false)}
+        onCancel={() => setShowTermsModal(false)}
+      />
     </div>
   );
 };
@@ -958,37 +1043,6 @@ const SuccessContent = ({ onStartIntegrating, onViewDocs, selectedUseCase }) => 
       </div>
     </div>
 
-    {/* Use Case Disclaimer */}
-    {(selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') && (
-      <div className="mb-8 border border-[#e3e8ee] rounded-lg p-5 bg-[#f7f8fa]">
-        <p className="font-bold text-[16px] text-[#353a44] leading-6 mb-2">
-          {selectedUseCase === 'b2b' ? 'B2B program guidelines' : 'On-demand services guidelines'}
-        </p>
-        <p className="text-[16px] text-[#596171] leading-6 mb-3">
-          Before using your cards, make sure you:
-        </p>
-        <ul className="text-[16px] text-[#596171] leading-6 space-y-1.5 list-disc pl-5 mb-3">
-          {selectedUseCase === 'b2b' ? (
-            <>
-              <li>Use cards for business-to-business transactions only</li>
-              <li>Limit purchases to a single industry category (e.g., travel or e-commerce)</li>
-              <li>Inform customers that you handle refunds and disputes</li>
-            </>
-          ) : (
-            <>
-              <li>Use cards for business-to-business transactions only</li>
-              <li>Limit purchases to a single industry category (e.g., travel or e-commerce)</li>
-              <li>Only make purchases as part of the services you provide your customers</li>
-            </>
-          )}
-        </ul>
-        <p className="text-[16px] text-[#596171] leading-6">
-          Questions?{' '}
-          <a href="#" className="text-[#533afd] hover:underline">Contact us</a>.
-        </p>
-      </div>
-    )}
-    
     {/* Buttons */}
     <div className="flex flex-col gap-4">
       <button 

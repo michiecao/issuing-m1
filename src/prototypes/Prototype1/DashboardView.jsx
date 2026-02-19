@@ -597,7 +597,7 @@ const DashboardView = () => {
                   {/* Left Content */}
                   <div className="w-[500px] shrink-0">
                     <h1 className="text-[40px] font-bold text-[#353a44] leading-[48px] tracking-[0.37px] mb-2" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-                      Launch your card program in minutes, not months
+                      Launch your card program in minutes
                     </h1>
                     <p className="text-[20px] text-[#596171] leading-[28px] tracking-[0.3px] mb-[22px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
                       Launch, manage, scale a commercial card program, and bootstrap your business.
