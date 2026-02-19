@@ -600,7 +600,7 @@ const DashboardView = () => {
                       Launch your card program in minutes
                     </h1>
                     <p className="text-[20px] text-[#596171] leading-[28px] tracking-[0.3px] mb-[22px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-                      Bootstrap your business and a commercial card program
+                      Access powerful APIs to create, manage, and scale your card program.
                     </p>
                     <div className="flex gap-4">
                       <button 
