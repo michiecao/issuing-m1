@@ -570,10 +570,10 @@ const OwnerInfoContent = ({ onContinue }) => (
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        Provide more information
+        Complete your business details
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px]">
-        Before you can start issuing cards, Stripe needs more information from you.
+        We need a few more details about your business to get started.
       </p>
     </div>
     
@@ -1539,11 +1539,14 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   if (!isOpen) return null;
 
   // Step flow with immediate decline feedback:
-  //   0: Choose cardholders
-  //      → If non-business cardholder (platforms, consumers) selected → go to processing → declined
-  //   1: Describe use case
-  //      → If specialized use case (fleet, insurance, bnpl) selected → go to processing → declined
-  //   2: Review your information (happy) OR Provide more information (kyc)
+  //   Happy path:
+  //     0: Choose cardholders → If non-business → processing → declined
+  //     1: Describe use case → If specialized → processing → declined
+  //     (step 2 skipped) → jumps to step 3
+  //   KYC path:
+  //     0: Provide more information
+  //     1: Choose cardholders → If non-business → processing → declined
+  //     2: Describe use case → If specialized → processing → declined
   //   3: Choose setup type
   //
   // Approved flow (after step 3):
@@ -1567,11 +1570,11 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       ];
     }
     
-    // For KYC path, include "Provide more information" step
+    // For KYC path, "Provide more information" is the first step
     return [
-      { label: 'Select cardholders', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
-      { label: 'Describe use case', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
-      { label: 'Provide more information', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
+      { label: 'Complete business details', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
+      { label: 'Select cardholders', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
+      { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
       { label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
       { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
     ];
@@ -1580,37 +1583,58 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const steps = getSteps();
 
   const handleContinue = () => {
-    // After step 0 (Cardholders), check for non-business cardholder - decline with processing
-    if (currentStep === 0) {
-      if (isNonBusinessCardholder(selectedCardHolder)) {
-        setIsDeclined(true);
-        setCurrentStep(4); // Go to processing screen first
-        return;
+    if (onboardingPath === 'kyc') {
+      // KYC path: step 0 = Provide more info, step 1 = Cardholders, step 2 = Use case, step 3 = Setup type
+      if (currentStep === 1) {
+        if (isNonBusinessCardholder(selectedCardHolder)) {
+          setIsDeclined(true);
+          setCurrentStep(4); // Go to processing screen first
+          return;
+        }
       }
-    }
-    
-    // After step 1 (Use Case), check for specialized use case - decline with processing
-    if (currentStep === 1) {
-      if (isSpecializedUseCase(selectedUseCase)) {
-        setIsDeclined(true);
-        setCurrentStep(4); // Go to processing screen first
-        return;
+      
+      if (currentStep === 2) {
+        if (isSpecializedUseCase(selectedUseCase)) {
+          setIsDeclined(true);
+          setCurrentStep(4); // Go to processing screen first
+          return;
+        }
+        setIsDeclined(false);
       }
-      // Past all decline gates
-      setIsDeclined(false);
-      // For happy path, skip from step 1 directly to step 3 (skip "Provide more information")
-      if (onboardingPath === 'happy') {
+
+      if (currentStep === 3) {
+        if (selectedCardHolder === 'business' && selectedUseCase === 'corporate' && selectedSetupType === 'starter') {
+          setShowDashboardSuccess(true);
+          return;
+        }
+      }
+    } else {
+      // Happy path: step 0 = Cardholders, step 1 = Use case, step 3 = Setup type
+      if (currentStep === 0) {
+        if (isNonBusinessCardholder(selectedCardHolder)) {
+          setIsDeclined(true);
+          setCurrentStep(4); // Go to processing screen first
+          return;
+        }
+      }
+      
+      if (currentStep === 1) {
+        if (isSpecializedUseCase(selectedUseCase)) {
+          setIsDeclined(true);
+          setCurrentStep(4); // Go to processing screen first
+          return;
+        }
+        setIsDeclined(false);
+        // For happy path, skip from step 1 directly to step 3 (skip "Provide more information")
         setCurrentStep(3);
         return;
       }
-    }
 
-    // After step 3 (Setup type): "My business" + "Corporate expense" + "Starter"
-    // → financial accounts only path (no Issuing API access)
-    if (currentStep === 3) {
-      if (selectedCardHolder === 'business' && selectedUseCase === 'corporate' && selectedSetupType === 'starter') {
-        setShowDashboardSuccess(true);
-        return;
+      if (currentStep === 3) {
+        if (selectedCardHolder === 'business' && selectedUseCase === 'corporate' && selectedSetupType === 'starter') {
+          setShowDashboardSuccess(true);
+          return;
+        }
       }
     }
     
@@ -1711,30 +1735,49 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
               {/* Regular flow - hidden when dashboard success is shown */}
               {!showDashboardSuccess && (
                 <>
-                  {/* Step 0: Choose cardholders */}
-                  {currentStep === 0 && (
-                    <CardHoldersContent 
-                      onContinue={handleContinue}
-                      selectedCardHolder={selectedCardHolder}
-                      setSelectedCardHolder={setSelectedCardHolder}
-                    />
-                  )}
-                  {/* Step 1: Describe use case */}
-                  {currentStep === 1 && (
-                    <UseCaseContent 
-                      onContinue={handleContinue}
-                      selectedUseCase={selectedUseCase}
-                      setSelectedUseCase={setSelectedUseCase}
-                      description={description}
-                      setDescription={setDescription}
-                    />
-                  )}
-                  {/* Step 2: Review info (happy) or Provide more info (kyc) */}
-                  {currentStep === 2 && onboardingPath === 'happy' && (
-                    <ReviewInfoContent onContinue={handleContinue} />
-                  )}
-                  {currentStep === 2 && onboardingPath === 'kyc' && (
-                    <OwnerInfoContent onContinue={handleContinue} />
+                  {/* KYC path: Provide more info is step 0, then cardholders (1), use case (2) */}
+                  {/* Happy path: Cardholders is step 0, use case (1), skip step 2 */}
+                  {onboardingPath === 'kyc' ? (
+                    <>
+                      {currentStep === 0 && (
+                        <OwnerInfoContent onContinue={handleContinue} />
+                      )}
+                      {currentStep === 1 && (
+                        <CardHoldersContent 
+                          onContinue={handleContinue}
+                          selectedCardHolder={selectedCardHolder}
+                          setSelectedCardHolder={setSelectedCardHolder}
+                        />
+                      )}
+                      {currentStep === 2 && (
+                        <UseCaseContent 
+                          onContinue={handleContinue}
+                          selectedUseCase={selectedUseCase}
+                          setSelectedUseCase={setSelectedUseCase}
+                          description={description}
+                          setDescription={setDescription}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {currentStep === 0 && (
+                        <CardHoldersContent 
+                          onContinue={handleContinue}
+                          selectedCardHolder={selectedCardHolder}
+                          setSelectedCardHolder={setSelectedCardHolder}
+                        />
+                      )}
+                      {currentStep === 1 && (
+                        <UseCaseContent 
+                          onContinue={handleContinue}
+                          selectedUseCase={selectedUseCase}
+                          setSelectedUseCase={setSelectedUseCase}
+                          description={description}
+                          setDescription={setDescription}
+                        />
+                      )}
+                    </>
                   )}
                   {/* Step 3: Choose setup type */}
                   {currentStep === 3 && (
@@ -1788,7 +1831,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           
           {/* Right Sidebar - Contextual content */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
-            {currentStep === 1 && !showDashboardSuccess && <UseCaseCallout />}
+            {((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && !showDashboardSuccess && <UseCaseCallout />}
             {isDeclinedScreen && <DeclinedSidebarContent />}
           </div>
         </div>

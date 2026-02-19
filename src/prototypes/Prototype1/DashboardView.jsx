@@ -731,12 +731,14 @@ const DashboardView = () => {
                 3. Issuing dashboard
               </button>
             )}
-            <button
-              onClick={handleJumpToBalances}
-              className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-            >
-              4. Balances view
-            </button>
+            {onboardingPath !== 'declined' && (
+              <button
+                onClick={handleJumpToBalances}
+                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+              >
+                4. Balances view
+              </button>
+            )}
           </div>
         </div>
         <div className="border-t border-gray-200 pt-3">
