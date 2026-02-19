@@ -292,7 +292,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         icon="growth"
         description="Scale quickly with code"
         features={[
-          'Up to 50 cards and cardholders',
+          'Unlimited cards and cardholders (upon review)',
           'Dashboard and Issuing API access',
           'Stripe-branded physical card',
           'Shared BIN',
