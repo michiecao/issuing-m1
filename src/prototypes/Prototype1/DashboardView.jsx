@@ -485,7 +485,7 @@ const DashboardView = () => {
             {/* Top Level Nav */}
             <div className="flex flex-col">
               <NavItem icon={HomeIcon} label="Home" />
-              <NavItem icon={BalancesIcon} label="Balances" />
+              <NavItem icon={BalancesIcon} label="Balances" active={activeNav === 'balances'} onClick={handleJumpToBalances} />
               <NavItem icon={TransactionsIcon} label="Transactions" />
               <NavItem icon={CustomersIcon} label="Customers" />
               <NavItem icon={ProductIcon} label="Product catalog" />

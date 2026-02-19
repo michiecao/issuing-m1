@@ -256,7 +256,7 @@ const ResourceLink = ({ icon: Icon, label }) => (
 
 
 // Create Cards Modal Component - Updated to match Figma design
-const CreateCardsModal = ({ isOpen, onClose, onGetStarted }) => {
+const CreateCardsModal = ({ isOpen, onClose, onGetStarted, showApiBanner }) => {
   if (!isOpen) return null;
 
   return (
@@ -288,45 +288,54 @@ const CreateCardsModal = ({ isOpen, onClose, onGetStarted }) => {
           <div className="flex flex-col gap-4 flex-1">
             {/* Feature 1 - Virtual/Physical cards */}
             <div className="flex gap-2 items-center">
-              <div className="w-11 h-11 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-3">
+              <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
                 <img src={modalIconCard} alt="" className="w-5 h-5" />
               </div>
-              <p className="text-[20px] text-[#353a44] leading-[28px] tracking-[0.3px]">
+              <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
                 Create <span className="font-bold">virtual</span> or <span className="font-bold">physical</span> cards for your team in just a few clicks.
               </p>
             </div>
             
             {/* Feature 2 - Multiple currencies */}
             <div className="flex gap-2 items-center">
-              <div className="w-11 h-11 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-3">
+              <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
                 <img src={modalIconConvert} alt="" className="w-5 h-5" />
               </div>
-              <p className="text-[20px] text-[#353a44] leading-[28px] tracking-[0.3px]">
+              <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
                 Spend in <span className="font-bold">multiple currencies</span> straight from your <span className="font-bold">financial account</span> balance.
               </p>
             </div>
             
             {/* Feature 3 - Manage subscriptions */}
             <div className="flex gap-2 items-center">
-              <div className="w-11 h-11 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-3">
+              <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
                 <img src={modalIconRecurring} alt="" className="w-5 h-5" />
               </div>
-              <p className="text-[20px] text-[#353a44] leading-[28px] tracking-[0.3px]">
+              <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
                 <span className="font-bold">Manage</span> subscriptions, expenses, and bills.
               </p>
             </div>
             
             {/* Feature 4 - Spend limits */}
             <div className="flex gap-2 items-center">
-              <div className="w-11 h-11 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-3">
+              <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
                 <img src={modalIconUsage} alt="" className="w-5 h-5" />
               </div>
-              <p className="text-[20px] text-[#353a44] leading-[28px] tracking-[0.3px]">
+              <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
                 Set spend <span className="font-bold">limits</span>, track <span className="font-bold">usage</span>, and manage team cards.
               </p>
             </div>
+
+            {showApiBanner && (
+              <div className="bg-[#F5F6F8] rounded p-4 mt-2">
+                <p className="text-[14px] text-[#596171] leading-[20px] tracking-[-0.15px]">
+                  Interested in creating other card programs and Stripe Issuing API?{' '}
+                  <span className="text-[#533AFD] cursor-pointer hover:underline">Start building</span>
+                </p>
+              </div>
+            )}
           </div>
-          
+
           {/* Get Started Button - Per Figma specs */}
           <button 
             onClick={onGetStarted || onClose}
@@ -362,6 +371,7 @@ const CreateCardsModal = ({ isOpen, onClose, onGetStarted }) => {
 const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, isSandboxMode = false, onExitSandbox }) => {
   const [activeTab, setActiveTab] = useState('payments');
   const [isCreateCardsModalOpen, setIsCreateCardsModalOpen] = useState(showCreateCardsModal);
+  const [showApiBanner, setShowApiBanner] = useState(false);
   const [isCreateCardPopoverOpen, setIsCreateCardPopoverOpen] = useState(false);
   
   // Sync with prop changes
@@ -371,6 +381,7 @@ const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, i
   
   const handleCloseCreateCardsModal = () => {
     setIsCreateCardsModalOpen(false);
+    setShowApiBanner(false);
     if (onCloseCreateCardsModal) {
       onCloseCreateCardsModal();
     }
@@ -401,7 +412,7 @@ const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, i
           <ActionButton icon={TransferIcon} label="Transfer" />
           <ActionButton icon={AddFundsIcon} label="Add funds" />
           <ActionButton icon={SendIcon} label="Send" />
-          <ActionButton icon={CreateCardIcon} label="Create card" onClick={() => setIsCreateCardPopoverOpen(true)} />
+          <ActionButton icon={CreateCardIcon} label="Create card" onClick={() => { setShowApiBanner(true); setIsCreateCardsModalOpen(true); }} />
           <ActionButton icon={MoreDotsIcon} label="More" />
           <div className="ml-auto">
             <button className="flex items-center gap-1.5 px-3 py-[7px] bg-white border border-[#d8dee4] rounded-full text-[13px] font-medium text-[#353a44] hover:bg-[#f7f8f9] transition-colors">
@@ -551,6 +562,7 @@ const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, i
         isOpen={isCreateCardsModalOpen} 
         onClose={handleCloseCreateCardsModal}
         onGetStarted={handleCloseCreateCardsModal}
+        showApiBanner={showApiBanner}
       />
       
       {/* Create Card Popover Modal */}
