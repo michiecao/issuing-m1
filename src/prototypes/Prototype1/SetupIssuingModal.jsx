@@ -278,7 +278,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         icon="rocket"
         description="No integration required"
         features={[
-          'Up to 5 cards and cardholders',
+          'Up to 100 cards, 2 per cardholder',
           'Dashboard access',
           'Stripe-branded physical card',
           'Shared BIN',
