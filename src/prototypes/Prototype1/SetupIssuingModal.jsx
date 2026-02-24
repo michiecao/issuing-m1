@@ -301,24 +301,10 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         onClick={() => setSelectedSetupType('growth')}
       />
       
-      <SetupTypeCard
-        title="Custom"
-        icon="customizeBrand"
-        description="Your brand, your program"
-        features={[
-          'Unlimited cards and cardholders',
-          'Dashboard and Issuing API access',
-          'Customizable physical card',
-          'Custom BIN',
-          'Revenue share opportunity',
-        ]}
-        selected={selectedSetupType === 'enterprise'}
-        onClick={() => setSelectedSetupType('enterprise')}
-      />
     </div>
-    
+
     {/* Continue Button */}
-    <div className="mt-6">
+    <div className="mt-6 mb-6">
       <button 
         onClick={onContinue}
         disabled={!selectedSetupType}
@@ -331,6 +317,12 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         Continue
       </button>
     </div>
+
+    {/* Sales-assisted fallback */}
+    <p className="text-[14px] text-[#596171] leading-[20px]">
+      Need a fully custom card program?{' '}
+      <span className="text-[#533AFD] cursor-pointer hover:underline">Contact us</span>
+    </p>
   </div>
 );
 
