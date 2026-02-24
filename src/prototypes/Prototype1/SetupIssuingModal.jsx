@@ -458,8 +458,6 @@ const continueButtonClasses = (disabled) =>
 
 // Step 2: Use Case Content
 const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, description, setDescription }) => {
-  const [moreOptionsExpanded, setMoreOptionsExpanded] = useState(false);
-  
   return (
     <div className="w-full max-w-[580px] px-4">
       {/* Page Header */}
@@ -498,44 +496,6 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
           />
         </div>
         
-        {/* Additional Use Cases Toggle */}
-        <button 
-          onClick={() => setMoreOptionsExpanded(!moreOptionsExpanded)}
-          className="flex items-center gap-1 mt-4 text-[#596171] hover:text-[#474e5a]"
-        >
-          <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${moreOptionsExpanded ? '' : '-rotate-90'}`} />
-          <span className="font-semibold text-sm">Additional use cases</span>
-        </button>
-        
-        {/* Expanded Specialized Use Cases */}
-        {moreOptionsExpanded && (
-          <div className="space-y-[9px] mt-[9px]">
-            <UseCaseOption
-              title="Fleet"
-              description="Let employees, contractors, or customers to pay for vehicle operations or related expenses."
-              selected={selectedUseCase === 'fleet'}
-              onClick={() => setSelectedUseCase('fleet')}
-            />
-            <UseCaseOption
-              title="Insurance"
-              description="Let policyholders to purchase items or services that insurance covers."
-              selected={selectedUseCase === 'insurance'}
-              onClick={() => setSelectedUseCase('insurance')}
-            />
-            <UseCaseOption
-              title="Buy now pay later"
-              description="Fund purchases for customers who pay you back over time."
-              selected={selectedUseCase === 'bnpl'}
-              onClick={() => setSelectedUseCase('bnpl')}
-            />
-            <UseCaseOption
-              title="Other"
-              description=""
-              selected={selectedUseCase === 'other'}
-              onClick={() => setSelectedUseCase('other')}
-            />
-          </div>
-        )}
       </div>
 
       {/* Description Textarea */}
@@ -552,7 +512,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
       </div>
       
       {/* Continue Button */}
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-6">
         <button 
           onClick={onContinue}
           disabled={!selectedUseCase || !description.trim()}
@@ -561,6 +521,12 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
           Continue
         </button>
       </div>
+
+      {/* Sales-assisted use cases fallback */}
+      <p className="text-[14px] text-[#596171] leading-[20px]">
+        Don't see an option that fits your needs? Our team is here to help.{' '}
+        <span className="text-[#533AFD] cursor-pointer hover:underline">Contact us</span>
+      </p>
     </div>
   );
 };
