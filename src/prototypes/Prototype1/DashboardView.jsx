@@ -233,6 +233,7 @@ const DashboardView = () => {
   const [setupGuideCompletedTasks, setSetupGuideCompletedTasks] = useState(1);
   const [isSandboxMode, setIsSandboxMode] = useState(false);
   const [showProjectContext, setShowProjectContext] = useState(false);
+  const [showPopulatedState, setShowPopulatedState] = useState(false);
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
@@ -577,11 +578,11 @@ const DashboardView = () => {
               onExternalAddFundsClose={() => setShowAddFundsModal(false)}
               onAddFundsComplete={() => {
                 setAddFundsCompleted(true);
-                // Re-expand the blueprint overlay after adding funds
                 setIsBlueprintMinimized(false);
               }}
               isSandboxMode={isSandboxMode}
               onExitSandbox={handleExitSandbox}
+              showEmptyState={!showPopulatedState}
             />
             <SetupGuide 
               isOpen={showBlueprintOverlay || showSetupGuide} 
@@ -736,6 +737,17 @@ const DashboardView = () => {
               <span className="text-sm text-gray-700">Auto-create card</span>
             </label>
           </div>
+        </div>
+        <div className="border-t border-gray-200 pt-3">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showPopulatedState}
+              onChange={(e) => setShowPopulatedState(e.target.checked)}
+              className="w-4 h-4 text-blue-600 rounded"
+            />
+            <span className="text-sm text-gray-700">Show data</span>
+          </label>
         </div>
         <div className="border-t border-gray-200 pt-3 space-y-1">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Jump to step</p>

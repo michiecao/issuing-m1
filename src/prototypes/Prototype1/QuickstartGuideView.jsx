@@ -153,9 +153,9 @@ const SetupGuide = ({ isOpen, completedTasks = 1, isPanelMinimized = false, hide
   
   const tasks = [
     { label: 'Enable Issuing', completed: completedTasks >= 1 },
-    { label: 'Add funds', completed: completedTasks >= 2 },
-    { label: 'Create a cardholder', completed: completedTasks >= 3 },
-    { label: 'Create a card', completed: completedTasks >= 4 },
+    { label: 'Create a cardholder', completed: completedTasks >= 2 },
+    { label: 'Create a card', completed: completedTasks >= 3 },
+    { label: 'Add funds', completed: completedTasks >= 4 },
     { label: 'Spend with card', completed: completedTasks >= 5 },
   ];
   
@@ -516,28 +516,26 @@ const BlueprintPanel = ({ isOpen, onClose, isMinimized = false, onMinimizeChange
                   </button>
                   <span className="w-5 h-5 rounded-full bg-[#2d3348] text-white text-xs flex items-center justify-center shrink-0">1</span>
                   <div>
-                    <h3 className="text-white font-semibold">Fund your Financial account balance</h3>
-                    <p className="text-sm text-[#8792a2]">Add funds to your Financial account balance before creating cards.</p>
+                    <h3 className="text-white font-semibold">Create a cardholder</h3>
+                    <p className="text-sm text-[#8792a2]">Create a cardholder representing the company or business entity authorized to use card funding.</p>
                   </div>
                 </div>
                 <div className="ml-10 space-y-2">
                   <div ref={el => stepRefs.current[0] = el}>
-                    <BlueprintStepItem 
-                      type="Dashboard" 
-                      title="Add funds to Financial account balance" 
-                      actionLabel="Add funds"
+                    <BlueprintApiItem 
+                      method="POST" 
+                      endpoint="/v1/issuing/cardholders"
                       status={getStepStatus(1)}
-                      onAction={handleAddFundsAction}
+                      onAction={runAllSteps}
                     />
                   </div>
                   <div className="flex justify-center py-1">
                     <div className="w-px h-4 bg-[#2d3348]" />
                   </div>
                   <div ref={el => stepRefs.current[1] = el}>
-                    <BlueprintStepItem 
-                      type="Async handler" 
-                      title="Wait for topup" 
-                      actionLabel="Run"
+                    <BlueprintApiItem 
+                      method="POST" 
+                      endpoint="/v1/issuing/cardholders/{id}"
                       status={getStepStatus(2)}
                       onAction={runAllSteps}
                     />
@@ -555,15 +553,15 @@ const BlueprintPanel = ({ isOpen, onClose, isMinimized = false, onMinimizeChange
                   </button>
                   <span className="w-5 h-5 rounded-full bg-[#2d3348] text-white text-xs flex items-center justify-center shrink-0">2</span>
                   <div>
-                    <h3 className="text-white font-semibold">Create a cardholder</h3>
-                    <p className="text-sm text-[#8792a2]">Create a cardholder representing the company or business entity authorized to use card funding.</p>
+                    <h3 className="text-white font-semibold">Create and activate a card</h3>
+                    <p className="text-sm text-[#8792a2]">Create a card and attach it to the cardholder, then activate it for use.</p>
                   </div>
                 </div>
                 <div className="ml-10 space-y-2">
                   <div ref={el => stepRefs.current[2] = el}>
                     <BlueprintApiItem 
                       method="POST" 
-                      endpoint="/v1/issuing/cardholders"
+                      endpoint="/v1/issuing/cards"
                       status={getStepStatus(3)}
                       onAction={runAllSteps}
                     />
@@ -574,7 +572,7 @@ const BlueprintPanel = ({ isOpen, onClose, isMinimized = false, onMinimizeChange
                   <div ref={el => stepRefs.current[3] = el}>
                     <BlueprintApiItem 
                       method="POST" 
-                      endpoint="/v1/issuing/cardholders/{id}"
+                      endpoint="/v1/issuing/cards/{id}"
                       status={getStepStatus(4)}
                       onAction={runAllSteps}
                     />
@@ -592,26 +590,28 @@ const BlueprintPanel = ({ isOpen, onClose, isMinimized = false, onMinimizeChange
                   </button>
                   <span className="w-5 h-5 rounded-full bg-[#2d3348] text-white text-xs flex items-center justify-center shrink-0">3</span>
                   <div>
-                    <h3 className="text-white font-semibold">Create and activate a card</h3>
-                    <p className="text-sm text-[#8792a2]">Create a card and attach it to the cardholder, then activate it for use.</p>
+                    <h3 className="text-white font-semibold">Fund your Financial account balance</h3>
+                    <p className="text-sm text-[#8792a2]">Add funds to your Financial account balance so your cards can spend.</p>
                   </div>
                 </div>
                 <div className="ml-10 space-y-2">
                   <div ref={el => stepRefs.current[4] = el}>
-                    <BlueprintApiItem 
-                      method="POST" 
-                      endpoint="/v1/issuing/cards"
+                    <BlueprintStepItem 
+                      type="Dashboard" 
+                      title="Add funds to Financial account balance" 
+                      actionLabel="Add funds"
                       status={getStepStatus(5)}
-                      onAction={runAllSteps}
+                      onAction={handleAddFundsAction}
                     />
                   </div>
                   <div className="flex justify-center py-1">
                     <div className="w-px h-4 bg-[#2d3348]" />
                   </div>
                   <div ref={el => stepRefs.current[5] = el}>
-                    <BlueprintApiItem 
-                      method="POST" 
-                      endpoint="/v1/issuing/cards/{id}"
+                    <BlueprintStepItem 
+                      type="Async handler" 
+                      title="Wait for topup" 
+                      actionLabel="Run"
                       status={getStepStatus(6)}
                       onAction={runAllSteps}
                     />
@@ -827,7 +827,7 @@ const QuickstartGuideView = ({ onExit, isSandboxMode = false, onExitSandbox }) =
             
             {/* Content */}
             <p className="text-sm text-[#3c4257] leading-5 mb-6">
-              Before you can start spending with a card, you must create a cardholder, create a virtual card, and add funds to that card.
+              Before you can start spending with a card, you must create a cardholder, create a virtual card, and add funds to your balance.
             </p>
             
             <div className="space-y-4">

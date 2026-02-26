@@ -1276,7 +1276,22 @@ const AddFundsModal = ({ isOpen, onClose, onAddFunds }) => {
 };
 
 // Main Issuing Home View Component
-const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete, isSandboxMode = false, onExitSandbox }) => {
+const EmptyStateView = ({ icon, title, description }) => (
+  <div className="flex flex-col items-center justify-center py-20">
+    <div className="w-12 h-12 rounded-full bg-[#F5F6F8] flex items-center justify-center mb-4">
+      {icon || (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5Z" stroke="#8792a2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M3 10H21" stroke="#8792a2" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+      )}
+    </div>
+    <h3 className="text-[16px] font-semibold text-[#353a44] mb-1">{title}</h3>
+    <p className="text-[14px] text-[#596171] text-center max-w-[360px]">{description}</p>
+  </div>
+);
+
+const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete, isSandboxMode = false, onExitSandbox, showEmptyState = false }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [compareEnabled, setCompareEnabled] = useState(true);
   const [selectedAccount, setSelectedAccount] = useState({ id: '1', label: 'Commercial program 1' });
@@ -1427,6 +1442,15 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
       
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-8 py-6">
+        {showEmptyState && (activeTab === 'transfers' || activeTab === 'fraud') && (
+          <EmptyStateView
+            title={activeTab === 'transfers' ? 'No transfers yet' : 'No fraud data yet'}
+            description={
+              activeTab === 'transfers' ? 'Transfers will appear here when funds are moved between accounts.' :
+              'Fraud and risk data will appear here as your card program grows.'
+            }
+          />
+        )}
         {/* Cards Tab View */}
         {activeTab === 'cards' && !selectedCard && (
           <div>
@@ -1472,6 +1496,11 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             </div>
             
             {/* Cards Table */}
+            {showEmptyState ? (
+              <div className="border-2 border-dashed border-[#d8dee4] rounded-lg py-16 flex items-center justify-center mt-2">
+                <span className="text-[14px] text-[#8792a2]">No cards available</span>
+              </div>
+            ) : (
             <div>
               {/* Table Header */}
               <div className="flex items-center border-y border-[#e3e8ee] text-[12px] font-bold text-[#353A44] whitespace-nowrap">
@@ -1577,11 +1606,12 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                 </div>
               ))}
             </div>
+            )}
           </div>
         )}
         
         {/* Card Detail View */}
-        {activeTab === 'cards' && selectedCard && (
+        {!showEmptyState && activeTab === 'cards' && selectedCard && (
           <div>
             {/* Breadcrumb */}
             <div className="mb-2">
@@ -1840,6 +1870,11 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             </div>
             
             {/* Cardholders Table */}
+            {showEmptyState ? (
+              <div className="border-2 border-dashed border-[#d8dee4] rounded-lg py-16 flex items-center justify-center mt-2">
+                <span className="text-[14px] text-[#8792a2]">No cardholders available</span>
+              </div>
+            ) : (
             <div>
               {/* Table Header */}
               <div className="flex items-center border-y border-[#e3e8ee] text-[12px] font-bold text-[#353A44]">
@@ -1929,6 +1964,7 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                 </div>
               ))}
             </div>
+            )}
           </div>
         )}
         
@@ -1992,6 +2028,11 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             </div>
             
             {/* Transactions Table */}
+            {showEmptyState ? (
+              <div className="border-2 border-dashed border-[#d8dee4] rounded-lg py-16 flex items-center justify-center mt-2">
+                <span className="text-[14px] text-[#8792a2]">No transactions available</span>
+              </div>
+            ) : (
             <div>
               {/* Table Header */}
               <div className="flex items-center border-y border-[#e3e8ee] text-[12px] font-bold text-[#353A44]">
@@ -2047,6 +2088,7 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                 Viewing 1–1 results
               </div>
             </div>
+            )}
           </div>
         )}
         
@@ -2110,6 +2152,11 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             </div>
             
             {/* Disputes Table */}
+            {showEmptyState ? (
+              <div className="border-2 border-dashed border-[#d8dee4] rounded-lg py-16 flex items-center justify-center mt-2">
+                <span className="text-[14px] text-[#8792a2]">No disputes available</span>
+              </div>
+            ) : (
             <div>
               {/* Table Header */}
               <div className="flex items-center border-y border-[#e3e8ee] text-[12px] font-bold text-[#353A44] whitespace-nowrap">
@@ -2208,18 +2255,19 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                 </div>
               ))}
             </div>
+            )}
           </div>
         )}
         
         {/* Transfers Tab View */}
-        {activeTab === 'transfers' && (
+        {!showEmptyState && activeTab === 'transfers' && (
           <div className="w-full h-[500px] bg-[#f5f6f8] rounded-lg flex items-center justify-center">
             <span className="text-[14px] text-[#6c7688]">Transfers content coming soon</span>
           </div>
         )}
         
         {/* Fraud and Risk Tab View */}
-        {activeTab === 'fraud' && (
+        {!showEmptyState && activeTab === 'fraud' && (
           <div>
             {/* Filter Bar */}
             <div className="flex items-center gap-3 mb-8">
@@ -2411,7 +2459,167 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
         )}
         
         {/* Overview Tab View */}
-        {activeTab === 'overview' && (
+        {showEmptyState && activeTab === 'overview' && (
+        <div>
+          {/* Filter Bar */}
+          <div className="flex items-center gap-2 mb-6 flex-wrap">
+            <FilterChipDropdown 
+              label="Issuing program" 
+              value={selectedAccount.label}
+              options={financialAccountOptions}
+              onSelect={setSelectedAccount}
+              hasSeparator={true}
+              hasCloseIcon={true}
+            />
+            <FilterChip label="Date Range" value="Last 12 months" hasSeparator={true} hasCloseIcon={true} />
+            <FilterChip label="Monthly" value="Monthly" sameValue={true} hasCloseIcon={true} />
+          </div>
+
+          <div className="flex gap-12">
+          {/* Primary Column */}
+          <div className="flex-1 min-w-0">
+            {/* Charts Row - Empty with axes */}
+            <div className="flex gap-6 mb-8">
+              <div className="flex-1 min-w-0 flex flex-col">
+                <div className="mb-2">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-bold text-[16px] text-[#353a44]">Total volume</h3>
+                    <span className="text-[#6c7688]"><InfoIcon /></span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[18px] font-semibold text-[#353a44]">$0.00</span>
+                  </div>
+                </div>
+                <div className="relative h-[200px] flex">
+                  <div className="flex flex-col justify-between text-[11px] text-[#8792a2] pr-2 py-1">
+                    <span>$0</span>
+                    <span>$0</span>
+                    <span>$0</span>
+                    <span>$0</span>
+                    <span>$0</span>
+                  </div>
+                  <div className="flex-1 relative border-l border-b border-[#e3e8ee]">
+                    <div className="absolute bottom-0 left-0 right-0 h-px bg-[#d8dee4]" />
+                    {[1,2,3,4].map(i => (
+                      <div key={i} className="absolute left-0 right-0 border-t border-dashed border-[#eef0f3]" style={{ top: `${i * 25}%` }} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 min-w-0 flex flex-col">
+                <div className="mb-2">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-bold text-[16px] text-[#353a44]">Approval rate</h3>
+                    <span className="text-[#6c7688]"><InfoIcon /></span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[18px] font-semibold text-[#353a44]">0%</span>
+                  </div>
+                </div>
+                <div className="relative h-[200px] flex">
+                  <div className="flex flex-col justify-between text-[11px] text-[#8792a2] pr-2 py-1">
+                    <span>100%</span>
+                    <span>80%</span>
+                    <span>60%</span>
+                    <span>40%</span>
+                    <span>20%</span>
+                    <span>0%</span>
+                  </div>
+                  <div className="flex-1 relative border-l border-b border-[#e3e8ee]">
+                    <div className="absolute bottom-0 left-0 right-0 h-px bg-[#d8dee4]" />
+                    {[1,2,3,4,5].map(i => (
+                      <div key={i} className="absolute left-0 right-0 border-t border-dashed border-[#eef0f3]" style={{ top: `${i * (100/6)}%` }} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Secondary Row - Empty placeholders */}
+            <div className="flex gap-6 mb-8">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-4">
+                  <h2 className="font-bold text-[16px] text-[#353a44]">Failed transactions</h2>
+                  <span className="text-[#6c7688]"><InfoIcon /></span>
+                </div>
+                <div className="border-2 border-dashed border-[#d8dee4] rounded-lg py-10 flex items-center justify-center">
+                  <span className="text-[14px] text-[#8792a2]">No data available</span>
+                </div>
+              </div>
+              
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-4">
+                  <h2 className="font-bold text-[16px] text-[#353a44]">Spend by category</h2>
+                  <span className="text-[#6c7688]"><InfoIcon /></span>
+                </div>
+                <div className="border-2 border-dashed border-[#d8dee4] rounded-lg py-10 flex items-center justify-center">
+                  <span className="text-[14px] text-[#8792a2]">No data available</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Secondary Column - Right Rail */}
+          <div className="min-w-[294px] shrink-0">
+            {/* Funds Available */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-bold text-[16px] text-[#353a44] leading-6 tracking-[-0.31px]">Funds available</h3>
+                <button 
+                  onClick={() => setIsAddFundsOpen(true)}
+                  className="flex items-center gap-1 h-6 px-2 text-[12px] font-semibold text-[#353a44] tracking-[-0.024px] bg-white border border-[#d8dee4] rounded-md hover:bg-gray-50 shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
+                >
+                  Add funds
+                </button>
+              </div>
+              
+              <div className="flex items-stretch bg-white border border-[#e3e8ee] rounded-xl overflow-hidden">
+                <div className="bg-[#f5f6f8] flex items-center justify-center pl-3 pr-3 py-3">
+                  <div className="w-8 h-8 rounded overflow-hidden">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="32" height="32" fill="#533AFD"/>
+                      <path fillRule="evenodd" clipRule="evenodd" d="M8 23.998L24 20.6049V7.99805L8 11.4308V23.998Z" fill="white"/>
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 justify-center py-3 px-3">
+                  <div className="text-[14px] font-semibold text-[#353a44] leading-5 tracking-[-0.15px]">$0.00</div>
+                  <div className="text-[12px] text-[#353a44] leading-4">Financial account 1</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Resources */}
+            <div>
+              <h3 className="font-bold text-[16px] text-[#353a44] leading-6 tracking-[-0.31px] mb-3">Resources</h3>
+              <div className="flex flex-col gap-2">
+                <a href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                  <div className="w-8 h-8 rounded-lg bg-[#f5f6f8] flex items-center justify-center shrink-0">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M13 2.5H3C2.17157 2.5 1.5 3.17157 1.5 4V12C1.5 12.8284 2.17157 13.5 3 13.5H13C13.8284 13.5 14.5 12.8284 14.5 12V4C14.5 3.17157 13.8284 2.5 13 2.5ZM3 1C1.34315 1 0 2.34315 0 4V12C0 13.6569 1.34315 15 3 15H13C14.6569 15 16 13.6569 16 12V4C16 2.34315 14.6569 1 13 1H3Z" fill="#474E5A"/>
+                      <path fillRule="evenodd" clipRule="evenodd" d="M3.43056 4.51191C3.70012 4.19741 4.1736 4.16099 4.48809 4.43056L7.98809 7.43056C8.15433 7.57304 8.25 7.78106 8.25 8C8.25 8.21894 8.15433 8.42696 7.98809 8.56944L4.48809 11.5694C4.1736 11.839 3.70012 11.8026 3.43056 11.4881C3.16099 11.1736 3.19741 10.7001 3.51191 10.4306L6.34756 8L3.51191 5.56944C3.19741 5.29988 3.16099 4.8264 3.43056 4.51191Z" fill="#474E5A"/>
+                      <path fillRule="evenodd" clipRule="evenodd" d="M8 10.75C8 10.3358 8.33579 10 8.75 10H12.25C12.6642 10 13 10.3358 13 10.75C13 11.1642 12.6642 11.5 12.25 11.5H8.75C8.33579 11.5 8 11.1642 8 10.75Z" fill="#474E5A"/>
+                    </svg>
+                  </div>
+                  <span className="text-[14px] font-semibold text-[#353a44] leading-5 tracking-[-0.15px]">Quickstart guide</span>
+                </a>
+                <a href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                  <div className="w-8 h-8 rounded-lg bg-[#f5f6f8] flex items-center justify-center shrink-0">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M13 2.5H3C2.17157 2.5 1.5 3.17157 1.5 4V12C1.5 12.8284 2.17157 13.5 3 13.5H13C13.8284 13.5 14.5 12.8284 14.5 12V4C14.5 3.17157 13.8284 2.5 13 2.5ZM3 1C1.34315 1 0 2.34315 0 4V12C0 13.6569 1.34315 15 3 15H13C14.6569 15 16 13.6569 16 12V4C16 2.34315 14.6569 1 13 1H3Z" fill="#474E5A"/>
+                      <path fillRule="evenodd" clipRule="evenodd" d="M3.43056 4.51191C3.70012 4.19741 4.1736 4.16099 4.48809 4.43056L7.98809 7.43056C8.15433 7.57304 8.25 7.78106 8.25 8C8.25 8.21894 8.15433 8.42696 7.98809 8.56944L4.48809 11.5694C4.1736 11.839 3.70012 11.8026 3.43056 11.4881C3.16099 11.1736 3.19741 10.7001 3.51191 10.4306L6.34756 8L3.51191 5.56944C3.19741 5.29988 3.16099 4.8264 3.43056 4.51191Z" fill="#474E5A"/>
+                      <path fillRule="evenodd" clipRule="evenodd" d="M8 10.75C8 10.3358 8.33579 10 8.75 10H12.25C12.6642 10 13 10.3358 13 10.75C13 11.1642 12.6642 11.5 12.25 11.5H8.75C8.33579 11.5 8 11.1642 8 10.75Z" fill="#474E5A"/>
+                    </svg>
+                  </div>
+                  <span className="text-[14px] font-semibold text-[#353a44] leading-5 tracking-[-0.15px]">Integration guide</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+        )}
+        {!showEmptyState && activeTab === 'overview' && (
         <div>
           {/* Filter Bar */}
           <div className="flex items-center gap-2 mb-6 flex-wrap">

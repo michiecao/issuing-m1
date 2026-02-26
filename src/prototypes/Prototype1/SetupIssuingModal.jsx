@@ -264,7 +264,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-        Pick the setup that best suits your needs
+        Choose how to get started
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
         You can upgrade anytime as your program grows.
@@ -320,7 +320,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
 
     {/* Sales-assisted fallback */}
     <p className="text-[14px] text-[#596171] leading-[20px]">
-      Need a fully custom card program?{' '}
+      Interested in more custom options?{' '}
       <span className="text-[#533AFD] cursor-pointer hover:underline">Contact us</span>
     </p>
   </div>
@@ -450,6 +450,7 @@ const continueButtonClasses = (disabled) =>
 
 // Step 2: Use Case Content
 const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, description, setDescription }) => {
+  const [descriptionTouched, setDescriptionTouched] = useState(false);
   return (
     <div className="w-full max-w-[580px] px-4">
       {/* Page Header */}
@@ -493,22 +494,28 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
       {/* Description Textarea */}
       <div className="mb-8">
         <label className="block font-semibold text-[16px] text-[#353a44] mb-2">
-          Describe your card program
+          Describe your card program <span className="font-normal text-[13px] text-[#6c7688]">(200 character minimum)</span>
         </label>
         <textarea
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
+          onBlur={() => setDescriptionTouched(true)}
           placeholder="e.g. We want to issue virtual cards to our sales team for client entertainment expenses."
           className="w-full h-[88px] px-3 py-2 border border-[#d8dee4] rounded-md text-sm text-[#353a44] placeholder-[#6c7688] resize-y focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
         />
+        {descriptionTouched && description.length < 200 && (
+          <p className="text-[13px] text-[#df1b41] mt-1">{200 - description.length} more characters needed</p>
+        )}
       </div>
       
       {/* Continue Button */}
       <div className="flex justify-center mb-6">
         <button 
           onClick={onContinue}
-          disabled={!selectedUseCase || !description.trim()}
-          className={continueButtonClasses(!selectedUseCase || !description.trim())}
+          disabled={!selectedUseCase || description.trim().length < 200}
+          className={continueButtonClasses(!selectedUseCase || description.trim().length < 200)}
         >
           Continue
         </button>
@@ -553,13 +560,67 @@ const OwnerInfoContent = ({ onContinue }) => (
   </div>
 );
 
+// Diagram icons
+const BuildingIcon = ({ size = 16, color = '#6c7688' }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2.5 2.5C2.5 1.94772 2.94772 1.5 3.5 1.5H8.5C9.05228 1.5 9.5 1.94772 9.5 2.5V14H6.5V11.5C6.5 11.2239 6.27614 11 6 11C5.72386 11 5.5 11.2239 5.5 11.5V14H2.5V2.5Z" stroke={color} strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M9.5 5.5H12.5C13.0523 5.5 13.5 5.94772 13.5 6.5V14H9.5V5.5Z" stroke={color} strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4.5 4H5.5M7.5 4H8.5M4.5 6.5H5.5M7.5 6.5H8.5M4.5 9H5.5M7.5 9H8.5M11 8H12M11 10.5H12" stroke={color} strokeLinecap="round"/>
+  </svg>
+);
+
+const PersonIcon = ({ size = 16, color = '#6c7688' }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="8" cy="5" r="2.5" stroke={color}/>
+    <path d="M3.5 13.5C3.5 11.0147 5.51472 9 8 9C10.4853 9 12.5 11.0147 12.5 13.5" stroke={color} strokeLinecap="round"/>
+  </svg>
+);
+
+const LayersIcon = ({ size = 16, color = '#6c7688' }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 1.5L1.5 5L8 8.5L14.5 5L8 1.5Z" stroke={color} strokeLinejoin="round"/>
+    <path d="M1.5 8L8 11.5L14.5 8" stroke={color} strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M1.5 11L8 14.5L14.5 11" stroke={color} strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const HierarchyDiagram = ({ topIcon: TopIcon, topLabel, bottomIcon: BottomIcon, bottomLabel }) => (
+  <div className="flex flex-col items-center gap-0.5 min-w-[120px]">
+    <div className="flex items-center gap-1.5">
+      <div className="w-6 h-6 rounded-full bg-[#F5F6F8] flex items-center justify-center">
+        <TopIcon size={13} color="#6c7688" />
+      </div>
+      <span className="text-[11px] text-[#8a919e] whitespace-nowrap">{topLabel}</span>
+    </div>
+    <div className="flex flex-col items-center">
+      <div className="w-px h-2 bg-[#d8dee4]" />
+      <div className="flex items-center">
+        <div className="w-4 h-px bg-[#d8dee4]" />
+        <div className="w-px h-2 bg-[#d8dee4]" />
+        <div className="w-4 h-px bg-[#d8dee4]" />
+      </div>
+    </div>
+    <div className="flex items-center gap-1.5">
+      <div className="flex gap-1">
+        <div className="w-6 h-6 rounded-full bg-[#F5F6F8] flex items-center justify-center">
+          <BottomIcon size={13} color="#6c7688" />
+        </div>
+        <div className="w-6 h-6 rounded-full bg-[#F5F6F8] flex items-center justify-center">
+          <BottomIcon size={13} color="#6c7688" />
+        </div>
+      </div>
+      <span className="text-[11px] text-[#8a919e] whitespace-nowrap">{bottomLabel}</span>
+    </div>
+  </div>
+);
+
 // Card Holders Content - "Who will be your cardholders" step
 const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHolder }) => (
   <div className="w-full max-w-[580px] px-4">
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        Who will use your cards?
+        Who will use the cards?
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px]">
         This helps us understand what card program you need.
@@ -577,7 +638,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
         }`}
       >
         <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">My business</h4>
-        <p className="text-[14px] text-[#596171] leading-5">For yourself, your team, or agents of your business</p>
+        <p className="text-[14px] text-[#596171] leading-5">Employees, contractors, or agents of my company</p>
       </button>
       <button
         onClick={() => setSelectedCardHolder('platforms')}
@@ -588,7 +649,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
         }`}
       >
         <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Businesses on my platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">For business entities that use your platform</p>
+        <p className="text-[14px] text-[#596171] leading-5">Merchants, sellers, or vendors on my platform</p>
       </button>
       <button
         onClick={() => setSelectedCardHolder('consumers')}
@@ -599,7 +660,7 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
         }`}
       >
         <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Consumers on my platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">For individual end users of your platform</p>
+        <p className="text-[14px] text-[#596171] leading-5">App users, gig workers, or individual customers on my platform</p>
       </button>
     </div>
     
@@ -1624,6 +1685,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const [selectedUseCase, setSelectedUseCase] = useState(null);
   const [selectedCardHolder, setSelectedCardHolder] = useState(null);
   const [description, setDescription] = useState('');
+  const [descriptionTouched, setDescriptionTouched] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
   const [showDashboardSuccess, setShowDashboardSuccess] = useState(false);
   
