@@ -234,6 +234,7 @@ const DashboardView = () => {
   const [isSandboxMode, setIsSandboxMode] = useState(false);
   const [showProjectContext, setShowProjectContext] = useState(false);
   const [showPopulatedState, setShowPopulatedState] = useState(false);
+  const [multipleFinancialAccounts, setMultipleFinancialAccounts] = useState(false);
   const [hasStartedSetup, setHasStartedSetup] = useState(false);
   const [savedStep, setSavedStep] = useState(0);
 
@@ -587,6 +588,7 @@ const DashboardView = () => {
               isSandboxMode={isSandboxMode}
               onExitSandbox={handleExitSandbox}
               showEmptyState={!showPopulatedState}
+              multipleFinancialAccounts={multipleFinancialAccounts}
             />
             <SetupGuide 
               isOpen={showBlueprintOverlay || showSetupGuide} 
@@ -749,7 +751,7 @@ const DashboardView = () => {
             </label>
           </div>
         </div>
-        <div className="border-t border-gray-200 pt-3">
+        <div className="border-t border-gray-200 pt-3 space-y-2">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -758,6 +760,15 @@ const DashboardView = () => {
               className="w-4 h-4 text-blue-600 rounded"
             />
             <span className="text-sm text-gray-700">Show data</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={multipleFinancialAccounts}
+              onChange={(e) => setMultipleFinancialAccounts(e.target.checked)}
+              className="w-4 h-4 text-blue-600 rounded"
+            />
+            <span className="text-sm text-gray-700">Multiple financial accounts</span>
           </label>
         </div>
         <div className="border-t border-gray-200 pt-3 space-y-1">

@@ -1291,7 +1291,7 @@ const EmptyStateView = ({ icon, title, description }) => (
   </div>
 );
 
-const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete, isSandboxMode = false, onExitSandbox, showEmptyState = false }) => {
+const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete, isSandboxMode = false, onExitSandbox, showEmptyState = false, multipleFinancialAccounts = false }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [compareEnabled, setCompareEnabled] = useState(true);
   const [selectedAccount, setSelectedAccount] = useState({ id: '1', label: 'Commercial program 1' });
@@ -1831,14 +1831,6 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             {/* Filter Bar and Actions */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2 flex-wrap">
-                <FilterChipDropdown 
-                  label="Issuing program" 
-                  value={selectedAccount.label}
-                  options={financialAccountOptions}
-                  onSelect={setSelectedAccount}
-                  hasSeparator={true}
-                  hasCloseIcon={true}
-                />
                 <FilterChip label="Created" isInactive={true} />
                 <FilterChip label="Name" isInactive={true} />
                 <FilterChip label="Type" isInactive={true} />
@@ -2463,14 +2455,6 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
         <div>
           {/* Filter Bar */}
           <div className="flex items-center gap-2 mb-6 flex-wrap">
-            <FilterChipDropdown 
-              label="Issuing program" 
-              value={selectedAccount.label}
-              options={financialAccountOptions}
-              onSelect={setSelectedAccount}
-              hasSeparator={true}
-              hasCloseIcon={true}
-            />
             <FilterChip label="Date Range" value="Last 12 months" hasSeparator={true} hasCloseIcon={true} />
             <FilterChip label="Monthly" value="Monthly" sameValue={true} hasCloseIcon={true} />
           </div>
@@ -2573,19 +2557,37 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                 </button>
               </div>
               
-              <div className="flex items-stretch bg-white border border-[#e3e8ee] rounded-xl overflow-hidden">
-                <div className="bg-[#f5f6f8] flex items-center justify-center pl-3 pr-3 py-3">
-                  <div className="w-8 h-8 rounded overflow-hidden">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="32" height="32" fill="#533AFD"/>
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 23.998L24 20.6049V7.99805L8 11.4308V23.998Z" fill="white"/>
-                    </svg>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-stretch bg-white border border-[#e3e8ee] rounded-xl overflow-hidden">
+                  <div className="bg-[#f5f6f8] flex items-center justify-center pl-3 pr-3 py-3">
+                    <div className="w-8 h-8 rounded overflow-hidden">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" fill="#533AFD"/>
+                        <path fillRule="evenodd" clipRule="evenodd" d="M8 23.998L24 20.6049V7.99805L8 11.4308V23.998Z" fill="white"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1 justify-center py-3 px-3">
+                    <div className="text-[14px] font-semibold text-[#353a44] leading-5 tracking-[-0.15px]">$0.00</div>
+                    <div className="text-[12px] text-[#353a44] leading-4">Financial account 1</div>
                   </div>
                 </div>
-                <div className="flex flex-col gap-1 justify-center py-3 px-3">
-                  <div className="text-[14px] font-semibold text-[#353a44] leading-5 tracking-[-0.15px]">$0.00</div>
-                  <div className="text-[12px] text-[#353a44] leading-4">Financial account 1</div>
-                </div>
+                {multipleFinancialAccounts && (
+                  <div className="flex items-stretch bg-white border border-[#e3e8ee] rounded-xl overflow-hidden">
+                    <div className="bg-[#f5f6f8] flex items-center justify-center pl-3 pr-3 py-3">
+                      <div className="w-8 h-8 rounded overflow-hidden">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect width="32" height="32" fill="#533AFD"/>
+                          <path fillRule="evenodd" clipRule="evenodd" d="M8 23.998L24 20.6049V7.99805L8 11.4308V23.998Z" fill="white"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1 justify-center py-3 px-3">
+                      <div className="text-[14px] font-semibold text-[#353a44] leading-5 tracking-[-0.15px]">$0.00</div>
+                      <div className="text-[12px] text-[#353a44] leading-4">Financial account 2</div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             
@@ -2623,14 +2625,6 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
         <div>
           {/* Filter Bar */}
           <div className="flex items-center gap-2 mb-6 flex-wrap">
-            <FilterChipDropdown 
-              label="Issuing program" 
-              value={selectedAccount.label}
-              options={financialAccountOptions}
-              onSelect={setSelectedAccount}
-              hasSeparator={true}
-              hasCloseIcon={true}
-            />
             <FilterChip label="Date Range" value="Last 12 months" hasSeparator={true} hasCloseIcon={true} />
             <FilterChip label="Monthly" value="Monthly" sameValue={true} hasCloseIcon={true} />
             <FilterChip 
@@ -2746,27 +2740,46 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                 </button>
               </div>
               
-              {/* Account Card */}
-              <div className="flex items-stretch bg-white border border-[#e3e8ee] rounded-xl overflow-hidden">
-                {/* Stripe Icon Container - gray bg fills height, extends to left edge */}
-                <div className="bg-[#f5f6f8] flex items-center justify-center pl-3 pr-3 py-3">
-                  <div className="w-8 h-8 rounded overflow-hidden">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="32" height="32" fill="#533AFD"/>
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 23.998L24 20.6049V7.99805L8 11.4308V23.998Z" fill="white"/>
-                    </svg>
+              {/* Account Cards */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-stretch bg-white border border-[#e3e8ee] rounded-xl overflow-hidden">
+                  <div className="bg-[#f5f6f8] flex items-center justify-center pl-3 pr-3 py-3">
+                    <div className="w-8 h-8 rounded overflow-hidden">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" fill="#533AFD"/>
+                        <path fillRule="evenodd" clipRule="evenodd" d="M8 23.998L24 20.6049V7.99805L8 11.4308V23.998Z" fill="white"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1 justify-center py-3 px-3">
+                    <div className="text-[14px] font-semibold text-[#353a44] leading-5 tracking-[-0.15px]">
+                      ${fundsAvailable.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                    <div className="text-[12px] text-[#353a44] leading-4">
+                      Financial account 1
+                    </div>
                   </div>
                 </div>
-                
-                {/* Content */}
-                <div className="flex flex-col gap-1 justify-center py-3 px-3">
-                  <div className="text-[14px] font-semibold text-[#353a44] leading-5 tracking-[-0.15px]">
-                    ${fundsAvailable.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                {multipleFinancialAccounts && (
+                  <div className="flex items-stretch bg-white border border-[#e3e8ee] rounded-xl overflow-hidden">
+                    <div className="bg-[#f5f6f8] flex items-center justify-center pl-3 pr-3 py-3">
+                      <div className="w-8 h-8 rounded overflow-hidden">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect width="32" height="32" fill="#533AFD"/>
+                          <path fillRule="evenodd" clipRule="evenodd" d="M8 23.998L24 20.6049V7.99805L8 11.4308V23.998Z" fill="white"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1 justify-center py-3 px-3">
+                      <div className="text-[14px] font-semibold text-[#353a44] leading-5 tracking-[-0.15px]">
+                        $0.00
+                      </div>
+                      <div className="text-[12px] text-[#353a44] leading-4">
+                        Financial account 2
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[12px] text-[#353a44] leading-4">
-                    Financial account 1
-                  </div>
-                </div>
+                )}
               </div>
             </div>
             
