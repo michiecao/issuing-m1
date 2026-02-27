@@ -246,14 +246,14 @@ const SetupTypeCard = ({ title, description, icon, features, selected, onClick }
 // Right Sidebar Callout for Choose Setup Type step
 const CustomSetupCallout = () => (
   <div className="w-[278px] bg-[#f5f6f8] rounded-lg p-4">
-    <h4 className="font-bold text-[16px] text-[#353a44] leading-6 mb-1">
-      Pricing
+    <h4 className="font-bold text-[16px] text-[#3d3d3d] leading-6 tracking-[-0.31px] mb-1">
+      Issuing pricing
     </h4>
-    <p className="text-[14px] text-[#596171] leading-5 mb-3">
-      Compare plans and see what's included with each setup option.
+    <p className="text-[14px] text-[#596171] leading-5 tracking-[-0.15px] mb-4">
+      Learn more about Issuing pricing for the Growth plan, including per-card and transaction fees.
     </p>
     <a href="#" className="text-[14px] font-semibold text-[#533afd] hover:underline">
-      View details
+      View pricing
     </a>
   </div>
 );
@@ -2107,6 +2107,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           {/* Right Sidebar - Contextual content */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
             {((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && !showDashboardSuccess && <UseCaseCallout />}
+            {currentStep === 3 && !showDashboardSuccess && <CustomSetupCallout />}
             {isDeclinedScreen && <DeclinedSidebarContent />}
           </div>
         </div>
