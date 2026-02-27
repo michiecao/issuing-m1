@@ -234,6 +234,8 @@ const DashboardView = () => {
   const [isSandboxMode, setIsSandboxMode] = useState(false);
   const [showProjectContext, setShowProjectContext] = useState(false);
   const [showPopulatedState, setShowPopulatedState] = useState(false);
+  const [hasStartedSetup, setHasStartedSetup] = useState(false);
+  const [savedStep, setSavedStep] = useState(0);
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
@@ -244,7 +246,9 @@ const DashboardView = () => {
     setShowBalancesView(false);
     setShowBalancesCreateCardsModal(false);
     setModalInitialStep(0);
-    setModalKey(prev => prev + 1); // Increment key to remount modal with fresh state
+    setModalKey(prev => prev + 1);
+    setHasStartedSetup(false);
+    setSavedStep(0);
     setAddFundsCompleted(false);
     setShowSetupGuide(false);
     setSetupGuideCompletedTasks(1);
@@ -617,7 +621,7 @@ const DashboardView = () => {
                       Launch your card program in minutes
                     </h1>
                     <p className="text-[20px] text-[#596171] leading-[28px] tracking-[0.3px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-                      Access powerful APIs to create, manage, and scale your card program.
+                      Create, manage, and scale virtual and physical debit cards with powerful APIs.
                     </p>
                   </div>
                   <div className="flex gap-4">
@@ -625,7 +629,7 @@ const DashboardView = () => {
                       onClick={() => setIsModalOpen(true)}
                       className="px-4 py-2.5 bg-[#635bff] hover:bg-[#5851ea] text-white font-medium text-[14px] rounded-md transition-colors shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
                     >
-                      Get started
+                      {hasStartedSetup ? 'Continue setup' : 'Get started'}
                     </button>
                     <button 
                       onClick={handleExploreSandbox}
@@ -651,8 +655,8 @@ const DashboardView = () => {
               <div className="flex gap-4 w-full">
                 <CalloutCard
                   title="Supportable use cases"
-                  description="Learn more about all the supportable use cases and find one to start."
-                  linkText="Learn more"
+                  description="See which card programs Issuing supports and what's required for each."
+                  linkText="View docs"
                 />
                 <CalloutCard
                   title="Quickstart guide"
@@ -669,7 +673,14 @@ const DashboardView = () => {
       <SetupIssuingModal 
         key={modalKey}
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
+        onClose={(stepOnClose) => {
+          if (typeof stepOnClose === 'number') {
+            setHasStartedSetup(true);
+            setSavedStep(stepOnClose);
+            setModalInitialStep(stepOnClose);
+          }
+          setIsModalOpen(false);
+        }}
         onComplete={handleOnboardingComplete}
         onStartIntegrating={handleStartIntegrating}
         onSimulatePurchase={handleSimulatePurchase}

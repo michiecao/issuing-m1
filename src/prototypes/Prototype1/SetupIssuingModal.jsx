@@ -247,13 +247,13 @@ const SetupTypeCard = ({ title, description, icon, features, selected, onClick }
 const CustomSetupCallout = () => (
   <div className="w-[278px] bg-[#f5f6f8] rounded-lg p-4">
     <h4 className="font-bold text-[16px] text-[#353a44] leading-6 mb-1">
-      Need more flexibility?
+      Pricing
     </h4>
     <p className="text-[14px] text-[#596171] leading-5 mb-3">
-      Explore custom card programs, pricing, or integrations with our team.
+      Compare plans and see what's included with each setup option.
     </p>
     <a href="#" className="text-[14px] font-semibold text-[#533afd] hover:underline">
-      Contact us
+      View details
     </a>
   </div>
 );
@@ -264,7 +264,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-        Choose how to get started
+        Choose the setup that fits your needs
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
         You can upgrade anytime as your program grows.
@@ -278,24 +278,22 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         icon="rocket"
         description="No integration required"
         features={[
-          'Up to 100 cards',
-          'Dashboard access',
-          'Stripe-branded physical card',
-          'Shared BIN',
+          'Up to 100 debit cards',
+          'Create cards in the Dashboard',
+          'Free',
         ]}
         selected={selectedSetupType === 'starter'}
         onClick={() => setSelectedSetupType('starter')}
       />
       
       <SetupTypeCard
-        title="Commercial"
+        title="Growth"
         icon="growth"
-        description="Scale quickly with code"
+        description="Scale quickly via the API"
         features={[
-          'Unlimited cards and cardholders',
-          'Dashboard and Issuing API access',
-          'Stripe-branded physical card',
-          'Shared BIN',
+          'Unlimited debit cards',
+          'Create cards via Dashboard and API',
+          'Pay as you go',
         ]}
         selected={selectedSetupType === 'growth'}
         onClick={() => setSelectedSetupType('growth')}
@@ -320,7 +318,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
 
     {/* Sales-assisted fallback */}
     <p className="text-[14px] text-[#596171] leading-[20px]">
-      Interested in more custom options?{' '}
+      Interested in custom options or a revenue sharing model?{' '}
       <span className="text-[#533AFD] cursor-pointer hover:underline">Contact us</span>
     </p>
   </div>
@@ -449,26 +447,35 @@ const continueButtonClasses = (disabled) =>
   }`;
 
 // Step 2: Use Case Content
-const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, description, setDescription }) => {
+const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selectedIndustry, setSelectedIndustry, description, setDescription }) => {
   const [descriptionTouched, setDescriptionTouched] = useState(false);
+  const needsIndustry = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
+  const canContinue = selectedUseCase && description.trim().length >= 100 && (!needsIndustry || selectedIndustry);
+
   return (
     <div className="w-full max-w-[580px] px-4">
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-          What's the purpose of your card program?
+          Tell us about your use case
         </h1>
         <p className="text-[16px] text-[#596171] leading-[24px]">
-          This helps us understand if we can support your needs today.
+          This helps us understand how you'll use Issuing.
         </p>
       </div>
       
       {/* Use Case Selection */}
       <div className="mb-8">
         <label className="block font-semibold text-[16px] text-[#353a44] mb-2">
-          Select a use case
+          Select use case
         </label>
         <div className="space-y-[9px]">
+          <UseCaseOption
+            title="Corporate expense management"
+            description="Let employees or contractors make purchases on your business' behalf"
+            selected={selectedUseCase === 'corporate'}
+            onClick={() => { setSelectedUseCase('corporate'); setSelectedIndustry(''); }}
+          />
           <UseCaseOption
             title="B2B payments"
             description="Buy goods or services for inventory to resell to your customers."
@@ -481,21 +488,38 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
             selected={selectedUseCase === 'ondemand'}
             onClick={() => setSelectedUseCase('ondemand')}
           />
-          <UseCaseOption
-            title="Corporate expense management"
-            description="Let employees or contractors make purchases on your business' behalf."
-            selected={selectedUseCase === 'corporate'}
-            onClick={() => setSelectedUseCase('corporate')}
-          />
         </div>
-        
+
+        {/* Industry Category - conditional on B2B or On-demand */}
+        <div className={`overflow-hidden transition-all duration-300 ${needsIndustry ? 'max-h-[140px] opacity-100 mt-6' : 'max-h-0 opacity-0 mt-0'}`}>
+          <label className="block font-semibold text-[16px] text-[#353a44] mb-1">
+            Industry category
+          </label>
+          <p className="text-[14px] text-[#596171] leading-5 mb-2">Select the primary industry in which you intend to use the card.</p>
+          <div className="relative rounded-md border border-[#d8dee4] bg-white shadow-[0px_1px_1px_rgba(33,37,44,0.16)]">
+            <select
+              value={selectedIndustry}
+              onChange={(e) => setSelectedIndustry(e.target.value)}
+              className="w-full h-10 px-2 pr-8 rounded-md text-[16px] text-[#353a44] font-semibold leading-6 tracking-[-0.31px] bg-transparent appearance-none cursor-pointer focus:outline-none"
+            >
+              <option value="">Select an industry</option>
+              {INDUSTRY_CATEGORIES.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <SelectChevronIcon className="w-4 h-4 text-[#474e5a]" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Description Textarea */}
       <div className="mb-8">
-        <label className="block font-semibold text-[16px] text-[#353a44] mb-2">
-          Describe your card program <span className="font-normal text-[13px] text-[#6c7688]">(200 character minimum)</span>
+        <label className="block font-semibold text-[16px] text-[#353a44] mb-1">
+          Describe your card program
         </label>
+        <p className="text-[14px] text-[#596171] leading-5 mb-2">This requirement helps us verify your use case.</p>
         <textarea
           value={description}
           onChange={(e) => {
@@ -505,17 +529,18 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, descr
           placeholder="e.g. We want to issue virtual cards to our sales team for client entertainment expenses."
           className="w-full h-[88px] px-3 py-2 border border-[#d8dee4] rounded-md text-sm text-[#353a44] placeholder-[#6c7688] resize-y focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
         />
-        {descriptionTouched && description.length < 200 && (
-          <p className="text-[13px] text-[#df1b41] mt-1">{200 - description.length} more characters needed</p>
-        )}
+        <div className="flex justify-between items-center mt-1">
+          <span className="text-[13px] text-[#d8dee4] hover:text-[#a3acba] cursor-pointer transition-colors select-none" onClick={() => setDescription('We want to issue virtual debit cards to our sales team for client entertainment and travel expenses. Cards will be assigned per employee with monthly spend limits.')}>Prefill</span>
+          <p className="text-[13px] text-[#6c7688]">{description.length}/100 character minimum</p>
+        </div>
       </div>
       
       {/* Continue Button */}
       <div className="flex justify-center mb-6">
         <button 
           onClick={onContinue}
-          disabled={!selectedUseCase || description.trim().length < 200}
-          className={continueButtonClasses(!selectedUseCase || description.trim().length < 200)}
+          disabled={!canContinue}
+          className={continueButtonClasses(!canContinue)}
         >
           Continue
         </button>
@@ -620,10 +645,10 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
     {/* Page Header */}
     <div className="mb-8">
       <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
-        Who will use the cards?
+        Who's going to use the cards?
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px]">
-        This helps us understand what card program you need.
+        This information helps us understand your needs.
       </p>
     </div>
     
@@ -637,8 +662,8 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">My business</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Employees, contractors, or agents of my company</p>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Your business</h4>
+        <p className="text-[14px] text-[#596171] leading-5">Employees or contractors of your business</p>
       </button>
       <button
         onClick={() => setSelectedCardHolder('platforms')}
@@ -648,8 +673,8 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Businesses on my platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Merchants, sellers, or vendors on my platform</p>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Businesses on your platform</h4>
+        <p className="text-[14px] text-[#596171] leading-5">Merchants, sellers, or vendors using your Connect platform</p>
       </button>
       <button
         onClick={() => setSelectedCardHolder('consumers')}
@@ -659,8 +684,8 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
             : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
         }`}
       >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Consumers on my platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">App users, gig workers, or individual customers on my platform</p>
+        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Individuals on your platform</h4>
+        <p className="text-[14px] text-[#596171] leading-5">App users, gig workers, or others using your Connect platform</p>
       </button>
     </div>
     
@@ -724,6 +749,23 @@ const Checkbox = ({ checked, onChange, children }) => (
     <span className="text-[16px] text-[#4f566b] leading-6">{children}</span>
   </div>
 );
+
+const INDUSTRY_CATEGORIES = [
+  { value: 'travel', label: 'Travel' },
+  { value: 'ecommerce', label: 'E-commerce / Online retail' },
+  { value: 'food_delivery', label: 'Food & delivery' },
+  { value: 'transportation', label: 'Transportation / Ride-hailing' },
+  { value: 'healthcare', label: 'Healthcare' },
+  { value: 'construction', label: 'Construction / Building materials' },
+  { value: 'technology', label: 'Technology / SaaS' },
+  { value: 'marketing', label: 'Marketing / Advertising' },
+  { value: 'other', label: 'Other' },
+];
+
+const getIndustryDisplayName = (industry) => {
+  const match = INDUSTRY_CATEGORIES.find(c => c.value === industry);
+  return match ? match.label : industry || 'Not selected';
+};
 
 // Helper to get display name for use case
 const getUseCaseDisplayName = (useCase) => {
@@ -790,6 +832,7 @@ const TermsOfServiceModal = ({ isOpen, onAccept, onCancel }) => {
 const SubmitReviewContent = ({ 
   onSubmit, 
   selectedUseCase, 
+  selectedIndustry,
   description,
   agreedTerms,
   setAgreedTerms,
@@ -872,8 +915,8 @@ const SubmitReviewContent = ({
       {/* Program Details */}
       <div className="mb-6">
         <h3 className="font-semibold text-[16px] text-[#353a44] mb-2">Program details</h3>
-        <div className="border border-[#d5dbe1] rounded-lg p-4">
-          <div className="flex flex-col gap-4">
+        <div className="border border-[#d5dbe1] rounded-lg p-4 min-w-0">
+          <div className="flex flex-col gap-4 min-w-0">
             <div>
               <div className="flex items-center justify-between">
                 <h4 className="font-semibold text-[14px] text-[#353a44]">Card program</h4>
@@ -881,9 +924,15 @@ const SubmitReviewContent = ({
               </div>
               <p className="text-sm text-[#414552] leading-5">{getUseCaseDisplayName(selectedUseCase)}</p>
             </div>
+            {selectedIndustry && (
+              <div>
+                <h4 className="font-semibold text-[14px] text-[#353a44]">Industry category</h4>
+                <p className="text-sm text-[#414552] leading-5">{getIndustryDisplayName(selectedIndustry)}</p>
+              </div>
+            )}
             <div>
               <h4 className="font-semibold text-[14px] text-[#353a44]">Program description</h4>
-              <p className="text-sm text-[#414552] leading-5">{description || 'Description'}</p>
+              <p className="text-sm text-[#414552] leading-5 break-words" style={{ overflowWrap: 'anywhere' }}>{description || 'Description'}</p>
             </div>
             {(selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') && (
               <div className="bg-[#f7f8fa] rounded-lg p-4">
@@ -1080,8 +1129,8 @@ const SuccessContent = ({ onStartIntegrating, onViewDocs, selectedUseCase }) => 
           Create and manage cards programmatically with the Issuing API.
         </FeatureHighlight>
         
-        <FeatureHighlight icon={BalanceIcon} title="Financial accounts">
-          The cards you create pull from your financial account balance. Add funds to your balance and spend easily.
+        <FeatureHighlight icon={BalanceIcon} title="Financial Accounts API">
+          Hold and manage balances directly on Stripe. Use the Financial Accounts API to fund your card program and move money programmatically.
         </FeatureHighlight>
       </div>
     </div>
@@ -1684,6 +1733,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
   const [selectedCardHolder, setSelectedCardHolder] = useState(null);
+  const [selectedIndustry, setSelectedIndustry] = useState('');
   const [description, setDescription] = useState('');
   const [descriptionTouched, setDescriptionTouched] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
@@ -1755,23 +1805,30 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   // Build steps array for sidebar
   const getSteps = () => {
     // For happy path, skip "Provide more information" step
+    const skipSetupType = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
+
     if (onboardingPath === 'happy' || onboardingPath === 'auto-create-card') {
-      return [
+      const steps = [
         { label: 'Select cardholders', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
         { label: 'Describe use case', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
-        { label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
-        { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
       ];
+      if (!skipSetupType) {
+        steps.push({ label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
+      }
+      steps.push({ label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 });
+      return steps;
     }
     
-    // For KYC path, "Provide more information" is the first step
-    return [
+    const kycSteps = [
       { label: 'Complete business details', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
       { label: 'Select cardholders', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
       { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
-      { label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
-      { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
     ];
+    if (!skipSetupType) {
+      kycSteps.push({ label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
+    }
+    kycSteps.push({ label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 });
+    return kycSteps;
   };
   
   const steps = getSteps();
@@ -1790,10 +1847,15 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       if (currentStep === 2) {
         if (isSpecializedUseCase(selectedUseCase)) {
           setIsDeclined(true);
-          setCurrentStep(4); // Go to processing screen first
+          setCurrentStep(4);
           return;
         }
         setIsDeclined(false);
+        if (selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') {
+          setSelectedSetupType('growth');
+          setCurrentStep(4);
+          return;
+        }
       }
 
       if (currentStep === 3) {
@@ -1815,11 +1877,15 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       if (currentStep === 1) {
         if (isSpecializedUseCase(selectedUseCase)) {
           setIsDeclined(true);
-          setCurrentStep(4); // Go to processing screen first
+          setCurrentStep(4);
           return;
         }
         setIsDeclined(false);
-        // For happy path, skip from step 1 directly to step 3 (skip "Provide more information")
+        if (selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') {
+          setSelectedSetupType('growth');
+          setCurrentStep(4);
+          return;
+        }
         setCurrentStep(3);
         return;
       }
@@ -1863,6 +1929,10 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const isSuccessScreen = (isFinalScreen && !isDeclinedFlow) || showDashboardSuccess;
   const isDeclinedScreen = isFinalScreen && isDeclinedFlow && !showDashboardSuccess;
 
+  const handleSaveAndExit = () => {
+    onClose(currentStep);
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex flex-col">
       {/* Sandbox Banner - shown when in sandbox mode */}
@@ -1872,7 +1942,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
         {/* Backdrop */}
         <div 
           className="absolute inset-0 bg-[rgba(182,192,205,0.7)]"
-          onClick={onClose}
+          onClick={handleSaveAndExit}
           style={isSandboxMode ? { top: '52px' } : {}}
         />
         
@@ -1892,7 +1962,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                 <Button variant="secondary" size="md">
                   Need help?
                 </Button>
-                <Button variant="secondary" size="md" onClick={onClose}>
+                <Button variant="secondary" size="md" onClick={handleSaveAndExit}>
                   Save and exit
                 </Button>
               </div>
@@ -1948,6 +2018,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                           onContinue={handleContinue}
                           selectedUseCase={selectedUseCase}
                           setSelectedUseCase={setSelectedUseCase}
+                          selectedIndustry={selectedIndustry}
+                          setSelectedIndustry={setSelectedIndustry}
                           description={description}
                           setDescription={setDescription}
                         />
@@ -1967,6 +2039,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                           onContinue={handleContinue}
                           selectedUseCase={selectedUseCase}
                           setSelectedUseCase={setSelectedUseCase}
+                          selectedIndustry={selectedIndustry}
+                          setSelectedIndustry={setSelectedIndustry}
                           description={description}
                           setDescription={setDescription}
                         />
@@ -2001,6 +2075,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                         <SubmitReviewContent
                           onSubmit={handleContinue}
                           selectedUseCase={selectedUseCase}
+                          selectedIndustry={selectedIndustry}
                           description={description}
                           agreedTerms={agreedTerms}
                           setAgreedTerms={setAgreedTerms}
