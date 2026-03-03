@@ -154,20 +154,20 @@ const FeatureItem = ({ children }) => (
 
 // Dashboard Illustration - simplified UI mockup
 const DashboardIllustration = () => (
-  <div className="w-full h-full bg-[#f0f2f5] rounded-md p-3 flex flex-col gap-2">
+  <div className="w-full h-full bg-white rounded-md p-2 flex flex-col gap-1.5 shadow-md overflow-hidden">
     {/* Header bar */}
-    <div className="flex items-center gap-2">
-      <div className="w-3 h-3 rounded-full bg-[#d8dee4]" />
-      <div className="flex-1 h-2 bg-[#d8dee4] rounded" />
+    <div className="flex items-center gap-1.5">
+      <div className="w-2.5 h-2.5 rounded-full bg-[#d8dee4] shrink-0" />
+      <div className="flex-1 h-1.5 bg-[#d8dee4] rounded" />
     </div>
     {/* Card rows */}
-    <div className="flex-1 flex flex-col gap-1.5">
+    <div className="flex-1 flex flex-col gap-1 min-h-0">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="flex items-center gap-2 bg-white rounded p-1.5">
-          <div className="w-6 h-4 rounded bg-[#625afa]" />
-          <div className="flex-1">
-            <div className="h-1.5 bg-[#d8dee4] rounded w-3/4 mb-1" />
-            <div className="h-1 bg-[#e3e8ee] rounded w-1/2" />
+        <div key={i} className="flex items-center gap-1.5 bg-[#f5f6f8] rounded p-1.5 shrink-0">
+          <div className="w-5 h-3 rounded bg-[#625afa] shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="h-1 bg-[#d8dee4] rounded w-3/4 mb-0.5" />
+            <div className="h-0.5 bg-[#e3e8ee] rounded w-1/2" />
           </div>
         </div>
       ))}
@@ -214,30 +214,80 @@ const CodeEditorIllustration = () => (
   </div>
 );
 
-// Setup Type Card Component - With hero number and feature list
-const SetupTypeCard = ({ title, description, icon, features, selected, onClick }) => (
+// Combined Dashboard + API Illustration for Growth option
+const DashboardAndApiIllustration = () => (
+  <div className="w-full h-full relative">
+    {/* Dashboard behind, offset top-left */}
+    <div className="absolute top-1 left-1 w-[60%] h-[65%] bg-white rounded-md p-2 flex flex-col gap-1 shadow-sm overflow-hidden">
+      <div className="flex items-center gap-1.5">
+        <div className="w-2 h-2 rounded-full bg-[#d8dee4] shrink-0" />
+        <div className="flex-1 h-1.5 bg-[#d8dee4] rounded" />
+      </div>
+      {[1, 2].map((i) => (
+        <div key={i} className="flex items-center gap-1.5 bg-[#f5f6f8] rounded p-1 shrink-0">
+          <div className="w-4 h-3 rounded bg-[#625afa] shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="h-1 bg-[#d8dee4] rounded w-3/4 mb-0.5" />
+            <div className="h-0.5 bg-[#e3e8ee] rounded w-1/2" />
+          </div>
+        </div>
+      ))}
+    </div>
+    {/* Code editor in front, offset bottom-right */}
+    <div className="absolute bottom-1 right-1 w-[60%] h-[65%] bg-[#1a1f36] rounded-md p-2 flex flex-col gap-1 overflow-hidden shadow-lg">
+      <div className="flex items-center gap-1">
+        <div className="w-1.5 h-1.5 rounded-full bg-[#ff5f57]" />
+        <div className="w-1.5 h-1.5 rounded-full bg-[#ffbd2e]" />
+        <div className="w-1.5 h-1.5 rounded-full bg-[#28ca42]" />
+      </div>
+      <div className="flex-1 flex flex-col gap-1 font-mono text-[6px]">
+        <div className="flex gap-0.5">
+          <span className="text-[#a78bfa]">const</span>
+          <span className="text-[#e2e8f0]">card =</span>
+        </div>
+        <div className="flex gap-0.5">
+          <span className="text-[#e2e8f0] ml-1">stripe.issuing</span>
+        </div>
+        <div className="flex gap-0.5">
+          <span className="text-[#e2e8f0] ml-2">.cards.create(</span>
+        </div>
+        <div className="flex gap-0.5">
+          <span className="text-[#7dd3fc] ml-3">type:</span>
+          <span className="text-[#a5f3ab]">'virtual'</span>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// Setup Type Card Component - With illustration and feature list
+const SetupTypeCard = ({ title, description, icon, features, selected, onClick, illustration: Illustration }) => (
   <button
     onClick={onClick}
-    className={`w-full text-left rounded-lg py-3 px-3 transition-colors relative ${
+    className={`w-full text-left rounded-xl transition-colors relative ${
       selected 
         ? 'border border-[#675dff] ring-1 ring-[#675dff] bg-white' 
         : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
     }`}
   >
-    <div className="flex items-start">
-      {/* Left side - title/description */}
-      <div className="shrink-0">
-        <h3 className="font-semibold text-[18px] text-[#353a44] leading-7 tracking-[-0.48px] inline-flex items-center">
+    <div className="flex items-stretch h-[160px]">
+      {Illustration && (
+        <div className="w-[180px] shrink-0 rounded-l-xl overflow-hidden bg-[#f5f6f8]">
+          <div className="w-full h-full flex items-center justify-center p-5">
+            <Illustration />
+          </div>
+        </div>
+      )}
+      <div className="flex-1 min-w-0 py-3 px-4">
+        <h3 className="font-semibold text-[16px] text-[#353a44] leading-6">
           {title}
         </h3>
-        <p className="text-[14px] text-[#596171] leading-5 mt-0.5">{description}</p>
-      </div>
-      
-      {/* Right side - Feature list */}
-      <div className="flex flex-col gap-1 ml-auto w-[300px] bg-[#f5f6f8] rounded-lg px-4 py-3">
-        {features.map((feature, index) => (
-          <FeatureItem key={index}>{feature}</FeatureItem>
-        ))}
+        <p className="text-[13px] text-[#8a919e] leading-5 mt-0.5">{description}</p>
+        <div className="flex flex-col gap-0.5 mt-3">
+          {features.map((feature, index) => (
+            <FeatureItem key={index}>{feature}</FeatureItem>
+          ))}
+        </div>
       </div>
     </div>
   </button>
@@ -284,6 +334,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         ]}
         selected={selectedSetupType === 'starter'}
         onClick={() => setSelectedSetupType('starter')}
+        illustration={DashboardIllustration}
       />
       
       <SetupTypeCard
@@ -291,12 +342,13 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         icon="growth"
         description="Scale quickly via the API"
         features={[
-          'Virtual debit cards',
+          'Unlimited virtual debit cards',
           'Create cards via Dashboard and API',
           'Pay as you go',
         ]}
         selected={selectedSetupType === 'growth'}
         onClick={() => setSelectedSetupType('growth')}
+        illustration={DashboardAndApiIllustration}
       />
       
     </div>
