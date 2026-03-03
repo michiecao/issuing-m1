@@ -291,7 +291,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         icon="growth"
         description="Scale quickly via the API"
         features={[
-          'Unlimited debit cards',
+          'Virtual debit cards',
           'Create cards via Dashboard and API',
           'Pay as you go',
         ]}
@@ -472,19 +472,19 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
         <div className="space-y-[9px]">
           <UseCaseOption
             title="Corporate expense management"
-            description="Let employees or contractors make purchases on your business' behalf"
+            description="Buy goods or services for your business operations."
             selected={selectedUseCase === 'corporate'}
             onClick={() => { setSelectedUseCase('corporate'); setSelectedIndustry(''); }}
           />
           <UseCaseOption
-            title="B2B payments"
-            description="Buy goods or services for inventory to resell to your customers."
+            title="Reseller"
+            description="Buy goods or services as inventory to resell to your customers."
             selected={selectedUseCase === 'b2b'}
             onClick={() => setSelectedUseCase('b2b')}
           />
           <UseCaseOption
-            title="On-demand services"
-            description="Buy goods and services from merchants on your customers' behalf."
+            title="Fulfillment services"
+            description="Buy goods or services on your customers' behalf via software or AI agents."
             selected={selectedUseCase === 'ondemand'}
             onClick={() => setSelectedUseCase('ondemand')}
           />
@@ -639,6 +639,13 @@ const HierarchyDiagram = ({ topIcon: TopIcon, topLabel, bottomIcon: BottomIcon, 
   </div>
 );
 
+// Image paths for each cardholder option
+const CARDHOLDER_IMAGES = {
+  business: '/issuing-m1/images/cardholder-business.svg',
+  platforms: '/issuing-m1/images/cardholder-platforms.svg',
+  consumers: '/issuing-m1/images/cardholder-individuals.svg',
+};
+
 // Card Holders Content - "Who will be your cardholders" step
 const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHolder }) => (
   <div className="w-full max-w-[580px] px-4">
@@ -654,39 +661,33 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
     
     {/* Card Holder Options */}
     <div className="space-y-[9px] mb-8">
-      <button
-        onClick={() => setSelectedCardHolder('business')}
-        className={`w-full text-left px-[14px] py-[10px] rounded-lg transition-colors ${
-          selectedCardHolder === 'business' 
-            ? 'border border-[#675dff] ring-1 ring-[#675dff] bg-white' 
-            : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
-        }`}
-      >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Your business</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Employees or contractors of your business</p>
-      </button>
-      <button
-        onClick={() => setSelectedCardHolder('platforms')}
-        className={`w-full text-left px-[14px] py-[10px] rounded-lg transition-colors ${
-          selectedCardHolder === 'platforms' 
-            ? 'border border-[#675dff] ring-1 ring-[#675dff] bg-white' 
-            : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
-        }`}
-      >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Businesses on your platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">Merchants, sellers, or vendors using your Connect platform</p>
-      </button>
-      <button
-        onClick={() => setSelectedCardHolder('consumers')}
-        className={`w-full text-left px-[14px] py-[10px] rounded-lg transition-colors ${
-          selectedCardHolder === 'consumers' 
-            ? 'border border-[#675dff] ring-1 ring-[#675dff] bg-white' 
-            : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
-        }`}
-      >
-        <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">Individuals on your platform</h4>
-        <p className="text-[14px] text-[#596171] leading-5">App users, gig workers, or others using your Connect platform</p>
-      </button>
+      {[
+        { key: 'business', title: 'Your business', desc: 'Employees, contractors, or AI agents of your business' },
+        { key: 'platforms', title: 'Businesses on your platform', desc: 'Merchants, sellers, or vendors using your platform' },
+        { key: 'consumers', title: 'Individuals on your platform', desc: 'App users, gig workers, or others using your platform' },
+      ].map(({ key, title, desc }) => (
+        <button
+          key={key}
+          onClick={() => setSelectedCardHolder(key)}
+          className={`w-full text-left px-[14px] py-[10px] rounded-lg transition-colors flex items-start gap-4 ${
+            selectedCardHolder === key 
+              ? 'border border-[#675dff] ring-1 ring-[#675dff] bg-white' 
+              : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
+          }`}
+        >
+          <div className="flex-1 min-w-0">
+            <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">{title}</h4>
+            <p className="text-[14px] text-[#596171] leading-5">{desc}</p>
+          </div>
+          <div className="flex-shrink-0 w-[140px] h-[90px] bg-[#f9fafb] rounded-md flex items-center justify-center">
+            <img
+              src={CARDHOLDER_IMAGES[key]}
+              alt={title}
+              className="max-w-full max-h-full"
+            />
+          </div>
+        </button>
+      ))}
     </div>
     
     {/* Continue Button */}
@@ -771,8 +772,8 @@ const getIndustryDisplayName = (industry) => {
 const getUseCaseDisplayName = (useCase) => {
   const names = {
     'corporate': 'Corporate expense management',
-    'b2b': 'B2B payments',
-    'ondemand': 'On-demand services',
+    'b2b': 'Reseller',
+    'ondemand': 'Fulfillment services',
     'fleet': 'Fleet',
     'insurance': 'Insurance',
     'bnpl': 'Buy now pay later',
@@ -937,25 +938,27 @@ const SubmitReviewContent = ({
             {(selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') && (
               <div className="bg-[#f7f8fa] rounded-lg p-4">
                 <p className="font-semibold text-[14px] text-[#353a44] leading-5 mb-2">
-                  Guidelines
-                </p>
-                <p className="text-[14px] text-[#596171] leading-5 mb-2">
-                  Before using your cards, make sure you:
+                  How your program works
                 </p>
                 <ul className="text-[14px] text-[#596171] leading-5 space-y-1 list-disc pl-5">
                   {selectedUseCase === 'b2b' ? (
                     <>
-                      <li>Use cards for business-to-business transactions only</li>
-                      <li>Limit purchases to a single industry category (e.g., travel or e-commerce)</li>
-                      <li>Inform customers that you handle refunds and disputes</li>
+                      <li>Your program supports virtual cards only</li>
+                      <li>Cards can only be used once</li>
+                      <li>Cards are for B2B transactions in a single industry category</li>
+                      <li>You handle refunds and disputes on behalf of your customers</li>
                     </>
                   ) : (
                     <>
-                      <li>Use cards for business-to-business transactions only</li>
-                      <li>Limit purchases to a single industry category (e.g., travel or e-commerce)</li>
-                      <li>Only make purchases as part of the services you provide your customers</li>
+                      <li>Your program supports virtual cards only</li>
+                      <li>Cards are single-use for B2B and ancillary purchases</li>
+                      <li>Cards are for B2B transactions in a single industry category</li>
+                      <li>Purchases should be made as part of services you provide your customers</li>
                     </>
                   )}
+                  <li>Default card creation and spend limits apply.{' '}
+                    <a href="#" className="text-[#533afd] hover:underline">Learn more</a>
+                  </li>
                 </ul>
               </div>
             )}
