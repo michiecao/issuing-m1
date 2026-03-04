@@ -157,17 +157,17 @@ const DashboardIllustration = () => (
   <div className="w-full h-full bg-white rounded-md p-2 flex flex-col gap-1.5 shadow-md overflow-hidden">
     {/* Header bar */}
     <div className="flex items-center gap-1.5">
-      <div className="w-2.5 h-2.5 rounded-full bg-[#d8dee4] shrink-0" />
-      <div className="flex-1 h-1.5 bg-[#d8dee4] rounded" />
+      <div className="w-2.5 h-2.5 rounded-full bg-[#f5f6f8] shrink-0" />
+      <div className="flex-1 h-1.5 bg-[#f5f6f8] rounded" />
     </div>
     {/* Card rows */}
     <div className="flex-1 flex flex-col gap-1 min-h-0">
       {[1, 2, 3].map((i) => (
         <div key={i} className="flex items-center gap-1.5 bg-[#f5f6f8] rounded p-1.5 shrink-0">
-          <div className="w-5 h-3 rounded bg-[#625afa] shrink-0" />
+          <div className="w-4 h-3 bg-[#625afa] shrink-0" style={{ borderRadius: '1.75px' }} />
           <div className="flex-1 min-w-0">
             <div className="h-1 bg-[#d8dee4] rounded w-3/4 mb-0.5" />
-            <div className="h-0.5 bg-[#e3e8ee] rounded w-1/2" />
+            <div className="h-1 bg-[#d8dee4] rounded w-1/2" />
           </div>
         </div>
       ))}
@@ -220,15 +220,15 @@ const DashboardAndApiIllustration = () => (
     {/* Dashboard behind, offset top-left */}
     <div className="absolute top-1 left-1 w-[60%] h-[65%] bg-white rounded-md p-2 flex flex-col gap-1 shadow-sm overflow-hidden">
       <div className="flex items-center gap-1.5">
-        <div className="w-2 h-2 rounded-full bg-[#d8dee4] shrink-0" />
-        <div className="flex-1 h-1.5 bg-[#d8dee4] rounded" />
+        <div className="w-2 h-2 rounded-full bg-[#f5f6f8] shrink-0" />
+        <div className="flex-1 h-1.5 bg-[#f5f6f8] rounded" />
       </div>
       {[1, 2].map((i) => (
         <div key={i} className="flex items-center gap-1.5 bg-[#f5f6f8] rounded p-1 shrink-0">
-          <div className="w-4 h-3 rounded bg-[#625afa] shrink-0" />
+          <div className="w-4 h-3 bg-[#625afa] shrink-0" style={{ borderRadius: '1.75px' }} />
           <div className="flex-1 min-w-0">
             <div className="h-1 bg-[#d8dee4] rounded w-3/4 mb-0.5" />
-            <div className="h-0.5 bg-[#e3e8ee] rounded w-1/2" />
+            <div className="h-1 bg-[#d8dee4] rounded w-1/2" />
           </div>
         </div>
       ))}
@@ -317,7 +317,7 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         Choose the setup that fits your needs
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
-        You can upgrade anytime as your program grows.
+        You can always upgrade as your card program grows.
       </p>
     </div>
     
@@ -328,7 +328,6 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         icon="rocket"
         description="No integration required"
         features={[
-          'Up to 100 debit cards',
           'Create cards in the Dashboard',
           'Free',
         ]}
@@ -342,7 +341,6 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
         icon="growth"
         description="Scale quickly via the API"
         features={[
-          'Unlimited virtual debit cards',
           'Create cards via Dashboard and API',
           'Pay as you go',
         ]}
@@ -530,13 +528,13 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
           />
           <UseCaseOption
             title="Reseller"
-            description="Buy goods or services as inventory to resell to your customers."
+            description="Buy goods or services to resell to your customers."
             selected={selectedUseCase === 'b2b'}
             onClick={() => setSelectedUseCase('b2b')}
           />
           <UseCaseOption
-            title="Fulfillment services"
-            description="Buy goods or services on your customers' behalf via software or AI agents."
+            title="Fulfillment"
+            description="Buy goods or services on your customers' behalf."
             selected={selectedUseCase === 'ondemand'}
             onClick={() => setSelectedUseCase('ondemand')}
           />
@@ -571,7 +569,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
         <label className="block font-semibold text-[16px] text-[#353a44] mb-1">
           Describe your card program
         </label>
-        <p className="text-[14px] text-[#596171] leading-5 mb-2">This requirement helps us verify your use case.</p>
+        <p className="text-[14px] text-[#596171] leading-5 mb-2">This requirement helps us review your use case.</p>
         <textarea
           value={description}
           onChange={(e) => {
@@ -693,7 +691,8 @@ const HierarchyDiagram = ({ topIcon: TopIcon, topLabel, bottomIcon: BottomIcon, 
 
 // Image paths for each cardholder option
 const CARDHOLDER_IMAGES = {
-  business: '/issuing-m1/images/cardholder-business.svg',
+  employees: '/issuing-m1/images/cardholder-business.svg',
+  ai_agents: '/issuing-m1/images/cardholder-business.svg',
   platforms: '/issuing-m1/images/cardholder-platforms.svg',
   consumers: '/issuing-m1/images/cardholder-individuals.svg',
 };
@@ -714,7 +713,8 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
     {/* Card Holder Options */}
     <div className="space-y-[9px] mb-8">
       {[
-        { key: 'business', title: 'Your business', desc: 'Employees, contractors, or AI agents of your business' },
+        { key: 'employees', title: 'Your employees or contractors', desc: 'People who work for your business' },
+        { key: 'ai_agents', title: 'AI agents of your business', desc: 'Automated agents that operate on behalf of your business' },
         { key: 'platforms', title: 'Businesses on your platform', desc: 'Merchants, sellers, or vendors using your platform' },
         { key: 'consumers', title: 'Individuals on your platform', desc: 'App users, gig workers, or others using your platform' },
       ].map(({ key, title, desc }) => (
@@ -730,13 +730,6 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
           <div className="flex-1 min-w-0">
             <h4 className="font-semibold text-[16px] text-[#353a44] leading-6">{title}</h4>
             <p className="text-[14px] text-[#596171] leading-5">{desc}</p>
-          </div>
-          <div className="flex-shrink-0 w-[140px] h-[90px] bg-[#f9fafb] rounded-md flex items-center justify-center">
-            <img
-              src={CARDHOLDER_IMAGES[key]}
-              alt={title}
-              className="max-w-full max-h-full"
-            />
           </div>
         </button>
       ))}
@@ -825,7 +818,7 @@ const getUseCaseDisplayName = (useCase) => {
   const names = {
     'corporate': 'Corporate expense management',
     'b2b': 'Reseller',
-    'ondemand': 'Fulfillment services',
+    'ondemand': 'Fulfillment',
     'fleet': 'Fleet',
     'insurance': 'Insurance',
     'bnpl': 'Buy now pay later',
@@ -972,7 +965,7 @@ const SubmitReviewContent = ({
           <div className="flex flex-col gap-4 min-w-0">
             <div>
               <div className="flex items-center justify-between">
-                <h4 className="font-semibold text-[14px] text-[#353a44]">Card program</h4>
+                <h4 className="font-semibold text-[14px] text-[#353a44]">Use case</h4>
                 <button className="text-[14px] font-semibold text-[#533afd] hover:underline">Edit</button>
               </div>
               <p className="text-sm text-[#414552] leading-5">{getUseCaseDisplayName(selectedUseCase)}</p>
@@ -989,27 +982,32 @@ const SubmitReviewContent = ({
             </div>
             {(selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') && (
               <div className="bg-[#f7f8fa] rounded-lg p-4">
-                <p className="font-semibold text-[14px] text-[#353a44] leading-5 mb-2">
-                  How your program works
+                <p className="font-semibold text-[14px] text-[#353a44] leading-5 mb-2 flex items-center gap-1.5">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M11 2.5H5C3.61929 2.5 2.5 3.61929 2.5 5V11C2.5 12.3807 3.61929 13.5 5 13.5H11C12.3807 13.5 13.5 12.3807 13.5 11V5C13.5 3.61929 12.3807 2.5 11 2.5ZM5 1C2.79086 1 1 2.79086 1 5V11C1 13.2091 2.79086 15 5 15H11C13.2091 15 15 13.2091 15 11V5C15 2.79086 13.2091 1 11 1H5Z" fill="#474E5A"/>
+                    <path fillRule="evenodd" clipRule="evenodd" d="M6.25 8C6.25 7.58579 6.58579 7.25 7 7.25H8.25C8.66421 7.25 9 7.58579 9 8V11.5C9 11.9142 8.66421 12.25 8.25 12.25C7.83579 12.25 7.5 11.9142 7.5 11.5V8.75H7C6.58579 8.75 6.25 8.41421 6.25 8Z" fill="#474E5A"/>
+                    <path d="M6.75 5C6.75 4.31075 7.31075 3.75 8 3.75C8.68925 3.75 9.25 4.31075 9.25 5C9.25 5.68925 8.68925 6.25 8 6.25C7.31075 6.25 6.75 5.68925 6.75 5Z" fill="#474E5A"/>
+                  </svg>
+                  Roles and limits
                 </p>
                 <ul className="text-[14px] text-[#596171] leading-5 space-y-1 list-disc pl-5">
                   {selectedUseCase === 'b2b' ? (
                     <>
-                      <li>Your program supports virtual cards only</li>
-                      <li>Cards can only be used once</li>
-                      <li>Cards are for B2B transactions in a single industry category</li>
-                      <li>You handle refunds and disputes on behalf of your customers</li>
+                      <li>Your program supports virtual cards only.</li>
+                      <li>Cards can only be used once.</li>
+                      <li>Cards are for B2B transactions in a single industry category.</li>
+                      <li>You handle refunds and disputes on behalf of your customers.</li>
                     </>
                   ) : (
                     <>
-                      <li>Your program supports virtual cards only</li>
-                      <li>Cards are single-use for B2B and ancillary purchases</li>
-                      <li>Cards are for B2B transactions in a single industry category</li>
-                      <li>Purchases should be made as part of services you provide your customers</li>
+                      <li>Your program supports virtual cards only.</li>
+                      <li>Cards are single-use for B2B and ancillary purchases.</li>
+                      <li>Cards are for B2B transactions in a single industry category.</li>
+                      <li>Purchases should be made as part of services you provide your customers.</li>
                     </>
                   )}
                   <li>Default card creation and spend limits apply.{' '}
-                    <a href="#" className="text-[#533afd] hover:underline">Learn more</a>
+                    <a href="#" className="text-[#533afd] hover:underline">View docs</a>
                   </li>
                 </ul>
               </div>
@@ -1029,7 +1027,7 @@ const SubmitReviewContent = ({
       {/* Agreement */}
       <div className="mb-8">
         <Checkbox checked={agreedTerms} onChange={setAgreedTerms}>
-          I agree to the <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowTermsModal(true); }} className="text-[#533afd] hover:underline">Issuing Terms of Service</button>, <a href="#" className="text-[#533afd] hover:underline">E-sign policy</a>, and <a href="#" className="text-[#533afd] hover:underline">Cross-River Bank's privacy policy</a>
+          I agree to the <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowTermsModal(true); }} className="text-[#533afd] hover:underline">Issuing Terms of Service</button>, <a href="#" className="text-[#533afd] hover:underline">E-sign policy</a>, <a href="#" className="text-[#533afd] hover:underline">Apple Pay Card Terms</a>, and <a href="#" className="text-[#533afd] hover:underline">Cross-River Bank's privacy policy</a>
         </Checkbox>
       </div>
       
@@ -1196,7 +1194,7 @@ const SuccessContent = ({ onStartIntegrating, onViewDocs, selectedUseCase }) => 
         onClick={onStartIntegrating}
         className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
       >
-        Start integrating
+        Get started
       </button>
       <button 
         onClick={onViewDocs}
@@ -1778,8 +1776,12 @@ const isSpecializedUseCase = (useCase) => {
 };
 
 // Check if cardholder selection triggers decline
+const isBusinessCardholder = (cardHolder) => {
+  return cardHolder === 'employees' || cardHolder === 'ai_agents';
+};
+
 const isNonBusinessCardholder = (cardHolder) => {
-  return cardHolder && cardHolder !== 'business';
+  return cardHolder && !isBusinessCardholder(cardHolder);
 };
 
 // Main Modal Component
@@ -1914,7 +1916,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       }
 
       if (currentStep === 3) {
-        if (selectedCardHolder === 'business' && selectedUseCase === 'corporate' && selectedSetupType === 'starter') {
+        if (isBusinessCardholder(selectedCardHolder) && selectedUseCase === 'corporate' && selectedSetupType === 'starter') {
           setShowDashboardSuccess(true);
           return;
         }
@@ -1946,7 +1948,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       }
 
       if (currentStep === 3) {
-        if (selectedCardHolder === 'business' && selectedUseCase === 'corporate' && selectedSetupType === 'starter') {
+        if (isBusinessCardholder(selectedCardHolder) && selectedUseCase === 'corporate' && selectedSetupType === 'starter') {
           setShowDashboardSuccess(true);
           return;
         }

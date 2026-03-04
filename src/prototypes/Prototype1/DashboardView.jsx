@@ -623,7 +623,7 @@ const DashboardView = () => {
                       Launch your card program in minutes
                     </h1>
                     <p className="text-[20px] text-[#596171] leading-[28px] tracking-[0.3px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-                      Create, manage, and scale virtual and physical debit cards with powerful APIs.
+                      Use Issuing to create, manage, and scale virtual and physical debit cards with powerful APIs.
                     </p>
                   </div>
                   <div className="flex gap-4">
