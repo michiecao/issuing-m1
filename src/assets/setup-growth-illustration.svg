@@ -1,0 +1,75 @@
+<svg width="360" height="270" viewBox="0 0 180 135" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="card-shadow-g" x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur1"/>
+      <feOffset in="blur1" dx="0" dy="2" result="offset1"/>
+      <feColorMatrix in="offset1" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.08 0" result="shadow1"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur2"/>
+      <feOffset in="blur2" dx="0" dy="1" result="offset2"/>
+      <feColorMatrix in="offset2" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0" result="shadow2"/>
+      <feMerge>
+        <feMergeNode in="shadow1"/>
+        <feMergeNode in="shadow2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Gray background (rounded left corners only) -->
+  <path d="M12,0 H180 V135 H12 A12,12 0 0,1 0,123 V12 A12,12 0 0,1 12,0 Z" fill="#F5F6F8"/>
+
+  <!-- Dashboard card (background, offset top-left) -->
+  <g filter="url(#card-shadow-g)">
+    <rect x="18" y="14" width="90" height="64" rx="5" fill="white"/>
+
+    <!-- Mini top bar -->
+    <rect x="24" y="20" width="6" height="6" rx="3" fill="#F0F0F4"/>
+    <rect x="34" y="21.5" width="30" height="3" rx="1.5" fill="#F0F0F4"/>
+
+    <!-- Mini row 1 -->
+    <rect x="24" y="32" width="78" height="14" rx="3" fill="#FAFAFB"/>
+    <rect x="28" y="35" width="10" height="7" rx="2" fill="#625AFA"/>
+    <rect x="42" y="36" width="26" height="2.5" rx="1.25" fill="#D8DEE4"/>
+    <rect x="42" y="40" width="18" height="2.5" rx="1.25" fill="#E3E8EE"/>
+
+    <!-- Mini row 2 -->
+    <rect x="24" y="49" width="78" height="14" rx="3" fill="#FAFAFB"/>
+    <rect x="28" y="52" width="10" height="7" rx="2" fill="#625AFA"/>
+    <rect x="42" y="53" width="22" height="2.5" rx="1.25" fill="#D8DEE4"/>
+    <rect x="42" y="57" width="16" height="2.5" rx="1.25" fill="#E3E8EE"/>
+  </g>
+
+  <!-- Code editor card (foreground, offset bottom-right) -->
+  <g filter="url(#card-shadow-g)">
+    <rect x="66" y="46" width="100" height="76" rx="5" fill="#1A1F36"/>
+
+    <!-- Window dots -->
+    <circle cx="78" cy="56" r="2.5" fill="#FF5F57"/>
+    <circle cx="86" cy="56" r="2.5" fill="#FFBD2E"/>
+    <circle cx="94" cy="56" r="2.5" fill="#28CA42"/>
+
+    <!-- Line 1: const card = await -->
+    <rect x="76" y="67" width="18" height="3" rx="1" fill="#C084FC"/>
+    <rect x="97" y="67" width="14" height="3" rx="1" fill="#E2E8F0"/>
+    <rect x="114" y="67" width="5" height="3" rx="1" fill="#94A3B8"/>
+    <rect x="122" y="67" width="18" height="3" rx="1" fill="#FBBF24"/>
+
+    <!-- Line 2:   stripe.issuing -->
+    <rect x="80" y="75" width="42" height="3" rx="1" fill="#E2E8F0"/>
+
+    <!-- Line 3:     .cards.create({ -->
+    <rect x="84" y="83" width="38" height="3" rx="1" fill="#E2E8F0"/>
+    <rect x="125" y="83" width="6" height="3" rx="1" fill="#FBBF24"/>
+
+    <!-- Line 4:       cardholder: 'ich_1234', -->
+    <rect x="88" y="91" width="28" height="3" rx="1" fill="#7DD3FC"/>
+    <rect x="119" y="91" width="26" height="3" rx="1" fill="#A5F3AB"/>
+
+    <!-- Line 5:       type: 'virtual', -->
+    <rect x="88" y="99" width="14" height="3" rx="1" fill="#7DD3FC"/>
+    <rect x="105" y="99" width="22" height="3" rx="1" fill="#A5F3AB"/>
+
+    <!-- Line 6:     }) -->
+    <rect x="84" y="107" width="10" height="3" rx="1" fill="#FBBF24"/>
+  </g>
+</svg>

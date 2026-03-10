@@ -1,0 +1,87 @@
+<svg width="520" height="240" viewBox="0 0 520 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="outer-clip">
+      <rect width="520" height="240" rx="12"/>
+    </clipPath>
+  </defs>
+
+  <!-- Outer frame -->
+  <g clip-path="url(#outer-clip)">
+    <!-- Light background -->
+    <rect width="520" height="240" rx="12" fill="#E3E8EE"/>
+
+    <!-- Dark terminal window -->
+    <rect x="20" y="24" width="480" height="200" rx="12" fill="#1A1F36"/>
+
+    <!-- Window controls -->
+    <circle cx="44" cy="48" r="6" fill="#FF5F57"/>
+    <circle cx="62" cy="48" r="6" fill="#FFBD2E"/>
+    <circle cx="80" cy="48" r="6" fill="#28CA42"/>
+
+    <!-- Filename -->
+    <text x="108" y="52" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="11" fill="#6B7280">create-card.js</text>
+
+    <!-- Line 1: const stripe = require('stripe'); -->
+    <text x="44" y="86" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" fill="#4B5563" text-anchor="end">1</text>
+    <text x="60" y="86" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13">
+      <tspan fill="#C084FC">const</tspan>
+      <tspan fill="#E2E8F0"> stripe </tspan>
+      <tspan fill="#94A3B8">=</tspan>
+      <tspan fill="#E2E8F0"> </tspan>
+      <tspan fill="#60A5FA">require</tspan>
+      <tspan fill="#E2E8F0">(</tspan>
+      <tspan fill="#A5F3AB">'stripe'</tspan>
+      <tspan fill="#E2E8F0">);</tspan>
+    </text>
+
+    <!-- Line 2: (empty) -->
+    <text x="44" y="106" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" fill="#4B5563" text-anchor="end">2</text>
+
+    <!-- Line 3: const card = await stripe.issuing.cards -->
+    <text x="44" y="126" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" fill="#4B5563" text-anchor="end">3</text>
+    <text x="60" y="126" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13">
+      <tspan fill="#C084FC">const</tspan>
+      <tspan fill="#E2E8F0"> card </tspan>
+      <tspan fill="#94A3B8">=</tspan>
+      <tspan fill="#E2E8F0"> </tspan>
+      <tspan fill="#C084FC">await</tspan>
+      <tspan fill="#E2E8F0"> stripe.issuing.cards</tspan>
+    </text>
+
+    <!-- Line 4:   .create({ -->
+    <text x="44" y="146" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" fill="#4B5563" text-anchor="end">4</text>
+    <text x="60" y="146" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13">
+      <tspan fill="#E2E8F0">  .create</tspan>
+      <tspan fill="#FBBF24">(&#123;</tspan>
+    </text>
+
+    <!-- Line 5:     cardholder: 'ich_1234', -->
+    <text x="44" y="166" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" fill="#4B5563" text-anchor="end">5</text>
+    <text x="60" y="166" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13">
+      <tspan fill="#60A5FA">    cardholder</tspan>
+      <tspan fill="#E2E8F0">: </tspan>
+      <tspan fill="#A5F3AB">'ich_1234'</tspan>
+      <tspan fill="#E2E8F0">,</tspan>
+    </text>
+
+    <!-- Line 6:     type: 'virtual', -->
+    <text x="44" y="186" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" fill="#4B5563" text-anchor="end">6</text>
+    <text x="60" y="186" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13">
+      <tspan fill="#60A5FA">    type</tspan>
+      <tspan fill="#E2E8F0">: </tspan>
+      <tspan fill="#A5F3AB">'virtual'</tspan>
+      <tspan fill="#E2E8F0">,</tspan>
+    </text>
+
+    <!-- Line 7:     currency: 'usd' -->
+    <text x="44" y="206" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13" fill="#4B5563" text-anchor="end">7</text>
+    <text x="60" y="206" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="13">
+      <tspan fill="#60A5FA">    currency</tspan>
+      <tspan fill="#E2E8F0">: </tspan>
+      <tspan fill="#A5F3AB">'usd'</tspan>
+    </text>
+  </g>
+
+  <!-- Outer border -->
+  <rect x="0.5" y="0.5" width="519" height="239" rx="11.5" stroke="#D5DBE1" stroke-opacity="0.5"/>
+</svg>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '../../icons/SailIcons';
 import { Button } from '../../components/sail/Button';
 import SandboxBanner from '../../components/SandboxBanner';
+import starterIllustrationUrl from '../../assets/setup-starter-illustration.svg';
+import growthIllustrationUrl from '../../assets/setup-growth-illustration.svg';
 
 // Edit Icon
 const EditIcon = () => (
@@ -261,7 +263,7 @@ const DashboardAndApiIllustration = () => (
 );
 
 // Setup Type Card Component - With illustration and feature list
-const SetupTypeCard = ({ title, description, icon, features, selected, onClick, illustration: Illustration }) => (
+const SetupTypeCard = ({ title, description, icon, features, selected, onClick, illustrationSrc }) => (
   <button
     onClick={onClick}
     className={`w-full text-left rounded-xl transition-colors relative ${
@@ -270,20 +272,18 @@ const SetupTypeCard = ({ title, description, icon, features, selected, onClick, 
         : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
     }`}
   >
-    <div className="flex items-stretch h-[160px]">
-      {Illustration && (
-        <div className="w-[180px] shrink-0 rounded-l-xl overflow-hidden bg-[#f5f6f8]">
-          <div className="w-full h-full flex items-center justify-center p-5">
-            <Illustration />
-          </div>
+    <div className="flex items-stretch h-[135px]">
+      {illustrationSrc && (
+        <div className="w-[180px] shrink-0 rounded-l-xl overflow-hidden">
+          <img src={illustrationSrc} alt="" className="w-full h-full object-cover" />
         </div>
       )}
       <div className="flex-1 min-w-0 py-3 px-4">
         <h3 className="font-semibold text-[16px] text-[#353a44] leading-6">
           {title}
         </h3>
-        <p className="text-[13px] text-[#8a919e] leading-5 mt-0.5">{description}</p>
-        <div className="flex flex-col gap-0.5 mt-3">
+        {description && <p className="text-[13px] text-[#8a919e] leading-5 mt-0.5">{description}</p>}
+        <div className={`flex flex-col gap-0.5 ${description ? 'mt-3' : 'mt-1.5'}`}>
           {features.map((feature, index) => (
             <FeatureItem key={index}>{feature}</FeatureItem>
           ))}
@@ -326,27 +326,29 @@ const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupTyp
       <SetupTypeCard
         title="Starter"
         icon="rocket"
-        description="No integration required"
+        description=""
         features={[
+          'No integration required',
           'Create cards in the Dashboard',
           'Free',
         ]}
         selected={selectedSetupType === 'starter'}
         onClick={() => setSelectedSetupType('starter')}
-        illustration={DashboardIllustration}
+        illustrationSrc={starterIllustrationUrl}
       />
       
       <SetupTypeCard
         title="Growth"
         icon="growth"
-        description="Scale quickly via the API"
+        description=""
         features={[
+          'Scale quickly via the API',
           'Create cards via Dashboard and API',
           'Pay as you go',
         ]}
         selected={selectedSetupType === 'growth'}
         onClick={() => setSelectedSetupType('growth')}
-        illustration={DashboardAndApiIllustration}
+        illustrationSrc={growthIllustrationUrl}
       />
       
     </div>
