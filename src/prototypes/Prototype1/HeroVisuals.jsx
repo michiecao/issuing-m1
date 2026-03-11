@@ -30,27 +30,19 @@ export const CurrentVisual = () => (
   </div>
 );
 
-// Direction 1 — Card + Agent Command Terminal (overlay on bottom-left of card)
+// Direction 1 — Terminal behind card (terminal top-left, card overlaid on top)
 export const TerminalVisual = () => (
-  <div className="absolute right-[40px] top-1/2 -translate-y-[calc(50%-10px)]">
-    <div className="relative">
-      {/* Card — primary visual */}
-      <img
-        src={CARD_SVG_URL}
-        alt="Issuing card"
-        className="w-[520px] h-auto"
-        style={{ filter: PURPLE_SHADOW }}
-      />
-
-      {/* Terminal overlay — bottom-left of card */}
-      <div className="absolute -bottom-8 -left-6 w-[300px] bg-[#1e1e2e]/95 backdrop-blur-md rounded-xl shadow-2xl overflow-hidden border border-[#313244] z-10">
+  <div className="absolute -right-[20px] top-[280px] bottom-[110px] flex items-center">
+    <div className="relative w-[540px] h-[420px] scale-[0.85] origin-top-right">
+      {/* Terminal — bounded box, behind card */}
+      <div className="absolute top-0 -left-[190px] w-[400px] pb-6 bg-[#1e1e2e] backdrop-blur-md rounded-xl shadow-2xl overflow-hidden border border-[#313244] z-0">
         <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#181825]/80 border-b border-[#313244]">
           <div className="w-2 h-2 rounded-full bg-[#f38ba8]" />
           <div className="w-2 h-2 rounded-full bg-[#f9e2af]" />
           <div className="w-2 h-2 rounded-full bg-[#a6e3a1]" />
-          <span className="ml-2 text-[10px] text-[#6c7086] font-mono">agent.js</span>
+          <span className="ml-2 text-[12px] text-[#6c7086] font-mono">agent.js</span>
         </div>
-        <div className="p-3 font-mono text-[11px] leading-[18px] space-y-1">
+        <div className="p-3 font-mono text-[13px] leading-[21px] space-y-1">
           <div className="text-[#6c7086]">// Agent creates a virtual card</div>
           <div>
             <span className="text-[#cba6f7]">const</span>
@@ -99,6 +91,14 @@ export const TerminalVisual = () => (
           </div>
         </div>
       </div>
+
+      {/* Card — overlaid on top, offset down-right */}
+      <img
+        src={CARD_SVG_URL}
+        alt="Issuing card"
+        className="absolute top-1/2 -translate-y-[55%] right-[20px] w-[540px] h-auto z-10"
+        style={{ filter: PURPLE_SHADOW }}
+      />
     </div>
   </div>
 );
