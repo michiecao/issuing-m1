@@ -1,6 +1,7 @@
 import React from 'react';
 
 const CARD_SVG_URL = new URL('../../assets/issuing-card-hero.svg', import.meta.url).href;
+const CARD_NO_SHADOW_SVG_URL = new URL('../../assets/issuing-card-no-shadow.svg', import.meta.url).href;
 const PURPLE_SHADOW = 'drop-shadow(0px 20px 100px rgba(83,58,253,0.2)) drop-shadow(0px 20px 35px rgba(83,58,253,0.2)) drop-shadow(0px 5px 15px rgba(83,58,253,0.2))';
 
 const SparkleIcon = ({ size = 16, className = '' }) => (
@@ -30,74 +31,89 @@ export const CurrentVisual = () => (
   </div>
 );
 
-// Direction 1 — Terminal behind card (terminal top-left, card overlaid on top)
+// Direction 1 — Terminal + Card (rebuilt as JSX)
+const TerminalCodeContent = () => (
+  <div className="font-mono text-[10.5px] leading-[17px] p-3 pt-2">
+    <div className="text-[#9399b2]">// Agent creates a virtual card</div>
+    <div>
+      <span className="text-[#cba6f7]">const</span>
+      <span className="text-[#cdd6f4]"> card </span>
+      <span className="text-[#89dceb]">=</span>
+      <span className="text-[#cba6f7]"> await</span>
+      <span className="text-[#89b4fa]"> stripe</span>
+      <span className="text-[#cdd6f4]">.</span>
+      <span className="text-[#89b4fa]">issuing</span>
+      <span className="text-[#cdd6f4]">.</span>
+      <span className="text-[#89b4fa]">cards</span>
+      <span className="text-[#cdd6f4]">.</span>
+      <span className="text-[#f9e2af]">create</span>
+      <span className="text-[#cdd6f4]">{'({'}</span>
+    </div>
+    <div className="pl-4">
+      <span className="text-[#89b4fa]">type</span>
+      <span className="text-[#cdd6f4]">: </span>
+      <span className="text-[#a6e3a1]">'virtual'</span>
+      <span className="text-[#cdd6f4]">,</span>
+    </div>
+    <div className="pl-4">
+      <span className="text-[#89b4fa]">currency</span>
+      <span className="text-[#cdd6f4]">: </span>
+      <span className="text-[#a6e3a1]">'usd'</span>
+      <span className="text-[#cdd6f4]">,</span>
+    </div>
+    <div className="pl-4">
+      <span className="text-[#89b4fa]">spending_controls</span>
+      <span className="text-[#cdd6f4]">: {'{'}</span>
+    </div>
+    <div className="pl-8">
+      <span className="text-[#89b4fa]">spending_limits</span>
+      <span className="text-[#cdd6f4]">: [{'{'} </span>
+      <span className="text-[#89b4fa]">amount</span>
+      <span className="text-[#cdd6f4]">: </span>
+      <span className="text-[#fab387]">5000</span>
+      <span className="text-[#cdd6f4]"> {'}'}]</span>
+    </div>
+    <div className="pl-4">
+      <span className="text-[#cdd6f4]">{'}'}</span>
+    </div>
+    <div>
+      <span className="text-[#cdd6f4]">{'})'}</span>
+      <span className="text-[#cdd6f4]">;</span>
+    </div>
+    <div className="border-t border-[#313244] mt-2.5 pt-2.5">
+      <span className="text-[#a6e3a1]">✓</span>
+      <span className="text-[#6c7086]"> Card created: </span>
+      <span className="text-[#cdd6f4]">ic_1NhMkQ ····4242</span>
+    </div>
+  </div>
+);
+
 export const TerminalVisual = () => (
-  <div className="absolute -right-[20px] top-[280px] bottom-[110px] flex items-center">
-    <div className="relative w-[540px] h-[420px] scale-[0.85] origin-top-right">
-      {/* Terminal — bounded box, behind card */}
-      <div className="absolute top-0 -left-[190px] w-[400px] pb-6 bg-[#1e1e2e] backdrop-blur-md rounded-xl shadow-2xl overflow-hidden border border-[#313244] z-0">
-        <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#181825]/80 border-b border-[#313244]">
-          <div className="w-2 h-2 rounded-full bg-[#f38ba8]" />
-          <div className="w-2 h-2 rounded-full bg-[#f9e2af]" />
-          <div className="w-2 h-2 rounded-full bg-[#a6e3a1]" />
-          <span className="ml-2 text-[12px] text-[#6c7086] font-mono">agent.js</span>
+  <div className="absolute right-[20px] top-1/2 -translate-y-[calc(50%+10px)]">
+    <div
+      className="relative w-[480px]"
+      style={{ filter: 'drop-shadow(0px 4px 12px rgba(0,0,0,0.12)) drop-shadow(0px 16px 40px rgba(0,0,0,0.16))' }}
+    >
+      {/* Terminal (behind, left-aligned) */}
+      <div
+        className="w-[290px] h-[200px] rounded-lg border border-[#313244] overflow-hidden"
+        style={{ background: '#1e1e2e' }}
+      >
+        {/* Title bar */}
+        <div className="flex items-center gap-1.5 px-3 h-[28px] bg-[#181825] border-b border-[#313244]">
+          <div className="w-[9px] h-[9px] rounded-full bg-[#f38ba8]" />
+          <div className="w-[9px] h-[9px] rounded-full bg-[#f9e2af]" />
+          <div className="w-[9px] h-[9px] rounded-full bg-[#a6e3a1]" />
+          <span className="ml-2 text-[10px] font-mono text-[#9399b2]">agent.js</span>
         </div>
-        <div className="p-3 font-mono text-[13px] leading-[21px] space-y-1">
-          <div className="text-[#6c7086]">// Agent creates a virtual card</div>
-          <div>
-            <span className="text-[#cba6f7]">const</span>
-            <span className="text-[#cdd6f4]"> card </span>
-            <span className="text-[#89dceb]">=</span>
-            <span className="text-[#cba6f7]"> await</span>
-            <span className="text-[#89b4fa]"> stripe</span>
-            <span className="text-[#cdd6f4]">.</span>
-            <span className="text-[#89b4fa]">issuing</span>
-            <span className="text-[#cdd6f4]">.</span>
-            <span className="text-[#89b4fa]">cards</span>
-            <span className="text-[#cdd6f4]">.</span>
-            <span className="text-[#f9e2af]">create</span>
-            <span className="text-[#cdd6f4]">({"{"}</span>
-          </div>
-          <div className="pl-4">
-            <span className="text-[#89b4fa]">type</span>
-            <span className="text-[#cdd6f4]">: </span>
-            <span className="text-[#a6e3a1]">'virtual'</span>
-            <span className="text-[#cdd6f4]">,</span>
-          </div>
-          <div className="pl-4">
-            <span className="text-[#89b4fa]">currency</span>
-            <span className="text-[#cdd6f4]">: </span>
-            <span className="text-[#a6e3a1]">'usd'</span>
-            <span className="text-[#cdd6f4]">,</span>
-          </div>
-          <div className="pl-4">
-            <span className="text-[#89b4fa]">spending_controls</span>
-            <span className="text-[#cdd6f4]">: {"{"}</span>
-          </div>
-          <div className="pl-8">
-            <span className="text-[#89b4fa]">spending_limits</span>
-            <span className="text-[#cdd6f4]">: [{"{"} </span>
-            <span className="text-[#89b4fa]">amount</span>
-            <span className="text-[#cdd6f4]">: </span>
-            <span className="text-[#fab387]">5000</span>
-            <span className="text-[#cdd6f4]"> {"}"}]</span>
-          </div>
-          <div className="pl-4"><span className="text-[#cdd6f4]">{"}"}</span></div>
-          <div><span className="text-[#cdd6f4]">{"}"});</span></div>
-          <div className="mt-2 pt-2 border-t border-[#313244]">
-            <span className="text-[#a6e3a1]">✓</span>
-            <span className="text-[#6c7086]"> Card created: </span>
-            <span className="text-[#cdd6f4]">ic_1NhMkQ ····4242</span>
-          </div>
-        </div>
+        <TerminalCodeContent />
       </div>
 
-      {/* Card — overlaid on top, offset down-right */}
+      {/* Card (overlaid, bottom-right) */}
       <img
-        src={CARD_SVG_URL}
+        src={CARD_NO_SHADOW_SVG_URL}
         alt="Issuing card"
-        className="absolute top-1/2 -translate-y-[55%] right-[20px] w-[540px] h-auto z-10"
-        style={{ filter: PURPLE_SHADOW }}
+        className="absolute -bottom-[140px] -right-[10px] w-[370px] h-auto z-10"
       />
     </div>
   </div>

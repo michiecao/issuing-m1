@@ -238,7 +238,7 @@ const DashboardView = () => {
   const [hasStartedSetup, setHasStartedSetup] = useState(false);
   const [savedStep, setSavedStep] = useState(0);
   const [showSetupTypeStep, setShowSetupTypeStep] = useState(false);
-  const [heroVisualStyle, setHeroVisualStyle] = useState('current');
+  const [heroVisualStyle, setHeroVisualStyle] = useState('terminal');
   const [initialAgentInteraction, setInitialAgentInteraction] = useState(null);
 
   const handleResetPrototype = () => {

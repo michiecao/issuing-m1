@@ -1033,45 +1033,10 @@ const ApiCodeIllustration = () => (
 );
 
 // CLI Code Illustration for agent-involved "You're ready to start building"
+const CLI_TERMINAL_SVG_URL = new URL('../../assets/cli-terminal-hero.svg', import.meta.url).href;
 const CliCodeIllustration = () => (
-  <div className="w-full h-[220px] bg-[#e3e8ee] rounded-xl overflow-hidden relative">
-    <div className="absolute left-1/2 -translate-x-1/2 top-6 w-[480px] bg-[#1a1f36] rounded-xl p-5 shadow-xl">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-        <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
-        <div className="w-3 h-3 rounded-full bg-[#28ca42]" />
-        <span className="ml-3 text-[11px] text-[#6b7280] font-mono">Terminal</span>
-      </div>
-      <div className="font-mono text-[12px] leading-[20px] space-y-0.5">
-        <div className="flex">
-          <span><span className="text-[#a5f3ab]">$</span> <span className="text-[#e2e8f0]">stripe issuing cards create</span> <span className="text-[#94a3b8]">\</span></span>
-        </div>
-        <div className="flex">
-          <span><span className="text-[#e2e8f0]">    </span><span className="text-[#60a5fa]">--cardholder</span><span className="text-[#94a3b8]">=</span><span className="text-[#a5f3ab]">"ich_1MsKY81CEjIa"</span> <span className="text-[#94a3b8]">\</span></span>
-        </div>
-        <div className="flex">
-          <span><span className="text-[#e2e8f0]">    </span><span className="text-[#60a5fa]">--type</span><span className="text-[#94a3b8]">=</span><span className="text-[#a5f3ab]">"virtual"</span> <span className="text-[#94a3b8]">\</span></span>
-        </div>
-        <div className="flex">
-          <span><span className="text-[#e2e8f0]">    </span><span className="text-[#60a5fa]">--currency</span><span className="text-[#94a3b8]">=</span><span className="text-[#a5f3ab]">"usd"</span></span>
-        </div>
-        <div className="flex mt-3">
-          <span className="text-[#6b7280]">{"{"}</span>
-        </div>
-        <div className="flex">
-          <span className="text-[#6b7280]">{"  \"id\": \"ic_1MsKY81CEjIaSs\","}</span>
-        </div>
-        <div className="flex">
-          <span className="text-[#6b7280]">{"  \"type\": \"virtual\","}</span>
-        </div>
-        <div className="flex">
-          <span className="text-[#6b7280]">{"  \"status\": \"active\""}</span>
-        </div>
-        <div className="flex">
-          <span className="text-[#6b7280]">{"}"}</span>
-        </div>
-      </div>
-    </div>
+  <div className="w-full rounded-xl overflow-hidden">
+    <img src={CLI_TERMINAL_SVG_URL} alt="CLI terminal illustration" className="w-full h-auto" />
   </div>
 );
 
