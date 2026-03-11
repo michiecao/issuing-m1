@@ -2,6 +2,7 @@ import React from 'react';
 
 const CARD_SVG_URL = new URL('../../assets/issuing-card-hero.svg', import.meta.url).href;
 const CARD_NO_SHADOW_SVG_URL = new URL('../../assets/issuing-card-no-shadow.svg', import.meta.url).href;
+const TERMINAL_CARD_SVG_URL = new URL('../../assets/terminal-card-export.svg', import.meta.url).href;
 const PURPLE_SHADOW = 'drop-shadow(0px 20px 100px rgba(83,58,253,0.2)) drop-shadow(0px 20px 35px rgba(83,58,253,0.2)) drop-shadow(0px 5px 15px rgba(83,58,253,0.2))';
 
 const SparkleIcon = ({ size = 16, className = '' }) => (
@@ -89,33 +90,13 @@ const TerminalCodeContent = () => (
 );
 
 export const TerminalVisual = () => (
-  <div className="absolute right-[20px] top-1/2 -translate-y-[calc(50%+10px)]">
-    <div
-      className="relative w-[480px]"
-      style={{ filter: 'drop-shadow(0px 4px 12px rgba(0,0,0,0.12)) drop-shadow(0px 16px 40px rgba(0,0,0,0.16))' }}
-    >
-      {/* Terminal (behind, left-aligned) */}
-      <div
-        className="w-[290px] h-[200px] rounded-lg border border-[#313244] overflow-hidden"
-        style={{ background: '#1e1e2e' }}
-      >
-        {/* Title bar */}
-        <div className="flex items-center gap-1.5 px-3 h-[28px] bg-[#181825] border-b border-[#313244]">
-          <div className="w-[9px] h-[9px] rounded-full bg-[#f38ba8]" />
-          <div className="w-[9px] h-[9px] rounded-full bg-[#f9e2af]" />
-          <div className="w-[9px] h-[9px] rounded-full bg-[#a6e3a1]" />
-          <span className="ml-2 text-[10px] font-mono text-[#9399b2]">agent.js</span>
-        </div>
-        <TerminalCodeContent />
-      </div>
-
-      {/* Card (overlaid, bottom-right) */}
-      <img
-        src={CARD_NO_SHADOW_SVG_URL}
-        alt="Issuing card"
-        className="absolute -bottom-[140px] -right-[10px] w-[370px] h-auto z-10"
-      />
-    </div>
+  <div className="absolute right-[60px] top-1/2 -translate-y-[calc(50%-25px)]">
+    <img
+      src={TERMINAL_CARD_SVG_URL}
+      alt="Terminal and Issuing card"
+      className="w-[520px] h-auto"
+      style={{ filter: 'drop-shadow(0px 4px 12px rgba(0,0,0,0.1)) drop-shadow(0px 16px 40px rgba(0,0,0,0.12))' }}
+    />
   </div>
 );
 
