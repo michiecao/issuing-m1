@@ -4,11 +4,7 @@ import { Button } from '../../components/sail/Button';
 import SandboxBanner from '../../components/SandboxBanner';
 import starterIllustrationUrl from '../../assets/setup-starter-illustration.svg';
 import growthIllustrationUrl from '../../assets/setup-growth-illustration.svg';
-import modalIconCard from '../../assets/modal-icon-card.svg';
-import modalIconConvert from '../../assets/modal-icon-convert.svg';
-import modalIconRecurring from '../../assets/modal-icon-recurring.svg';
-import modalIconUsage from '../../assets/modal-icon-usage.svg';
-import modalPreviewGradient from '../../assets/modal-preview-gradient.svg';
+
 
 // Edit Icon
 const EditIcon = () => (
@@ -696,125 +692,6 @@ const HierarchyDiagram = ({ topIcon: TopIcon, topLabel, bottomIcon: BottomIcon, 
   </div>
 );
 
-// Image paths for each cardholder option
-// FA Model Diagrams
-const svgFontStyle = { fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" };
-
-const DirectModelDiagram = () => (
-  <svg width="140" height="80" viewBox="0 0 140 80" fill="none" xmlns="http://www.w3.org/2000/svg" style={svgFontStyle}>
-    <line x1="6" y1="30" x2="30" y2="30" stroke="#a3acba" strokeWidth="1.5" />
-    <polygon points="28,27 34,30 28,33" fill="#a3acba" />
-    <rect x="36" y="10" width="68" height="40" rx="6" fill="#eeedf7" stroke="#d0cef0" strokeWidth="1.5" />
-    <text x="70" y="35" textAnchor="middle" fontSize="14" fontWeight="600" fill="#353a44">FA</text>
-    <text x="70" y="66" textAnchor="middle" fontSize="11" fontWeight="500" fill="#675dff">card</text>
-    <line x1="106" y1="30" x2="130" y2="30" stroke="#a3acba" strokeWidth="1.5" />
-    <polygon points="128,27 134,30 128,33" fill="#a3acba" />
-  </svg>
-);
-
-const CommercialModelDiagram = () => (
-  <svg width="160" height="108" viewBox="0 0 160 108" fill="none" xmlns="http://www.w3.org/2000/svg" style={svgFontStyle}>
-    <line x1="16" y1="18" x2="40" y2="18" stroke="#a3acba" strokeWidth="1.5" />
-    <polygon points="38,15 44,18 38,21" fill="#a3acba" />
-    <rect x="46" y="2" width="56" height="32" rx="5" fill="#eeedf7" stroke="#d0cef0" strokeWidth="1.5" />
-    <text x="74" y="23" textAnchor="middle" fontSize="13" fontWeight="600" fill="#353a44">FA</text>
-    <line x1="104" y1="18" x2="128" y2="18" stroke="#a3acba" strokeWidth="1.5" />
-    <polygon points="126,15 132,18 126,21" fill="#a3acba" />
-    <line x1="60" y1="34" x2="36" y2="56" stroke="#d0cef0" strokeWidth="1.5" />
-    <line x1="88" y1="34" x2="124" y2="56" stroke="#d0cef0" strokeWidth="1.5" />
-    <rect x="2" y="56" width="70" height="30" rx="5" fill="#eeedf7" stroke="#d0cef0" strokeWidth="1.5" />
-    <text x="37" y="73" textAnchor="middle" fontSize="9" fontWeight="600" fill="#353a44">commercial FA</text>
-    <text x="37" y="100" textAnchor="middle" fontSize="10" fontWeight="500" fill="#675dff">card</text>
-    <rect x="88" y="56" width="70" height="30" rx="5" fill="#eeedf7" stroke="#d0cef0" strokeWidth="1.5" />
-    <text x="123" y="73" textAnchor="middle" fontSize="9" fontWeight="600" fill="#353a44">commercial FA</text>
-    <text x="123" y="100" textAnchor="middle" fontSize="10" fontWeight="500" fill="#675dff">card</text>
-  </svg>
-);
-
-const ConsumerModelDiagram = () => (
-  <svg width="160" height="108" viewBox="0 0 160 108" fill="none" xmlns="http://www.w3.org/2000/svg" style={svgFontStyle}>
-    <line x1="16" y1="18" x2="40" y2="18" stroke="#a3acba" strokeWidth="1.5" />
-    <polygon points="38,15 44,18 38,21" fill="#a3acba" />
-    <rect x="46" y="2" width="56" height="32" rx="5" fill="#eeedf7" stroke="#d0cef0" strokeWidth="1.5" />
-    <text x="74" y="23" textAnchor="middle" fontSize="13" fontWeight="600" fill="#353a44">FA</text>
-    <line x1="104" y1="18" x2="128" y2="18" stroke="#a3acba" strokeWidth="1.5" />
-    <polygon points="126,15 132,18 126,21" fill="#a3acba" />
-    <line x1="60" y1="34" x2="36" y2="56" stroke="#d0cef0" strokeWidth="1.5" />
-    <line x1="88" y1="34" x2="124" y2="56" stroke="#d0cef0" strokeWidth="1.5" />
-    <rect x="2" y="56" width="70" height="30" rx="5" fill="#eeedf7" stroke="#d0cef0" strokeWidth="1.5" />
-    <text x="37" y="73" textAnchor="middle" fontSize="9" fontWeight="600" fill="#353a44">consumer FA</text>
-    <text x="37" y="100" textAnchor="middle" fontSize="10" fontWeight="500" fill="#675dff">card</text>
-    <rect x="88" y="56" width="70" height="30" rx="5" fill="#eeedf7" stroke="#d0cef0" strokeWidth="1.5" />
-    <text x="123" y="73" textAnchor="middle" fontSize="9" fontWeight="600" fill="#353a44">consumer FA</text>
-    <text x="123" y="100" textAnchor="middle" fontSize="10" fontWeight="500" fill="#675dff">card</text>
-  </svg>
-);
-
-const FAModelCard = ({ title, description, selected, onClick, diagram }) => (
-  <button
-    onClick={onClick}
-    className={`w-full text-left rounded-xl transition-colors ${
-      selected
-        ? 'border border-[#675dff] ring-1 ring-[#675dff] bg-white'
-        : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
-    }`}
-  >
-    <div className="flex items-stretch">
-      <div className="w-[180px] shrink-0 rounded-l-xl bg-[#f7f8fa] flex items-center justify-center">
-        {diagram}
-      </div>
-      <div className="flex-1 min-w-0 py-4 px-4">
-        <h3 className="font-semibold text-[16px] text-[#353a44] leading-6">{title}</h3>
-        <p className="text-[14px] text-[#596171] leading-5 mt-1">{description}</p>
-      </div>
-    </div>
-  </button>
-);
-
-const FAModelContent = ({ onContinue, selectedFAModel, setSelectedFAModel }) => (
-  <div className="w-full max-w-[580px] px-4">
-    <div className="mb-8">
-      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px]">
-        Who will hold funds and use cards?
-      </h1>
-    </div>
-    <div className="flex flex-col gap-3 mb-8">
-      <FAModelCard
-        title="Attach cards to your financial account"
-        description="Hold funds and issue cards from a single account — for your business's own spending."
-        selected={selectedFAModel === 'direct'}
-        onClick={() => setSelectedFAModel('direct')}
-        diagram={<DirectModelDiagram />}
-      />
-      <FAModelCard
-        title="Create financial accounts for businesses"
-        description="Give each business on your platform their own account and cards. Ideal for marketplaces and B2B platforms."
-        selected={selectedFAModel === 'commercial'}
-        onClick={() => setSelectedFAModel('commercial')}
-        diagram={<CommercialModelDiagram />}
-      />
-      <FAModelCard
-        title="Create financial accounts for individuals"
-        description="Give each person on your platform their own account and cards. Ideal for neobanks, gig platforms, and consumer apps."
-        selected={selectedFAModel === 'consumer'}
-        onClick={() => setSelectedFAModel('consumer')}
-        diagram={<ConsumerModelDiagram />}
-      />
-    </div>
-    <button
-      onClick={onContinue}
-      disabled={!selectedFAModel}
-      className={`w-full py-3 font-bold text-[16px] rounded-md transition-colors text-white ${
-        !selectedFAModel
-          ? 'bg-[#533afd]/50 cursor-not-allowed'
-          : 'bg-[#675dff] hover:bg-[#5650e0] shadow-[0px_1px_1px_rgba(47,14,99,0.32)]'
-      }`}
-    >
-      Continue
-    </button>
-  </div>
-);
-
 const CARDHOLDER_IMAGES = {
   employees: '/issuing-m1/images/cardholder-business.svg',
   ai_agents: '/issuing-m1/images/cardholder-business.svg',
@@ -839,7 +716,6 @@ const CardHoldersContent = ({ onContinue, selectedCardHolder, setSelectedCardHol
     <div className="space-y-[9px] mb-8">
       {[
         { key: 'employees', title: 'Your employees or contractors', desc: 'People who work for your business' },
-        { key: 'ai_agents', title: 'AI agents of your business', desc: 'Automated agents that operate on behalf of your business' },
         { key: 'platforms', title: 'Businesses on your platform', desc: 'Merchants, sellers, or vendors using your platform' },
         { key: 'consumers', title: 'Individuals on your platform', desc: 'App users, gig workers, or others using your platform' },
       ].map(({ key, title, desc }) => (
@@ -1909,88 +1785,12 @@ const isNonBusinessCardholder = (cardHolder) => {
   return cardHolder && !isBusinessCardholder(cardHolder);
 };
 
-// Intro Content — merged from CreateCardsModal, shown as the first step before the questionnaire
-const IntroContent = ({ onGetStarted }) => (
-  <div className="w-full max-w-[580px] px-4">
-    {/* Illustration */}
-    <div className="w-full h-[220px] rounded-xl overflow-hidden relative mb-8">
-      <img
-        src={modalPreviewGradient}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover rounded-xl"
-      />
-      <div className="absolute inset-0 flex items-center justify-center p-8">
-        <img
-          src={new URL('../../assets/cards-modal-illustration.svg', import.meta.url).href}
-          alt="Cards illustration"
-          className="w-full h-full object-contain"
-        />
-      </div>
-    </div>
-
-    {/* Header */}
-    <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-      Create cards to manage expenses
-    </h1>
-    <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px] mb-8">
-      Set up a card program to create and manage virtual and physical debit cards for your team.
-    </p>
-
-    {/* Feature list */}
-    <div className="flex flex-col gap-4 mb-8">
-      <div className="flex gap-3 items-center">
-        <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
-          <img src={modalIconCard} alt="" className="w-5 h-5" />
-        </div>
-        <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
-          Create <span className="font-bold">virtual</span> or <span className="font-bold">physical</span> cards for your team in just a few clicks.
-        </p>
-      </div>
-      <div className="flex gap-3 items-center">
-        <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
-          <img src={modalIconConvert} alt="" className="w-5 h-5" />
-        </div>
-        <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
-          Spend in <span className="font-bold">multiple currencies</span> straight from your <span className="font-bold">financial account</span> balance.
-        </p>
-      </div>
-      <div className="flex gap-3 items-center">
-        <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
-          <img src={modalIconRecurring} alt="" className="w-5 h-5" />
-        </div>
-        <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
-          <span className="font-bold">Manage</span> subscriptions, expenses, and bills.
-        </p>
-      </div>
-      <div className="flex gap-3 items-center">
-        <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
-          <img src={modalIconUsage} alt="" className="w-5 h-5" />
-        </div>
-        <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
-          Set spend <span className="font-bold">limits</span>, track <span className="font-bold">usage</span>, and manage team cards.
-        </p>
-      </div>
-    </div>
-
-    {/* CTA */}
-    <button
-      onClick={onGetStarted}
-      className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
-    >
-      Get started
-    </button>
-  </div>
-);
-
 // Main Modal Component
 const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
-  const [showIntro, setShowIntro] = useState(initialStep === 0);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
   const [selectedCardHolder, setSelectedCardHolder] = useState(null);
-  const [selectedFAModel, setSelectedFAModel] = useState(null);
-  const [showingFAModel, setShowingFAModel] = useState(false);
   const [selectedIndustry, setSelectedIndustry] = useState('');
   const [description, setDescription] = useState('');
   const [descriptionTouched, setDescriptionTouched] = useState(false);
@@ -2018,16 +1818,12 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       setShowDashboardSuccess(false);
       
       // For direct decline path link, skip directly to the declined screen
-      setSelectedFAModel(null);
-      setShowingFAModel(false);
       if (isDirectDeclinePath) {
         setIsDeclined(true);
-        setShowIntro(false);
         setCurrentStep(5);
       } else {
         setIsDeclined(null);
         setCurrentStep(initialStep);
-        setShowIntro(initialStep === 0);
       }
     }
   }, [isOpen, initialStep, isDirectDeclinePath]);
@@ -2065,22 +1861,13 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   //   5: Declined screen
   
   // Build steps array for sidebar
-  const getFAModelStepStatus = () => {
-    if (showingFAModel) return 'active';
-    if (selectedFAModel && currentStep >= 3) return 'complete';
-    return 'pending';
-  };
-
   const getSteps = () => {
     const skipSetupType = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
-    const faModelStep = { label: 'Choose FA model', status: getFAModelStepStatus(), onClick: () => setShowingFAModel(true) };
 
     if (onboardingPath === 'happy' || onboardingPath === 'auto-create-card') {
-      const useCaseStatus = showingFAModel ? 'complete' : (currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending');
       const steps = [
-        { label: 'Select cardholders', status: currentStep === 0 && !showingFAModel ? 'active' : currentStep > 0 || showingFAModel ? 'complete' : 'pending', stepNumber: 0 },
-        { label: 'Describe use case', status: useCaseStatus, stepNumber: 1 },
-        faModelStep,
+        { label: 'Select cardholders', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
+        { label: 'Describe use case', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
       ];
       if (!skipSetupType) {
         steps.push({ label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
@@ -2089,12 +1876,10 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       return steps;
     }
     
-    const kycUseCaseStatus = showingFAModel ? 'complete' : (currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending');
     const kycSteps = [
-      { label: 'Complete business details', status: currentStep === 0 && !showingFAModel ? 'active' : currentStep > 0 || showingFAModel ? 'complete' : 'pending', stepNumber: 0 },
-      { label: 'Select cardholders', status: currentStep === 1 && !showingFAModel ? 'active' : currentStep > 1 || showingFAModel ? 'complete' : 'pending', stepNumber: 1 },
-      { label: 'Describe use case', status: kycUseCaseStatus, stepNumber: 2 },
-      faModelStep,
+      { label: 'Complete business details', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
+      { label: 'Select cardholders', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
+      { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
     ];
     if (!skipSetupType) {
       kycSteps.push({ label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
@@ -2104,17 +1889,6 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   };
   
   const steps = getSteps();
-
-  const handleFAModelContinue = () => {
-    setShowingFAModel(false);
-    const skipSetupType = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
-    if (skipSetupType) {
-      setSelectedSetupType('growth');
-      setCurrentStep(4);
-    } else {
-      setCurrentStep(3);
-    }
-  };
 
   const handleContinue = () => {
     if (onboardingPath === 'kyc') {
@@ -2134,7 +1908,13 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           return;
         }
         setIsDeclined(false);
-        setShowingFAModel(true);
+        const skipSetupType = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
+        if (skipSetupType) {
+          setSelectedSetupType('growth');
+          setCurrentStep(4);
+        } else {
+          setCurrentStep(3);
+        }
         return;
       }
 
@@ -2149,7 +1929,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       if (currentStep === 0) {
         if (isNonBusinessCardholder(selectedCardHolder)) {
           setIsDeclined(true);
-          setCurrentStep(4); // Go to processing screen first
+          setCurrentStep(4);
           return;
         }
       }
@@ -2161,7 +1941,13 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           return;
         }
         setIsDeclined(false);
-        setShowingFAModel(true);
+        const skipSetupType = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
+        if (skipSetupType) {
+          setSelectedSetupType('growth');
+          setCurrentStep(4);
+        } else {
+          setCurrentStep(3);
+        }
         return;
       }
 
@@ -2199,8 +1985,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   };
 
   // Processing and final screens
-  const isProcessingScreen = currentStep === processingStep && !showDashboardSuccess && !showIntro;
-  const isFinalScreen = (currentStep === finalStep || showDashboardSuccess) && !showIntro;
+  const isProcessingScreen = currentStep === processingStep && !showDashboardSuccess;
+  const isFinalScreen = (currentStep === finalStep || showDashboardSuccess);
   const isSuccessScreen = (isFinalScreen && !isDeclinedFlow) || showDashboardSuccess;
   const isDeclinedScreen = isFinalScreen && isDeclinedFlow && !showDashboardSuccess;
 
@@ -2248,7 +2034,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
         <div className="flex-1 flex overflow-hidden">
           {/* Left Sidebar - Task List (hidden on intro, processing and final screens) */}
           <div className="w-[278px] pt-6 px-8 shrink-0">
-            {!showIntro && !isProcessingScreen && !isFinalScreen && (
+            {!isProcessingScreen && !isFinalScreen && (
               <div className="space-y-0">
                 {steps.map((step, index) => (
                   <TaskListItem
@@ -2266,29 +2052,15 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           {/* Main Content - Centered */}
           <div className="flex-1 overflow-y-auto scrollbar-hide">
             <div className="flex justify-center py-6 min-h-full">
-              {/* Intro step — merged from CreateCardsModal */}
-              {showIntro && !showDashboardSuccess && (
-                <IntroContent onGetStarted={() => setShowIntro(false)} />
-              )}
-
               {/* Dashboard Setup Success - shown when user selects "Manage in dashboard" */}
-              {!showIntro && showDashboardSuccess && (
+              {showDashboardSuccess && (
                 <DashboardSetupSuccessContent onGoToBalances={handleGoToBalances} />
               )}
               
-              {/* Regular flow - hidden when dashboard success or intro is shown */}
-              {!showIntro && !showDashboardSuccess && (
+              {/* Regular flow - hidden when dashboard success is shown */}
+              {!showDashboardSuccess && (
                 <>
-                  {/* FA Model overlay step — shown between use case and setup type */}
-                  {showingFAModel && (
-                    <FAModelContent
-                      onContinue={handleFAModelContinue}
-                      selectedFAModel={selectedFAModel}
-                      setSelectedFAModel={setSelectedFAModel}
-                    />
-                  )}
-
-                  {!showingFAModel && onboardingPath === 'kyc' && (
+                  {onboardingPath === 'kyc' && (
                     <>
                       {currentStep === 0 && (
                         <OwnerInfoContent onContinue={handleContinue} />
@@ -2313,7 +2085,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                       )}
                     </>
                   )}
-                  {!showingFAModel && onboardingPath !== 'kyc' && (
+                  {onboardingPath !== 'kyc' && (
                     <>
                       {currentStep === 0 && (
                         <CardHoldersContent 
@@ -2335,7 +2107,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                       )}
                     </>
                   )}
-                  {!showingFAModel && currentStep === 3 && (
+                  {currentStep === 3 && (
                     <ChooseSetupTypeContent
                       onContinue={handleContinue}
                       onDashboardSetup={handleDashboardSetup}
@@ -2344,7 +2116,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                     />
                   )}
                   
-                  {!showingFAModel && isDeclinedFlow ? (
+                  {isDeclinedFlow ? (
                     <>
                       {currentStep === 4 && (
                         <ProcessingContent />
@@ -2353,7 +2125,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                         <DeclinedContent onClose={onClose} />
                       )}
                     </>
-                  ) : !showingFAModel && (
+                  ) : (
                     <>
                       {currentStep === 4 && (
                         <SubmitReviewContent
@@ -2390,8 +2162,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           
           {/* Right Sidebar - Contextual content (hidden during intro) */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
-            {!showIntro && !showingFAModel && ((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && !showDashboardSuccess && <UseCaseCallout />}
-            {!showIntro && !showingFAModel && currentStep === 3 && !showDashboardSuccess && <CustomSetupCallout />}
+            {((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && !showDashboardSuccess && <UseCaseCallout />}
+            {currentStep === 3 && !showDashboardSuccess && <CustomSetupCallout />}
             {isDeclinedScreen && <DeclinedSidebarContent />}
           </div>
         </div>
