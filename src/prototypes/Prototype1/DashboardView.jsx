@@ -626,10 +626,10 @@ const DashboardView = () => {
                 <div className="flex flex-col gap-[22px] items-start relative z-10 w-[428px]">
                   <div className="flex flex-col gap-2">
                     <h1 className="text-[40px] font-bold text-[#353a44] leading-[48px] tracking-[0.37px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-                      Launch your card program in minutes
+                      Issue cards with programmable spend
                     </h1>
                     <p className="text-[20px] text-[#596171] leading-[28px] tracking-[0.3px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-                      Use Issuing to create, manage, and scale virtual and physical debit cards with powerful APIs.
+                      Use APIs to create cards, define spending rules and automate transactions from your software systems.
                     </p>
                   </div>
                   <div className="flex gap-4">

@@ -3,9 +3,6 @@ import PrototypeWrapper from './PrototypeWrapper';
 import Prototype1, {
   initialVariables as prototype1InitialVars
 } from './prototypes/Prototype1';
-import Prototype2, {
-  initialVariables as prototype2InitialVars
-} from './prototypes/Prototype2';
 
 // Prototype definitions - edit this array to add/modify prototypes
 const PROTOTYPES = [
@@ -17,15 +14,6 @@ const PROTOTYPES = [
     component: Prototype1,
     initialVariables: prototype1InitialVars,
     initialControlVariables: { currentView: 'platform', showWrapper: true },
-  },
-  {
-    id: 'prototype2',
-    title: 'Prototype 2',
-    description: 'Explores how agents can use the Issuing experience alongside humans.',
-    status: 'in-progress',
-    component: Prototype2,
-    initialVariables: prototype2InitialVars,
-    initialControlVariables: {},
   },
 ];
 
