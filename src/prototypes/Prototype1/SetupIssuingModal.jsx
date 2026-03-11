@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '../../icons/SailIcons';
 import { Button } from '../../components/sail/Button';
 import SandboxBanner from '../../components/SandboxBanner';
-import starterIllustrationUrl from '../../assets/setup-starter-illustration.svg';
-import growthIllustrationUrl from '../../assets/setup-growth-illustration.svg';
 
 
 // Edit Icon
@@ -140,297 +138,7 @@ const InfoCard = ({ title, children, onEdit }) => (
   </div>
 );
 
-// Checkmark Icon for feature lists
-const CheckIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 8L6.5 11.5L13 4.5" stroke="#675dff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
 
-// Feature Item Component for setup type cards
-const FeatureItem = ({ children }) => (
-  <div className="flex gap-2 items-center">
-    <span className="w-[4px] h-[4px] rounded-full bg-[#596171] shrink-0" />
-    <span className="text-[14px] text-[#596171] leading-5">{children}</span>
-  </div>
-);
-
-// Dashboard Illustration - simplified UI mockup
-const DashboardIllustration = () => (
-  <div className="w-full h-full bg-white rounded-md p-2 flex flex-col gap-1.5 shadow-md overflow-hidden">
-    {/* Header bar */}
-    <div className="flex items-center gap-1.5">
-      <div className="w-2.5 h-2.5 rounded-full bg-[#f5f6f8] shrink-0" />
-      <div className="flex-1 h-1.5 bg-[#f5f6f8] rounded" />
-    </div>
-    {/* Card rows */}
-    <div className="flex-1 flex flex-col gap-1 min-h-0">
-      {[1, 2, 3].map((i) => (
-        <div key={i} className="flex items-center gap-1.5 bg-[#f5f6f8] rounded p-1.5 shrink-0">
-          <div className="w-4 h-3 bg-[#625afa] shrink-0" style={{ borderRadius: '1.75px' }} />
-          <div className="flex-1 min-w-0">
-            <div className="h-1 bg-[#d8dee4] rounded w-3/4 mb-0.5" />
-            <div className="h-1 bg-[#d8dee4] rounded w-1/2" />
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-// Code Editor Illustration - terminal/code view
-const CodeEditorIllustration = () => (
-  <div className="w-full h-full bg-[#1a1f36] rounded-md p-3 flex flex-col gap-2 overflow-hidden">
-    {/* Window controls */}
-    <div className="flex items-center gap-1.5">
-      <div className="w-2 h-2 rounded-full bg-[#ff5f57]" />
-      <div className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
-      <div className="w-2 h-2 rounded-full bg-[#28ca42]" />
-    </div>
-    {/* Code lines */}
-    <div className="flex-1 flex flex-col gap-1.5 font-mono text-[8px]">
-      <div className="flex gap-1">
-        <span className="text-[#7b7f98]">1</span>
-        <span className="text-[#a78bfa]">const</span>
-        <span className="text-[#e2e8f0]">card =</span>
-        <span className="text-[#fbbf24]">await</span>
-      </div>
-      <div className="flex gap-1">
-        <span className="text-[#7b7f98]">2</span>
-        <span className="text-[#e2e8f0] ml-2">stripe.issuing</span>
-      </div>
-      <div className="flex gap-1">
-        <span className="text-[#7b7f98]">3</span>
-        <span className="text-[#e2e8f0] ml-4">.cards.create(</span>
-        <span className="text-[#fbbf24]">{"{"}</span>
-      </div>
-      <div className="flex gap-1">
-        <span className="text-[#7b7f98]">4</span>
-        <span className="text-[#7dd3fc] ml-6">type:</span>
-        <span className="text-[#a5f3ab]">'virtual'</span>
-      </div>
-      <div className="flex gap-1">
-        <span className="text-[#7b7f98]">5</span>
-        <span className="text-[#fbbf24] ml-4">{"}"})</span>
-      </div>
-    </div>
-  </div>
-);
-
-// Combined Dashboard + API Illustration for Growth option
-const DashboardAndApiIllustration = () => (
-  <div className="w-full h-full relative">
-    {/* Dashboard behind, offset top-left */}
-    <div className="absolute top-1 left-1 w-[60%] h-[65%] bg-white rounded-md p-2 flex flex-col gap-1 shadow-sm overflow-hidden">
-      <div className="flex items-center gap-1.5">
-        <div className="w-2 h-2 rounded-full bg-[#f5f6f8] shrink-0" />
-        <div className="flex-1 h-1.5 bg-[#f5f6f8] rounded" />
-      </div>
-      {[1, 2].map((i) => (
-        <div key={i} className="flex items-center gap-1.5 bg-[#f5f6f8] rounded p-1 shrink-0">
-          <div className="w-4 h-3 bg-[#625afa] shrink-0" style={{ borderRadius: '1.75px' }} />
-          <div className="flex-1 min-w-0">
-            <div className="h-1 bg-[#d8dee4] rounded w-3/4 mb-0.5" />
-            <div className="h-1 bg-[#d8dee4] rounded w-1/2" />
-          </div>
-        </div>
-      ))}
-    </div>
-    {/* Code editor in front, offset bottom-right */}
-    <div className="absolute bottom-1 right-1 w-[60%] h-[65%] bg-[#1a1f36] rounded-md p-2 flex flex-col gap-1 overflow-hidden shadow-lg">
-      <div className="flex items-center gap-1">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#ff5f57]" />
-        <div className="w-1.5 h-1.5 rounded-full bg-[#ffbd2e]" />
-        <div className="w-1.5 h-1.5 rounded-full bg-[#28ca42]" />
-      </div>
-      <div className="flex-1 flex flex-col gap-1 font-mono text-[6px]">
-        <div className="flex gap-0.5">
-          <span className="text-[#a78bfa]">const</span>
-          <span className="text-[#e2e8f0]">card =</span>
-        </div>
-        <div className="flex gap-0.5">
-          <span className="text-[#e2e8f0] ml-1">stripe.issuing</span>
-        </div>
-        <div className="flex gap-0.5">
-          <span className="text-[#e2e8f0] ml-2">.cards.create(</span>
-        </div>
-        <div className="flex gap-0.5">
-          <span className="text-[#7dd3fc] ml-3">type:</span>
-          <span className="text-[#a5f3ab]">'virtual'</span>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-// Setup Type Card Component - With illustration and feature list
-const SetupTypeCard = ({ title, description, icon, features, selected, onClick, illustrationSrc }) => (
-  <button
-    onClick={onClick}
-    className={`w-full text-left rounded-xl transition-colors relative ${
-      selected 
-        ? 'border border-[#675dff] ring-1 ring-[#675dff] bg-white' 
-        : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
-    }`}
-  >
-    <div className="flex items-stretch h-[135px]">
-      {illustrationSrc && (
-        <div className="w-[180px] shrink-0 rounded-l-xl overflow-hidden">
-          <img src={illustrationSrc} alt="" className="w-full h-full object-cover" />
-        </div>
-      )}
-      <div className="flex-1 min-w-0 py-3 px-4">
-        <h3 className="font-semibold text-[16px] text-[#353a44] leading-6">
-          {title}
-        </h3>
-        {description && <p className="text-[13px] text-[#8a919e] leading-5 mt-0.5">{description}</p>}
-        <div className={`flex flex-col gap-0.5 ${description ? 'mt-3' : 'mt-1.5'}`}>
-          {features.map((feature, index) => (
-            <FeatureItem key={index}>{feature}</FeatureItem>
-          ))}
-        </div>
-      </div>
-    </div>
-  </button>
-);
-
-// Right Sidebar Callout for Choose Setup Type step
-const CustomSetupCallout = () => (
-  <div className="w-[278px] bg-[#f5f6f8] rounded-lg p-4">
-    <h4 className="font-bold text-[16px] text-[#3d3d3d] leading-6 tracking-[-0.31px] mb-1">
-      Issuing pricing
-    </h4>
-    <p className="text-[14px] text-[#596171] leading-5 tracking-[-0.15px] mb-4">
-      Learn more about Issuing pricing for the Growth plan, including per-card and transaction fees.
-    </p>
-    <a href="#" className="text-[14px] font-semibold text-[#533afd] hover:underline">
-      View pricing
-    </a>
-  </div>
-);
-
-// Step: Choose Setup Type Content
-const ChooseSetupTypeContent = ({ onContinue, onDashboardSetup, selectedSetupType, setSelectedSetupType }) => (
-  <div className="w-full max-w-[580px] px-4">
-    {/* Page Header */}
-    <div className="mb-8">
-      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-        Choose the setup that fits your needs
-      </h1>
-      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
-        You can always upgrade as your card program grows.
-      </p>
-    </div>
-    
-    {/* Setup Type Cards */}
-    <div className="flex flex-col gap-3">
-      <SetupTypeCard
-        title="Starter"
-        icon="rocket"
-        description=""
-        features={[
-          'No integration required',
-          'Create cards in the Dashboard',
-          'Free',
-        ]}
-        selected={selectedSetupType === 'starter'}
-        onClick={() => setSelectedSetupType('starter')}
-        illustrationSrc={starterIllustrationUrl}
-      />
-      
-      <SetupTypeCard
-        title="Growth"
-        icon="growth"
-        description=""
-        features={[
-          'Scale quickly via the API',
-          'Create cards via Dashboard and API',
-          'Pay as you go',
-        ]}
-        selected={selectedSetupType === 'growth'}
-        onClick={() => setSelectedSetupType('growth')}
-        illustrationSrc={growthIllustrationUrl}
-      />
-      
-    </div>
-
-    {/* Continue Button */}
-    <div className="mt-6 mb-6">
-      <button 
-        onClick={onContinue}
-        disabled={!selectedSetupType}
-        className={`w-full py-3 font-bold text-[16px] rounded-md transition-colors text-white ${
-          !selectedSetupType
-            ? 'bg-[#625afa]/50 cursor-not-allowed'
-            : 'bg-[#625afa] hover:bg-[#5650e0]'
-        }`}
-      >
-        Continue
-      </button>
-    </div>
-
-    {/* Sales-assisted fallback */}
-    <p className="text-[14px] text-[#596171] leading-[20px]">
-      Interested in custom options or a revenue sharing model?{' '}
-      <span className="text-[#533AFD] cursor-pointer hover:underline">Contact us</span>
-    </p>
-  </div>
-);
-
-// Filled Checkmark Icon for confirmation list
-const FilledCheckIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="8" cy="8" r="8" fill="#675dff"/>
-    <path d="M4.5 8L7 10.5L11.5 5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-// Confirmation Item Component
-const ConfirmationItem = ({ children }) => (
-  <div className="flex gap-2 items-center">
-    <FilledCheckIcon />
-    <span className="text-[16px] text-[#353a44] leading-6 tracking-[-0.31px]">{children}</span>
-  </div>
-);
-
-// Step 0.5: Confirm Setup Content (shown after selecting dashboard option)
-const ConfirmSetupContent = ({ onContinue }) => (
-  <div className="w-full max-w-[520px]">
-    {/* Page Header */}
-    <div className="mb-8">
-      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
-        Confirm this setup is right for you
-      </h1>
-      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
-        This setup supports card programs that:
-      </p>
-    </div>
-    
-    {/* Confirmation Items */}
-    <div className="flex flex-col gap-4 mb-8">
-      <ConfirmationItem>Are for commercial business expenses</ConfirmationItem>
-      <ConfirmationItem>Issue cards to employees of your company</ConfirmationItem>
-      <ConfirmationItem>Have cardholders based in the United States</ConfirmationItem>
-    </div>
-    
-    {/* Continue Button */}
-    <div className="mb-4">
-      <button 
-        onClick={onContinue}
-        className="w-full py-2.5 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_0px_rgba(47,14,99,0.32)]"
-      >
-        Continue
-      </button>
-    </div>
-    
-    {/* Not a fit link */}
-    <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
-      Not a fit?{' '}
-      <a href="#" className="text-[#533afd] hover:underline">Contact us</a>
-      {' '}to discuss other options.
-    </p>
-  </div>
-);
 
 // Step 1: Review Information Content
 const ReviewInfoContent = ({ onContinue }) => (
@@ -536,8 +244,8 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
             onClick={() => setSelectedUseCase('b2b')}
           />
           <UseCaseOption
-            title="Fulfillment"
-            description="Buy goods or services on your customers' behalf."
+            title="Fulfillment and agentic services"
+            description="Buy goods or services on your customers' behalf, directly or through AI agents."
             selected={selectedUseCase === 'ondemand'}
             onClick={() => setSelectedUseCase('ondemand')}
           />
@@ -819,7 +527,7 @@ const getUseCaseDisplayName = (useCase) => {
   const names = {
     'corporate': 'Corporate expense management',
     'b2b': 'Reseller',
-    'ondemand': 'Fulfillment',
+    'ondemand': 'Fulfillment and agentic services',
     'fleet': 'Fleet',
     'insurance': 'Insurance',
     'bnpl': 'Buy now pay later',
@@ -1718,43 +1426,6 @@ const SuccessIllustration = () => (
   </div>
 );
 
-// Dashboard Setup Success Content - "You're all set" view for Manage in dashboard path
-const DashboardSetupSuccessContent = ({ onGoToBalances }) => (
-  <div className="w-full max-w-[580px] px-4">
-    {/* Success Illustration */}
-    <div className="mb-6">
-      <SuccessIllustration />
-    </div>
-    
-    {/* Header */}
-    <div className="mb-6">
-      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-6">
-        You're ready to create your first card
-      </h1>
-      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
-        You can start creating cards and tracking expenses in your redesigned Balances page.
-      </p>
-    </div>
-
-    {/* What's New Section */}
-    <div className="mb-8">
-      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px] mb-4">Here's what's new:</p>
-      
-      <FeatureHighlight icon={BalanceIcon} title="Financial accounts">
-        Your cards spend from your financial account balance. You can also store funds in multiple currencies and send payouts.
-      </FeatureHighlight>
-    </div>
-    
-    {/* Go to Balances Button */}
-    <button 
-      onClick={onGoToBalances}
-      className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
-    >
-      Go to Balances
-    </button>
-  </div>
-);
-
 // Right Sidebar Callout for Step 2
 const UseCaseCallout = () => (
   <div className="w-[278px] bg-[#f5f6f8] rounded-lg p-4">
@@ -1788,14 +1459,12 @@ const isNonBusinessCardholder = (cardHolder) => {
 // Main Modal Component
 const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
-  const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
   const [selectedCardHolder, setSelectedCardHolder] = useState(null);
   const [selectedIndustry, setSelectedIndustry] = useState('');
   const [description, setDescription] = useState('');
   const [descriptionTouched, setDescriptionTouched] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
-  const [showDashboardSuccess, setShowDashboardSuccess] = useState(false);
   
   // Track if user has been declined (computed immediately when decline criteria is met)
   // null = not yet determined, true = declined, false = approved
@@ -1844,14 +1513,12 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   //   Happy path:
   //     0: Choose cardholders → If non-business → processing → declined
   //     1: Describe use case → If specialized → processing → declined
-  //     (step 2 skipped) → jumps to step 3
   //   KYC path:
   //     0: Provide more information
   //     1: Choose cardholders → If non-business → processing → declined
   //     2: Describe use case → If specialized → processing → declined
-  //   3: Choose setup type
   //
-  // Approved flow (after step 3):
+  // Approved flow:
   //   4: Review and submit
   //   5: Processing
   //   6: Success
@@ -1862,41 +1529,30 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   
   // Build steps array for sidebar
   const getSteps = () => {
-    const skipSetupType = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
-
     if (onboardingPath === 'happy' || onboardingPath === 'auto-create-card') {
-      const steps = [
+      return [
         { label: 'Select cardholders', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
         { label: 'Describe use case', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
+        { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
       ];
-      if (!skipSetupType) {
-        steps.push({ label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
-      }
-      steps.push({ label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 });
-      return steps;
     }
     
-    const kycSteps = [
+    return [
       { label: 'Complete business details', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
       { label: 'Select cardholders', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
       { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
+      { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
     ];
-    if (!skipSetupType) {
-      kycSteps.push({ label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
-    }
-    kycSteps.push({ label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 });
-    return kycSteps;
   };
   
   const steps = getSteps();
 
   const handleContinue = () => {
     if (onboardingPath === 'kyc') {
-      // KYC path: step 0 = Provide more info, step 1 = Cardholders, step 2 = Use case, step 3 = Setup type
       if (currentStep === 1) {
         if (isNonBusinessCardholder(selectedCardHolder)) {
           setIsDeclined(true);
-          setCurrentStep(4); // Go to processing screen first
+          setCurrentStep(4);
           return;
         }
       }
@@ -1908,24 +1564,10 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           return;
         }
         setIsDeclined(false);
-        const skipSetupType = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
-        if (skipSetupType) {
-          setSelectedSetupType('growth');
-          setCurrentStep(4);
-        } else {
-          setCurrentStep(3);
-        }
+        setCurrentStep(4);
         return;
       }
-
-      if (currentStep === 3) {
-        if (isBusinessCardholder(selectedCardHolder) && selectedUseCase === 'corporate' && selectedSetupType === 'starter') {
-          setShowDashboardSuccess(true);
-          return;
-        }
-      }
     } else {
-      // Happy path: step 0 = Cardholders, step 1 = Use case, step 3 = Setup type
       if (currentStep === 0) {
         if (isNonBusinessCardholder(selectedCardHolder)) {
           setIsDeclined(true);
@@ -1941,21 +1583,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           return;
         }
         setIsDeclined(false);
-        const skipSetupType = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
-        if (skipSetupType) {
-          setSelectedSetupType('growth');
-          setCurrentStep(4);
-        } else {
-          setCurrentStep(3);
-        }
+        setCurrentStep(4);
         return;
-      }
-
-      if (currentStep === 3) {
-        if (isBusinessCardholder(selectedCardHolder) && selectedUseCase === 'corporate' && selectedSetupType === 'starter') {
-          setShowDashboardSuccess(true);
-          return;
-        }
       }
     }
     
@@ -1970,10 +1599,6 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
     }
   };
 
-  const handleDashboardSetup = () => {
-    setShowDashboardSuccess(true);
-  };
-
   const handleGoToBalances = () => {
     if (onGoToBalances) {
       onGoToBalances();
@@ -1985,10 +1610,10 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   };
 
   // Processing and final screens
-  const isProcessingScreen = currentStep === processingStep && !showDashboardSuccess;
-  const isFinalScreen = (currentStep === finalStep || showDashboardSuccess);
-  const isSuccessScreen = (isFinalScreen && !isDeclinedFlow) || showDashboardSuccess;
-  const isDeclinedScreen = isFinalScreen && isDeclinedFlow && !showDashboardSuccess;
+  const isProcessingScreen = currentStep === processingStep;
+  const isFinalScreen = currentStep === finalStep;
+  const isSuccessScreen = isFinalScreen && !isDeclinedFlow;
+  const isDeclinedScreen = isFinalScreen && isDeclinedFlow;
 
   const handleSaveAndExit = () => {
     onClose(currentStep);
@@ -2052,15 +1677,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           {/* Main Content - Centered */}
           <div className="flex-1 overflow-y-auto scrollbar-hide">
             <div className="flex justify-center py-6 min-h-full">
-              {/* Dashboard Setup Success - shown when user selects "Manage in dashboard" */}
-              {showDashboardSuccess && (
-                <DashboardSetupSuccessContent onGoToBalances={handleGoToBalances} />
-              )}
-              
-              {/* Regular flow - hidden when dashboard success is shown */}
-              {!showDashboardSuccess && (
-                <>
-                  {onboardingPath === 'kyc' && (
+              {onboardingPath === 'kyc' && (
                     <>
                       {currentStep === 0 && (
                         <OwnerInfoContent onContinue={handleContinue} />
@@ -2107,15 +1724,6 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                       )}
                     </>
                   )}
-                  {currentStep === 3 && (
-                    <ChooseSetupTypeContent
-                      onContinue={handleContinue}
-                      onDashboardSetup={handleDashboardSetup}
-                      selectedSetupType={selectedSetupType}
-                      setSelectedSetupType={setSelectedSetupType}
-                    />
-                  )}
-                  
                   {isDeclinedFlow ? (
                     <>
                       {currentStep === 4 && (
@@ -2155,15 +1763,12 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                       )}
                     </>
                   )}
-                </>
-              )}
             </div>
           </div>
           
           {/* Right Sidebar - Contextual content (hidden during intro) */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
-            {((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && !showDashboardSuccess && <UseCaseCallout />}
-            {currentStep === 3 && !showDashboardSuccess && <CustomSetupCallout />}
+            {((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && <UseCaseCallout />}
             {isDeclinedScreen && <DeclinedSidebarContent />}
           </div>
         </div>

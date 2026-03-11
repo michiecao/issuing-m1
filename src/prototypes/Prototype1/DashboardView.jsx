@@ -225,7 +225,6 @@ const DashboardView = () => {
   const [showBlueprintOverlay, setShowBlueprintOverlay] = useState(false);
   const [isBlueprintMinimized, setIsBlueprintMinimized] = useState(false);
   const [showBalancesView, setShowBalancesView] = useState(false);
-  const [showBalancesCreateCardsModal, setShowBalancesCreateCardsModal] = useState(false);
   const [onboardingPath, setOnboardingPath] = useState('happy'); // 'happy', 'kyc', 'declined'
   const [showAddFundsModal, setShowAddFundsModal] = useState(false);
   const [addFundsCompleted, setAddFundsCompleted] = useState(false);
@@ -570,8 +569,6 @@ const DashboardView = () => {
         {showBalancesView ? (
           /* Balances View - shown after "Manage in dashboard" setup */
           <BalancesView 
-            showCreateCardsModal={showBalancesCreateCardsModal}
-            onCloseCreateCardsModal={() => setShowBalancesCreateCardsModal(false)}
             isSandboxMode={isSandboxMode}
             onExitSandbox={handleExitSandbox}
             isOnboardingComplete={isOnboardingComplete}

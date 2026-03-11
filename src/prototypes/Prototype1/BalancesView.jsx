@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import gradientBg from '../../assets/balances-modal-bg.svg';
-import modalPreviewGradient from '../../assets/modal-preview-gradient.svg';
 import createCardPopover from '../../assets/create-card-popover.svg';
-
-// Feature icons for the modal
-import modalIconCard from '../../assets/modal-icon-card.svg';
-import modalIconConvert from '../../assets/modal-icon-convert.svg';
-import modalIconRecurring from '../../assets/modal-icon-recurring.svg';
-import modalIconUsage from '../../assets/modal-icon-usage.svg';
 import createCardIcon from '../../assets/create-card-icon.svg';
 import convertIcon from '../../assets/convert-icon.svg';
 import lightningBoltIcon from '../../assets/lightning-bolt-icon.svg';
@@ -255,137 +247,11 @@ const ResourceLink = ({ icon: Icon, label }) => (
 );
 
 
-// Create Cards Modal Component - Updated to match Figma design
-const CreateCardsModal = ({ isOpen, onClose, onGetStarted, showApiBanner }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-[rgba(182,192,205,0.7)]"
-        onClick={onClose}
-      />
-      
-      {/* Modal - 960x640 per Figma */}
-      <div className="relative flex bg-white rounded-xl shadow-[0px_15px_35px_rgba(48,49,61,0.08),0px_5px_15px_rgba(0,0,0,0.12)] w-[960px] h-[640px] overflow-hidden">
-        {/* Close Button - Top right of entire modal */}
-        <button 
-          onClick={onClose}
-          className="absolute top-6 right-6 w-3 h-3 flex items-center justify-center text-[#6c7688] hover:text-[#353a44] transition-colors z-20"
-        >
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 1L11 11M1 11L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        </button>
-        
-        {/* Left Panel - Content (480px including 48px padding on each side = 384px content) */}
-        <div className="w-[480px] p-12 flex flex-col">
-          <h2 className="text-[28px] font-bold text-[#21252c] leading-[36px] tracking-[0.38px] mb-6">
-            Create cards to manage expenses
-          </h2>
-          
-          <div className="flex flex-col gap-4 flex-1">
-            {/* Feature 1 - Virtual/Physical cards */}
-            <div className="flex gap-2 items-center">
-              <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
-                <img src={modalIconCard} alt="" className="w-5 h-5" />
-              </div>
-              <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
-                Create <span className="font-bold">virtual</span> or <span className="font-bold">physical</span> cards for your team in just a few clicks.
-              </p>
-            </div>
-            
-            {/* Feature 2 - Multiple currencies */}
-            <div className="flex gap-2 items-center">
-              <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
-                <img src={modalIconConvert} alt="" className="w-5 h-5" />
-              </div>
-              <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
-                Spend in <span className="font-bold">multiple currencies</span> straight from your <span className="font-bold">financial account</span> balance.
-              </p>
-            </div>
-            
-            {/* Feature 3 - Manage subscriptions */}
-            <div className="flex gap-2 items-center">
-              <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
-                <img src={modalIconRecurring} alt="" className="w-5 h-5" />
-              </div>
-              <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
-                <span className="font-bold">Manage</span> subscriptions, expenses, and bills.
-              </p>
-            </div>
-            
-            {/* Feature 4 - Spend limits */}
-            <div className="flex gap-2 items-center">
-              <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
-                <img src={modalIconUsage} alt="" className="w-5 h-5" />
-              </div>
-              <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
-                Set spend <span className="font-bold">limits</span>, track <span className="font-bold">usage</span>, and manage team cards.
-              </p>
-            </div>
-
-            {showApiBanner && (
-              <div className="bg-[#F5F6F8] rounded p-4 mt-2">
-                <p className="text-[14px] text-[#596171] leading-[20px] tracking-[-0.15px]">
-                  Interested in creating other card programs and Stripe Issuing API?{' '}
-                  <span className="text-[#533AFD] cursor-pointer hover:underline">Start building</span>
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Get Started Button - Per Figma specs */}
-          <button 
-            onClick={onGetStarted || onClose}
-            className="w-full min-h-[40px] py-2 bg-[#675dff] hover:bg-[#5650e0] text-white font-semibold text-[16px] leading-6 tracking-[-0.31px] rounded-md transition-colors shadow-[0px_1px_1px_0px_rgba(47,14,99,0.32)]"
-          >
-            Get started
-          </button>
-        </div>
-        
-        {/* Right Panel - Illustration (480px) */}
-        <div className="w-[480px] h-full relative overflow-hidden">
-          {/* Gradient Background */}
-          <img 
-            src={modalPreviewGradient}
-            alt=""
-            className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] object-cover rounded-lg"
-          />
-          {/* Illustration overlay - centered and scaled down */}
-          <div className="absolute inset-0 flex items-center justify-center p-8">
-            <img 
-              src={new URL('../../assets/cards-modal-illustration.svg', import.meta.url).href}
-              alt="Cards illustration"
-              className="w-full h-full object-contain"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // Main Balances View Component
-const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, isSandboxMode = false, onExitSandbox, onOpenSetupIssuing, isOnboardingComplete = false }) => {
+const BalancesView = ({ isSandboxMode = false, onExitSandbox, onOpenSetupIssuing, isOnboardingComplete = false }) => {
   const [activeTab, setActiveTab] = useState('payments');
-  const [isCreateCardsModalOpen, setIsCreateCardsModalOpen] = useState(showCreateCardsModal);
-  const [showApiBanner, setShowApiBanner] = useState(false);
   const [isCreateCardPopoverOpen, setIsCreateCardPopoverOpen] = useState(false);
-  
-  // Sync with prop changes
-  React.useEffect(() => {
-    setIsCreateCardsModalOpen(showCreateCardsModal);
-  }, [showCreateCardsModal]);
-  
-  const handleCloseCreateCardsModal = () => {
-    setIsCreateCardsModalOpen(false);
-    setShowApiBanner(false);
-    if (onCloseCreateCardsModal) {
-      onCloseCreateCardsModal();
-    }
-  };
 
   const activityData = [
     { amount: '$44,792.05', status: 'In transit', description: { from: 'Payments balance', to: 'Wells Fargo Bank' }, date: 'Sep 26' },
@@ -413,12 +279,8 @@ const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, i
           <ActionButton icon={AddFundsIcon} label="Add funds" />
           <ActionButton icon={SendIcon} label="Send" />
           <ActionButton icon={CreateCardIcon} label="Create card" onClick={() => {
-            console.log('[Create card] isOnboardingComplete:', isOnboardingComplete, 'onOpenSetupIssuing:', !!onOpenSetupIssuing);
             if (!isOnboardingComplete && onOpenSetupIssuing) {
               onOpenSetupIssuing();
-            } else {
-              setShowApiBanner(true);
-              setIsCreateCardsModalOpen(true);
             }
           }} />
           <ActionButton icon={MoreDotsIcon} label="More" />
@@ -564,14 +426,6 @@ const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, i
           </div>
         </div>
       </div>
-      
-      {/* Create Cards Modal */}
-      <CreateCardsModal 
-        isOpen={isCreateCardsModalOpen} 
-        onClose={handleCloseCreateCardsModal}
-        onGetStarted={handleCloseCreateCardsModal}
-        showApiBanner={showApiBanner}
-      />
       
       {/* Create Card Popover Modal */}
       <CreateCardPopoverModal 
