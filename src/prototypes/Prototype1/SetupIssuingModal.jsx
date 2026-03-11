@@ -439,7 +439,7 @@ const AgentInteractionContent = ({ onContinue, agentInteraction, setAgentInterac
         Will AI agents interact with Issuing?
       </h1>
       <p className="text-[16px] text-[#596171] leading-[24px]">
-        Let us know if AI agents will create cards, make purchases, or manage spend on behalf of your users.
+        Let us know if AI agents will perform financial actions for your users, like creating cards, making purchases, or managing spend.
       </p>
     </div>
     
