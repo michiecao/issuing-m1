@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import gradientBg from '../../assets/balances-modal-bg.svg';
 import createCardPopover from '../../assets/create-card-popover.svg';
 import createCardIcon from '../../assets/create-card-icon.svg';
 import convertIcon from '../../assets/convert-icon.svg';

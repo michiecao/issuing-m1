@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Icon } from '../../icons/SailIcons';
 import { Button } from '../../components/sail/Button';
 import SandboxBanner from '../../components/SandboxBanner';
+import starterIllustrationUrl from '../../assets/setup-starter-illustration.svg';
+import growthIllustrationUrl from '../../assets/setup-growth-illustration.svg';
 
 
 // Edit Icon
@@ -138,7 +140,120 @@ const InfoCard = ({ title, children, onEdit }) => (
   </div>
 );
 
+// Feature Item Component for setup type cards
+const FeatureItem = ({ children }) => (
+  <div className="flex gap-2 items-center">
+    <span className="w-[4px] h-[4px] rounded-full bg-[#596171] shrink-0" />
+    <span className="text-[14px] text-[#596171] leading-5">{children}</span>
+  </div>
+);
 
+// Setup Type Card Component - With illustration and feature list
+const SetupTypeCard = ({ title, description, features, selected, onClick, illustrationSrc }) => (
+  <button
+    onClick={onClick}
+    className={`w-full text-left rounded-xl transition-colors relative ${
+      selected 
+        ? 'border border-[#675dff] ring-1 ring-[#675dff] bg-white' 
+        : 'border border-[#d8dee4] bg-white hover:border-[#a3acba]'
+    }`}
+  >
+    <div className="flex items-stretch h-[135px]">
+      {illustrationSrc && (
+        <div className="w-[180px] shrink-0 rounded-l-xl overflow-hidden">
+          <img src={illustrationSrc} alt="" className="w-full h-full object-cover" />
+        </div>
+      )}
+      <div className="flex-1 min-w-0 py-3 px-4">
+        <h3 className="font-semibold text-[16px] text-[#353a44] leading-6">
+          {title}
+        </h3>
+        {description && <p className="text-[13px] text-[#8a919e] leading-5 mt-0.5">{description}</p>}
+        <div className={`flex flex-col gap-0.5 ${description ? 'mt-3' : 'mt-1.5'}`}>
+          {features.map((feature, index) => (
+            <FeatureItem key={index}>{feature}</FeatureItem>
+          ))}
+        </div>
+      </div>
+    </div>
+  </button>
+);
+
+// Right Sidebar Callout for Choose Setup Type step
+const CustomSetupCallout = () => (
+  <div className="w-[278px] bg-[#f5f6f8] rounded-lg p-4">
+    <h4 className="font-bold text-[16px] text-[#3d3d3d] leading-6 tracking-[-0.31px] mb-1">
+      Issuing pricing
+    </h4>
+    <p className="text-[14px] text-[#596171] leading-5 tracking-[-0.15px] mb-4">
+      Learn more about Issuing pricing for the Growth plan, including per-card and transaction fees.
+    </p>
+    <a href="#" className="text-[14px] font-semibold text-[#533afd] hover:underline">
+      View pricing
+    </a>
+  </div>
+);
+
+// Step: Choose Setup Type Content
+const ChooseSetupTypeContent = ({ onContinue, selectedSetupType, setSelectedSetupType }) => (
+  <div className="w-full max-w-[580px] px-4">
+    <div className="mb-8">
+      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
+        Choose the setup that fits your needs
+      </h1>
+      <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px]">
+        You can always upgrade as your card program grows.
+      </p>
+    </div>
+    
+    <div className="flex flex-col gap-3">
+      <SetupTypeCard
+        title="Starter"
+        description=""
+        features={[
+          'No integration required',
+          'Create cards in the Dashboard',
+          'Free',
+        ]}
+        selected={selectedSetupType === 'starter'}
+        onClick={() => setSelectedSetupType('starter')}
+        illustrationSrc={starterIllustrationUrl}
+      />
+      
+      <SetupTypeCard
+        title="Growth"
+        description=""
+        features={[
+          'Scale quickly via the API',
+          'Create cards via Dashboard and API',
+          'Pay as you go',
+        ]}
+        selected={selectedSetupType === 'growth'}
+        onClick={() => setSelectedSetupType('growth')}
+        illustrationSrc={growthIllustrationUrl}
+      />
+    </div>
+
+    <div className="mt-6 mb-6">
+      <button 
+        onClick={onContinue}
+        disabled={!selectedSetupType}
+        className={`w-full py-3 font-bold text-[16px] rounded-md transition-colors text-white ${
+          !selectedSetupType
+            ? 'bg-[#625afa]/50 cursor-not-allowed'
+            : 'bg-[#625afa] hover:bg-[#5650e0]'
+        }`}
+      >
+        Continue
+      </button>
+    </div>
+
+    <p className="text-[14px] text-[#596171] leading-[20px]">
+      Interested in custom options or a revenue sharing model?{' '}
+      <span className="text-[#533AFD] cursor-pointer hover:underline">Contact us</span>
+    </p>
+  </div>
+);
 
 // Step 1: Review Information Content
 const ReviewInfoContent = ({ onContinue }) => (
@@ -316,7 +431,43 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
   );
 };
 
-// Step 3: Pricing Content
+// Agent Interaction Content - "Will AI agents interact with Issuing?" step
+const AgentInteractionContent = ({ onContinue, agentInteraction, setAgentInteraction }) => (
+  <div className="w-full max-w-[580px] px-4">
+    <div className="mb-8">
+      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-2">
+        Will AI agents interact with Issuing?
+      </h1>
+      <p className="text-[16px] text-[#596171] leading-[24px]">
+        Let us know if AI agents will create cards, make purchases, or manage spend on behalf of your users.
+      </p>
+    </div>
+    
+    <div className="space-y-[9px] mb-8">
+      <UseCaseOption
+        title="Yes"
+        selected={agentInteraction === 'yes'}
+        onClick={() => setAgentInteraction('yes')}
+      />
+      <UseCaseOption
+        title="No"
+        selected={agentInteraction === 'no'}
+        onClick={() => setAgentInteraction('no')}
+      />
+    </div>
+    
+    <div className="flex justify-center">
+      <button 
+        onClick={onContinue}
+        disabled={!agentInteraction}
+        className={continueButtonClasses(!agentInteraction)}
+      >
+        Continue
+      </button>
+    </div>
+  </div>
+);
+
 // Owner Information Content - "Provide more information" step
 // Owner/KYC Information Content - "Provide more information" step
 const OwnerInfoContent = ({ onContinue }) => (
@@ -589,6 +740,7 @@ const SubmitReviewContent = ({
   selectedUseCase, 
   selectedIndustry,
   description,
+  agentInteraction,
   agreedTerms,
   setAgreedTerms,
 }) => {
@@ -689,6 +841,12 @@ const SubmitReviewContent = ({
               <h4 className="font-semibold text-[14px] text-[#353a44]">Program description</h4>
               <p className="text-sm text-[#414552] leading-5 break-words" style={{ overflowWrap: 'anywhere' }}>{description || 'Description'}</p>
             </div>
+            {agentInteraction && (
+              <div>
+                <h4 className="font-semibold text-[14px] text-[#353a44]">AI agent usage</h4>
+                <p className="text-sm text-[#414552] leading-5">{agentInteraction === 'yes' ? 'Yes — agents will interact with Issuing' : 'No — no agent usage planned'}</p>
+              </div>
+            )}
             {(selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') && (
               <div className="bg-[#f7f8fa] rounded-lg p-4">
                 <p className="font-semibold text-[14px] text-[#353a44] leading-5 mb-2 flex items-center gap-1.5">
@@ -1457,14 +1615,16 @@ const isNonBusinessCardholder = (cardHolder) => {
 };
 
 // Main Modal Component
-const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox }) => {
+const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox, showSetupTypeStep = false }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
+  const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
   const [selectedCardHolder, setSelectedCardHolder] = useState(null);
   const [selectedIndustry, setSelectedIndustry] = useState('');
   const [description, setDescription] = useState('');
   const [descriptionTouched, setDescriptionTouched] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
+  const [agentInteraction, setAgentInteraction] = useState(null);
   
   // Track if user has been declined (computed immediately when decline criteria is met)
   // null = not yet determined, true = declined, false = approved
@@ -1484,8 +1644,6 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   // Reset state when modal opens
   React.useEffect(() => {
     if (isOpen) {
-      setShowDashboardSuccess(false);
-      
       // For direct decline path link, skip directly to the declined screen
       if (isDirectDeclinePath) {
         setIsDeclined(true);
@@ -1530,19 +1688,26 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   // Build steps array for sidebar
   const getSteps = () => {
     if (onboardingPath === 'happy' || onboardingPath === 'auto-create-card') {
-      return [
+      const steps = [
         { label: 'Select cardholders', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
         { label: 'Describe use case', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
-        { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
+        { label: 'Confirm agent usage', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
       ];
+      if (showSetupTypeStep) {
+        steps.push({ label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
+      }
+      steps.push({ label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 });
+      return steps;
     }
     
-    return [
+    const kycSteps = [
       { label: 'Complete business details', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
       { label: 'Select cardholders', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
       { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
-      { label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 },
+      { label: 'Confirm agent usage', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
     ];
+    kycSteps.push({ label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 });
+    return kycSteps;
   };
   
   const steps = getSteps();
@@ -1563,6 +1728,11 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           setCurrentStep(4);
           return;
         }
+        setCurrentStep(3);
+        return;
+      }
+
+      if (currentStep === 3) {
         setIsDeclined(false);
         setCurrentStep(4);
         return;
@@ -1582,8 +1752,13 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           setCurrentStep(4);
           return;
         }
+        setCurrentStep(2);
+        return;
+      }
+
+      if (currentStep === 2) {
         setIsDeclined(false);
-        setCurrentStep(4);
+        setCurrentStep(showSetupTypeStep ? 3 : 4);
         return;
       }
     }
@@ -1700,6 +1875,13 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                           setDescription={setDescription}
                         />
                       )}
+                      {currentStep === 3 && (
+                        <AgentInteractionContent
+                          onContinue={handleContinue}
+                          agentInteraction={agentInteraction}
+                          setAgentInteraction={setAgentInteraction}
+                        />
+                      )}
                     </>
                   )}
                   {onboardingPath !== 'kyc' && (
@@ -1722,7 +1904,21 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                           setDescription={setDescription}
                         />
                       )}
+                      {currentStep === 2 && (
+                        <AgentInteractionContent
+                          onContinue={handleContinue}
+                          agentInteraction={agentInteraction}
+                          setAgentInteraction={setAgentInteraction}
+                        />
+                      )}
                     </>
+                  )}
+                  {showSetupTypeStep && onboardingPath !== 'kyc' && currentStep === 3 && (
+                    <ChooseSetupTypeContent
+                      onContinue={handleContinue}
+                      selectedSetupType={selectedSetupType}
+                      setSelectedSetupType={setSelectedSetupType}
+                    />
                   )}
                   {isDeclinedFlow ? (
                     <>
@@ -1741,6 +1937,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                           selectedUseCase={selectedUseCase}
                           selectedIndustry={selectedIndustry}
                           description={description}
+                          agentInteraction={agentInteraction}
                           agreedTerms={agreedTerms}
                           setAgreedTerms={setAgreedTerms}
                         />
@@ -1769,6 +1966,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           {/* Right Sidebar - Contextual content (hidden during intro) */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
             {((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && <UseCaseCallout />}
+            {showSetupTypeStep && currentStep === 3 && <CustomSetupCallout />}
             {isDeclinedScreen && <DeclinedSidebarContent />}
           </div>
         </div>

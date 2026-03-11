@@ -236,6 +236,7 @@ const DashboardView = () => {
   const [multipleFinancialAccounts, setMultipleFinancialAccounts] = useState(false);
   const [hasStartedSetup, setHasStartedSetup] = useState(false);
   const [savedStep, setSavedStep] = useState(0);
+  const [showSetupTypeStep, setShowSetupTypeStep] = useState(false);
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
@@ -244,7 +245,6 @@ const DashboardView = () => {
     setShowBlueprintOverlay(false);
     setIsBlueprintMinimized(false);
     setShowBalancesView(false);
-    setShowBalancesCreateCardsModal(false);
     setModalInitialStep(0);
     setModalKey(prev => prev + 1);
     setHasStartedSetup(false);
@@ -415,6 +415,17 @@ const DashboardView = () => {
                   <span className="text-sm text-gray-700">Auto-create card</span>
                 </label>
               </div>
+            </div>
+            <div className="border-t border-gray-200 pt-3 space-y-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showSetupTypeStep}
+                  onChange={(e) => setShowSetupTypeStep(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 rounded"
+                />
+                <span className="text-sm text-gray-700">Show "Choose setup type" step</span>
+              </label>
             </div>
             <div className="border-t border-gray-200 pt-3 space-y-1">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Jump to step</p>
@@ -693,6 +704,7 @@ const DashboardView = () => {
         onboardingPath={onboardingPath}
         isSandboxMode={isSandboxMode}
         onExitSandbox={handleExitSandbox}
+        showSetupTypeStep={showSetupTypeStep}
       />
 
       {/* Prototype Control Panel */}
@@ -770,6 +782,15 @@ const DashboardView = () => {
               className="w-4 h-4 text-blue-600 rounded"
             />
             <span className="text-sm text-gray-700">Multiple financial accounts</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showSetupTypeStep}
+              onChange={(e) => setShowSetupTypeStep(e.target.checked)}
+              className="w-4 h-4 text-blue-600 rounded"
+            />
+            <span className="text-sm text-gray-700">Show "Choose setup type" step</span>
           </label>
         </div>
         <div className="border-t border-gray-200 pt-3 space-y-1">
