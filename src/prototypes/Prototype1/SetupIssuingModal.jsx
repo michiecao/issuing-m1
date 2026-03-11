@@ -4,6 +4,11 @@ import { Button } from '../../components/sail/Button';
 import SandboxBanner from '../../components/SandboxBanner';
 import starterIllustrationUrl from '../../assets/setup-starter-illustration.svg';
 import growthIllustrationUrl from '../../assets/setup-growth-illustration.svg';
+import modalIconCard from '../../assets/modal-icon-card.svg';
+import modalIconConvert from '../../assets/modal-icon-convert.svg';
+import modalIconRecurring from '../../assets/modal-icon-recurring.svg';
+import modalIconUsage from '../../assets/modal-icon-usage.svg';
+import modalPreviewGradient from '../../assets/modal-preview-gradient.svg';
 
 // Edit Icon
 const EditIcon = () => (
@@ -1786,9 +1791,83 @@ const isNonBusinessCardholder = (cardHolder) => {
   return cardHolder && !isBusinessCardholder(cardHolder);
 };
 
+// Intro Content — merged from CreateCardsModal, shown as the first step before the questionnaire
+const IntroContent = ({ onGetStarted }) => (
+  <div className="w-full max-w-[580px] px-4">
+    {/* Illustration */}
+    <div className="w-full h-[220px] rounded-xl overflow-hidden relative mb-8">
+      <img
+        src={modalPreviewGradient}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover rounded-xl"
+      />
+      <div className="absolute inset-0 flex items-center justify-center p-8">
+        <img
+          src={new URL('../../assets/cards-modal-illustration.svg', import.meta.url).href}
+          alt="Cards illustration"
+          className="w-full h-full object-contain"
+        />
+      </div>
+    </div>
+
+    {/* Header */}
+    <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] tracking-[0.38px] mb-2">
+      Create cards to manage expenses
+    </h1>
+    <p className="text-[16px] text-[#596171] leading-[24px] tracking-[-0.31px] mb-8">
+      Set up a card program to create and manage virtual and physical debit cards for your team.
+    </p>
+
+    {/* Feature list */}
+    <div className="flex flex-col gap-4 mb-8">
+      <div className="flex gap-3 items-center">
+        <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
+          <img src={modalIconCard} alt="" className="w-5 h-5" />
+        </div>
+        <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
+          Create <span className="font-bold">virtual</span> or <span className="font-bold">physical</span> cards for your team in just a few clicks.
+        </p>
+      </div>
+      <div className="flex gap-3 items-center">
+        <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
+          <img src={modalIconConvert} alt="" className="w-5 h-5" />
+        </div>
+        <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
+          Spend in <span className="font-bold">multiple currencies</span> straight from your <span className="font-bold">financial account</span> balance.
+        </p>
+      </div>
+      <div className="flex gap-3 items-center">
+        <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
+          <img src={modalIconRecurring} alt="" className="w-5 h-5" />
+        </div>
+        <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
+          <span className="font-bold">Manage</span> subscriptions, expenses, and bills.
+        </p>
+      </div>
+      <div className="flex gap-3 items-center">
+        <div className="w-9 h-9 rounded-lg bg-[#cbf5fd] flex items-center justify-center shrink-0 p-2">
+          <img src={modalIconUsage} alt="" className="w-5 h-5" />
+        </div>
+        <p className="text-[16px] text-[#353a44] leading-[22px] tracking-[0.3px]">
+          Set spend <span className="font-bold">limits</span>, track <span className="font-bold">usage</span>, and manage team cards.
+        </p>
+      </div>
+    </div>
+
+    {/* CTA */}
+    <button
+      onClick={onGetStarted}
+      className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+    >
+      Get started
+    </button>
+  </div>
+);
+
 // Main Modal Component
 const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
+  const [showIntro, setShowIntro] = useState(initialStep === 0);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
   const [selectedCardHolder, setSelectedCardHolder] = useState(null);
@@ -1821,10 +1900,12 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       // For direct decline path link, skip directly to the declined screen
       if (isDirectDeclinePath) {
         setIsDeclined(true);
-        setCurrentStep(5); // Declined screen is step 5 in declined flow
+        setShowIntro(false);
+        setCurrentStep(5);
       } else {
         setIsDeclined(null);
         setCurrentStep(initialStep);
+        setShowIntro(initialStep === 0);
       }
     }
   }, [isOpen, initialStep, isDirectDeclinePath]);
@@ -1983,8 +2064,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   };
 
   // Processing and final screens
-  const isProcessingScreen = currentStep === processingStep && !showDashboardSuccess;
-  const isFinalScreen = (currentStep === finalStep || showDashboardSuccess);
+  const isProcessingScreen = currentStep === processingStep && !showDashboardSuccess && !showIntro;
+  const isFinalScreen = (currentStep === finalStep || showDashboardSuccess) && !showIntro;
   const isSuccessScreen = (isFinalScreen && !isDeclinedFlow) || showDashboardSuccess;
   const isDeclinedScreen = isFinalScreen && isDeclinedFlow && !showDashboardSuccess;
 
@@ -2030,9 +2111,9 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
         
         {/* Content - Three column layout with centered main content */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Left Sidebar - Task List (hidden on processing and final screens) */}
+          {/* Left Sidebar - Task List (hidden on intro, processing and final screens) */}
           <div className="w-[278px] pt-6 px-8 shrink-0">
-            {!isProcessingScreen && !isFinalScreen && (
+            {!showIntro && !isProcessingScreen && !isFinalScreen && (
               <div className="space-y-0">
                 {steps.map((step, index) => (
                   <TaskListItem
@@ -2050,13 +2131,18 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           {/* Main Content - Centered */}
           <div className="flex-1 overflow-y-auto scrollbar-hide">
             <div className="flex justify-center py-6 min-h-full">
+              {/* Intro step — merged from CreateCardsModal */}
+              {showIntro && !showDashboardSuccess && (
+                <IntroContent onGetStarted={() => setShowIntro(false)} />
+              )}
+
               {/* Dashboard Setup Success - shown when user selects "Manage in dashboard" */}
-              {showDashboardSuccess && (
+              {!showIntro && showDashboardSuccess && (
                 <DashboardSetupSuccessContent onGoToBalances={handleGoToBalances} />
               )}
               
-              {/* Regular flow - hidden when dashboard success is shown */}
-              {!showDashboardSuccess && (
+              {/* Regular flow - hidden when dashboard success or intro is shown */}
+              {!showIntro && !showDashboardSuccess && (
                 <>
                   {/* KYC path: Provide more info is step 0, then cardholders (1), use case (2) */}
                   {/* Happy path: Cardholders is step 0, use case (1), skip step 2 */}
@@ -2163,10 +2249,10 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
             </div>
           </div>
           
-          {/* Right Sidebar - Contextual content */}
+          {/* Right Sidebar - Contextual content (hidden during intro) */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
-            {((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && !showDashboardSuccess && <UseCaseCallout />}
-            {currentStep === 3 && !showDashboardSuccess && <CustomSetupCallout />}
+            {!showIntro && ((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && !showDashboardSuccess && <UseCaseCallout />}
+            {!showIntro && currentStep === 3 && !showDashboardSuccess && <CustomSetupCallout />}
             {isDeclinedScreen && <DeclinedSidebarContent />}
           </div>
         </div>

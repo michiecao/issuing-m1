@@ -368,7 +368,7 @@ const CreateCardsModal = ({ isOpen, onClose, onGetStarted, showApiBanner }) => {
 };
 
 // Main Balances View Component
-const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, isSandboxMode = false, onExitSandbox }) => {
+const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, isSandboxMode = false, onExitSandbox, onOpenSetupIssuing, isOnboardingComplete = false }) => {
   const [activeTab, setActiveTab] = useState('payments');
   const [isCreateCardsModalOpen, setIsCreateCardsModalOpen] = useState(showCreateCardsModal);
   const [showApiBanner, setShowApiBanner] = useState(false);
@@ -412,7 +412,15 @@ const BalancesView = ({ showCreateCardsModal = false, onCloseCreateCardsModal, i
           <ActionButton icon={TransferIcon} label="Transfer" />
           <ActionButton icon={AddFundsIcon} label="Add funds" />
           <ActionButton icon={SendIcon} label="Send" />
-          <ActionButton icon={CreateCardIcon} label="Create card" onClick={() => { setShowApiBanner(true); setIsCreateCardsModalOpen(true); }} />
+          <ActionButton icon={CreateCardIcon} label="Create card" onClick={() => {
+            console.log('[Create card] isOnboardingComplete:', isOnboardingComplete, 'onOpenSetupIssuing:', !!onOpenSetupIssuing);
+            if (!isOnboardingComplete && onOpenSetupIssuing) {
+              onOpenSetupIssuing();
+            } else {
+              setShowApiBanner(true);
+              setIsCreateCardsModalOpen(true);
+            }
+          }} />
           <ActionButton icon={MoreDotsIcon} label="More" />
           <div className="ml-auto">
             <button className="flex items-center gap-1.5 px-3 py-[7px] bg-white border border-[#d8dee4] rounded-full text-[13px] font-medium text-[#353a44] hover:bg-[#f7f8f9] transition-colors">

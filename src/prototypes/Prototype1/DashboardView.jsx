@@ -574,6 +574,12 @@ const DashboardView = () => {
             onCloseCreateCardsModal={() => setShowBalancesCreateCardsModal(false)}
             isSandboxMode={isSandboxMode}
             onExitSandbox={handleExitSandbox}
+            isOnboardingComplete={isOnboardingComplete}
+            onOpenSetupIssuing={() => {
+              setModalInitialStep(0);
+              setModalKey(prev => prev + 1);
+              setIsModalOpen(true);
+            }}
           />
         ) : isOnboardingComplete ? (
           /* Issuing Home View - shown after onboarding */
