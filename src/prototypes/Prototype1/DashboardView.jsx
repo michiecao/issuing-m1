@@ -332,11 +332,10 @@ const DashboardView = () => {
     setShowQuickstartGuide(true);
   };
 
-  // "Go to Balances" -> Show Balances view with Create Cards modal (from dashboard setup path)
+  // "Go to Balances" -> Show Balances view
   const handleGoToBalances = () => {
     setIsModalOpen(false);
     setShowBalancesView(true);
-    setShowBalancesCreateCardsModal(true);
     setActiveNav('balances');
   };
 
@@ -347,7 +346,6 @@ const DashboardView = () => {
     setShowBlueprintOverlay(false);
     setIsBlueprintMinimized(false);
     setShowBalancesView(true);
-    setShowBalancesCreateCardsModal(false);
     setActiveNav('balances');
     setIsModalOpen(false);
   };
