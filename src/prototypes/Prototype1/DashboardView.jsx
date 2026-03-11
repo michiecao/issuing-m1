@@ -6,6 +6,7 @@ import BalancesView from './BalancesView';
 import PrototypeControlPanel from '../../components/PrototypeControlPanel';
 import SandboxBanner from '../../components/SandboxBanner';
 import ProjectContextModal from '../../components/ProjectContextModal';
+import HeroVisual, { HERO_VISUAL_OPTIONS } from './HeroVisuals';
 
 // Icons as inline SVGs - matching Sail UI / Stripe Dashboard icons from Figma
 const HomeIcon = () => (
@@ -237,6 +238,8 @@ const DashboardView = () => {
   const [hasStartedSetup, setHasStartedSetup] = useState(false);
   const [savedStep, setSavedStep] = useState(0);
   const [showSetupTypeStep, setShowSetupTypeStep] = useState(false);
+  const [heroVisualStyle, setHeroVisualStyle] = useState('current');
+  const [initialAgentInteraction, setInitialAgentInteraction] = useState(null);
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
@@ -280,13 +283,13 @@ const DashboardView = () => {
   };
   
   // Jump to final screen (success or declined depending on path)
-  const handleJumpToSuccess = () => {
+  const handleJumpToSuccess = (agentMode = null) => {
     setIsOnboardingComplete(false);
     setShowQuickstartGuide(false);
     setShowBlueprintOverlay(false);
     setIsBlueprintMinimized(false);
-    // Happy/KYC paths: step 7 is final, Declined: step 4 is final
-    setModalInitialStep(onboardingPath === 'declined' ? 4 : 7);
+    setInitialAgentInteraction(agentMode);
+    setModalInitialStep(onboardingPath === 'declined' ? 4 : 6);
     setModalKey(prev => prev + 1);
     setIsModalOpen(true);
   };
@@ -436,12 +439,29 @@ const DashboardView = () => {
                 >
                   1. Landing view
                 </button>
-                <button
-                  onClick={handleJumpToSuccess}
-                  className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-                >
-                  2. {onboardingPath === 'declined' ? 'Declined view' : '"You\'re ready" view'}
-                </button>
+                {onboardingPath === 'declined' ? (
+                  <button
+                    onClick={() => handleJumpToSuccess()}
+                    className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+                  >
+                    2. Declined view
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleJumpToSuccess('no')}
+                      className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+                    >
+                      2a. "You're ready" (non-agent)
+                    </button>
+                    <button
+                      onClick={() => handleJumpToSuccess('yes')}
+                      className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+                    >
+                      2b. "You're ready" (agent)
+                    </button>
+                  </>
+                )}
                 {onboardingPath !== 'declined' && (
                   <button
                     onClick={handleJumpToDashboard}
@@ -655,14 +675,7 @@ const DashboardView = () => {
                 </div>
 
                 {/* Card Visual — absolutely positioned to the right */}
-                <div className="absolute right-[40px] top-1/2 -translate-y-[calc(50%-10px)]">
-                  <img 
-                    src={new URL('../../assets/issuing-card-hero.svg', import.meta.url).href}
-                    alt="Issuing card"
-                    className="w-[520px] h-auto"
-                    style={{ filter: 'drop-shadow(0px 20px 100px rgba(83,58,253,0.2)) drop-shadow(0px 20px 35px rgba(83,58,253,0.2)) drop-shadow(0px 5px 15px rgba(83,58,253,0.2))' }}
-                  />
-                </div>
+                <HeroVisual style={heroVisualStyle} />
               </div>
 
               {/* Info Cards */}
@@ -701,6 +714,7 @@ const DashboardView = () => {
         onViewDocs={handleViewIssuingDocs}
         onGoToBalances={handleGoToBalances}
         initialStep={modalInitialStep}
+        initialAgentInteraction={initialAgentInteraction}
         onboardingPath={onboardingPath}
         isSandboxMode={isSandboxMode}
         onExitSandbox={handleExitSandbox}
@@ -793,6 +807,18 @@ const DashboardView = () => {
             <span className="text-sm text-gray-700">Show "Choose setup type" step</span>
           </label>
         </div>
+        <div className="border-t border-gray-200 pt-3 space-y-2">
+          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Hero visual style</p>
+          <select
+            value={heroVisualStyle}
+            onChange={(e) => setHeroVisualStyle(e.target.value)}
+            className="w-full text-sm border border-gray-300 rounded-md px-2 py-1.5 bg-white text-gray-700"
+          >
+            {HERO_VISUAL_OPTIONS.map(opt => (
+              <option key={opt.id} value={opt.id}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
         <div className="border-t border-gray-200 pt-3 space-y-1">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Jump to step</p>
           <div className="flex flex-col gap-1">
@@ -802,12 +828,29 @@ const DashboardView = () => {
             >
               1. Landing view
             </button>
-            <button
-              onClick={handleJumpToSuccess}
-              className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
-            >
-              2. {onboardingPath === 'declined' ? 'Declined view' : '"You\'re ready" view'}
-            </button>
+            {onboardingPath === 'declined' ? (
+              <button
+                onClick={() => handleJumpToSuccess()}
+                className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+              >
+                2. Declined view
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => handleJumpToSuccess('no')}
+                  className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+                >
+                  2a. "You're ready" (non-agent)
+                </button>
+                <button
+                  onClick={() => handleJumpToSuccess('yes')}
+                  className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+                >
+                  2b. "You're ready" (agent)
+                </button>
+              </>
+            )}
             {onboardingPath !== 'declined' && (
               <button
                 onClick={handleJumpToDashboard}

@@ -51,6 +51,14 @@ const BalanceIcon = () => (
   </svg>
 );
 
+// Agentic Toolkit Icon (sparkle)
+const AgenticToolkitIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 1L11.1 7.9L18 10L11.1 12.1L9 19L6.9 12.1L0 10L6.9 7.9L9 1Z" fill="#675DFF"/>
+    <path d="M18.5 12L19.8 16.2L24 17.5L19.8 18.8L18.5 23L17.2 18.8L13 17.5L17.2 16.2L18.5 12Z" fill="#675DFF"/>
+  </svg>
+);
+
 // API Icon - Terminal/code style
 const ApiIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1024,54 +1032,111 @@ const ApiCodeIllustration = () => (
   </div>
 );
 
-// Step 5: Success Screen - "You're ready to start building"
-const SuccessContent = ({ onStartIntegrating, onViewDocs, selectedUseCase }) => (
-  <div className="w-full max-w-[580px] px-4">
-    {/* API Code Illustration */}
-    <div className="mb-8">
-      <ApiCodeIllustration />
-    </div>
-    
-    {/* Header */}
-    <div className="mb-4">
-      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-6">
-        You're ready to start building
-      </h1>
-      <p className="text-[16px] text-[#596171] leading-[24px]">
-        Here's what you get:
-      </p>
-    </div>
-
-    {/* Features Section */}
-    <div className="mb-8">
-      <div className="space-y-4">
-        <FeatureHighlight icon={ApiIcon} title="Stripe Issuing APIs">
-          Create and manage cards programmatically with the Issuing API.
-        </FeatureHighlight>
-        
-        <FeatureHighlight icon={BalanceIcon} title="Financial Accounts API">
-          Hold and manage balances directly on Stripe. Use the Financial Accounts API to fund your card program and move money programmatically.
-        </FeatureHighlight>
+// CLI Code Illustration for agent-involved "You're ready to start building"
+const CliCodeIllustration = () => (
+  <div className="w-full h-[220px] bg-[#e3e8ee] rounded-xl overflow-hidden relative">
+    <div className="absolute left-1/2 -translate-x-1/2 top-6 w-[480px] bg-[#1a1f36] rounded-xl p-5 shadow-xl">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+        <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+        <div className="w-3 h-3 rounded-full bg-[#28ca42]" />
+        <span className="ml-3 text-[11px] text-[#6b7280] font-mono">Terminal</span>
       </div>
-    </div>
-
-    {/* Buttons */}
-    <div className="flex flex-col gap-4">
-      <button 
-        onClick={onStartIntegrating}
-        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
-      >
-        Get started
-      </button>
-      <button 
-        onClick={onViewDocs}
-        className="w-full py-3 bg-white hover:bg-gray-50 text-[#353a44] font-bold text-[16px] rounded-md border border-[#d8dee4] transition-colors shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
-      >
-        View Issuing docs
-      </button>
+      <div className="font-mono text-[12px] leading-[20px] space-y-0.5">
+        <div className="flex">
+          <span><span className="text-[#a5f3ab]">$</span> <span className="text-[#e2e8f0]">stripe issuing cards create</span> <span className="text-[#94a3b8]">\</span></span>
+        </div>
+        <div className="flex">
+          <span><span className="text-[#e2e8f0]">    </span><span className="text-[#60a5fa]">--cardholder</span><span className="text-[#94a3b8]">=</span><span className="text-[#a5f3ab]">"ich_1MsKY81CEjIa"</span> <span className="text-[#94a3b8]">\</span></span>
+        </div>
+        <div className="flex">
+          <span><span className="text-[#e2e8f0]">    </span><span className="text-[#60a5fa]">--type</span><span className="text-[#94a3b8]">=</span><span className="text-[#a5f3ab]">"virtual"</span> <span className="text-[#94a3b8]">\</span></span>
+        </div>
+        <div className="flex">
+          <span><span className="text-[#e2e8f0]">    </span><span className="text-[#60a5fa]">--currency</span><span className="text-[#94a3b8]">=</span><span className="text-[#a5f3ab]">"usd"</span></span>
+        </div>
+        <div className="flex mt-3">
+          <span className="text-[#6b7280]">{"{"}</span>
+        </div>
+        <div className="flex">
+          <span className="text-[#6b7280]">{"  \"id\": \"ic_1MsKY81CEjIaSs\","}</span>
+        </div>
+        <div className="flex">
+          <span className="text-[#6b7280]">{"  \"type\": \"virtual\","}</span>
+        </div>
+        <div className="flex">
+          <span className="text-[#6b7280]">{"  \"status\": \"active\""}</span>
+        </div>
+        <div className="flex">
+          <span className="text-[#6b7280]">{"}"}</span>
+        </div>
+      </div>
     </div>
   </div>
 );
+
+// Step 5: Success Screen - "You're ready to start building"
+const SuccessContent = ({ onStartIntegrating, onViewDocs, selectedUseCase, agentInteraction }) => {
+  const isAgentInvolved = selectedUseCase === 'ondemand' || agentInteraction === 'yes';
+
+  return (
+    <div className="w-full max-w-[580px] px-4">
+      {/* Illustration */}
+      <div className="mb-8">
+        {isAgentInvolved ? <CliCodeIllustration /> : <ApiCodeIllustration />}
+      </div>
+      
+      {/* Header */}
+      <div className="mb-4">
+        <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-6">
+          You're ready to start building
+        </h1>
+        <p className="text-[16px] text-[#596171] leading-[24px]">
+          Here's what you get:
+        </p>
+      </div>
+
+      {/* Features Section */}
+      <div className="mb-8">
+        <div className="space-y-4">
+          <FeatureHighlight icon={ApiIcon} title="Stripe Issuing APIs">
+            {isAgentInvolved
+              ? 'Create and manage cards programmatically. Issue cards, define spending rules, and automate transactions via the API or the Stripe CLI.'
+              : 'Create and manage cards programmatically with the Issuing API.'}
+          </FeatureHighlight>
+          
+          <FeatureHighlight icon={BalanceIcon} title="Financial Accounts API">
+            {isAgentInvolved
+              ? 'Hold and manage balances directly on Stripe. Fund your card program and move money via the API or the Stripe CLI.'
+              : 'Hold and manage balances directly on Stripe. Use the Financial Accounts API to fund your card program and move money programmatically.'}
+          </FeatureHighlight>
+
+          {isAgentInvolved && (
+            <FeatureHighlight icon={AgenticToolkitIcon} title="Stripe Agentic Toolkit">
+              Build AI agents that securely perform financial operations on Stripe, with built-in guardrails for auditing, compliance, and human approval.
+            </FeatureHighlight>
+          )}
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex flex-col gap-4">
+        <button 
+          onClick={onStartIntegrating}
+          className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+        >
+          Get started
+        </button>
+        <button 
+          onClick={onViewDocs}
+          className="w-full py-3 bg-white hover:bg-gray-50 text-[#353a44] font-bold text-[16px] rounded-md border border-[#d8dee4] transition-colors shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
+        >
+          View Issuing docs
+        </button>
+      </div>
+    </div>
+  );
+};
 
 // Virtual Card Visual for Auto-Create Card Success
 const VirtualCardVisual = () => {
@@ -1615,7 +1680,7 @@ const isNonBusinessCardholder = (cardHolder) => {
 };
 
 // Main Modal Component
-const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox, showSetupTypeStep = false }) => {
+const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, initialAgentInteraction = null, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox, showSetupTypeStep = false }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
@@ -1624,7 +1689,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const [description, setDescription] = useState('');
   const [descriptionTouched, setDescriptionTouched] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
-  const [agentInteraction, setAgentInteraction] = useState(null);
+  const [agentInteraction, setAgentInteraction] = useState(initialAgentInteraction);
   
   // Track if user has been declined (computed immediately when decline criteria is met)
   // null = not yet determined, true = declined, false = approved
@@ -1652,8 +1717,9 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
         setIsDeclined(null);
         setCurrentStep(initialStep);
       }
+      setAgentInteraction(initialAgentInteraction);
     }
-  }, [isOpen, initialStep, isDirectDeclinePath]);
+  }, [isOpen, initialStep, isDirectDeclinePath, initialAgentInteraction]);
 
   // Auto-transition from processing to success/declined after 3 seconds
   useEffect(() => {
@@ -1687,12 +1753,16 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   
   // Build steps array for sidebar
   const getSteps = () => {
+    const showAgentStep = selectedUseCase !== 'ondemand';
+
     if (onboardingPath === 'happy' || onboardingPath === 'auto-create-card') {
       const steps = [
         { label: 'Select cardholders', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
         { label: 'Describe use case', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
-        { label: 'Confirm agent usage', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
       ];
+      if (showAgentStep) {
+        steps.push({ label: 'Confirm agent usage', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 });
+      }
       if (showSetupTypeStep) {
         steps.push({ label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
       }
@@ -1704,8 +1774,10 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       { label: 'Complete business details', status: currentStep === 0 ? 'active' : currentStep > 0 ? 'complete' : 'pending', stepNumber: 0 },
       { label: 'Select cardholders', status: currentStep === 1 ? 'active' : currentStep > 1 ? 'complete' : 'pending', stepNumber: 1 },
       { label: 'Describe use case', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 },
-      { label: 'Confirm agent usage', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 },
     ];
+    if (showAgentStep) {
+      kycSteps.push({ label: 'Confirm agent usage', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
+    }
     kycSteps.push({ label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 });
     return kycSteps;
   };
@@ -1725,6 +1797,12 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       if (currentStep === 2) {
         if (isSpecializedUseCase(selectedUseCase)) {
           setIsDeclined(true);
+          setCurrentStep(4);
+          return;
+        }
+        if (selectedUseCase === 'ondemand') {
+          setAgentInteraction('yes');
+          setIsDeclined(false);
           setCurrentStep(4);
           return;
         }
@@ -1750,6 +1828,12 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
         if (isSpecializedUseCase(selectedUseCase)) {
           setIsDeclined(true);
           setCurrentStep(4);
+          return;
+        }
+        if (selectedUseCase === 'ondemand') {
+          setAgentInteraction('yes');
+          setIsDeclined(false);
+          setCurrentStep(showSetupTypeStep ? 3 : 4);
           return;
         }
         setCurrentStep(2);
@@ -1955,6 +2039,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                             onStartIntegrating={handleStartIntegratingClick} 
                             onViewDocs={onViewDocs || onComplete || onClose}
                             selectedUseCase={selectedUseCase}
+                            agentInteraction={agentInteraction}
                           />
                         )
                       )}
