@@ -442,7 +442,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
             Tell us about your card program
           </label>
         </div>
-        <p className="text-[14px] text-[#596171] leading-5 mb-2">We'll review this to evaluate your use case. A thorough description helps us move quickly.</p>
+        <p className="text-[14px] text-[#596171] leading-5 mb-2">Provide a detailed description to help us evaluate your use case.</p>
         <textarea
           value={description}
           onChange={(e) => {
