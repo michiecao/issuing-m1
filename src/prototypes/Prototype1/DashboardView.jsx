@@ -6,7 +6,7 @@ import BalancesView from './BalancesView';
 import PrototypeControlPanel from '../../components/PrototypeControlPanel';
 import SandboxBanner from '../../components/SandboxBanner';
 import ProjectContextModal from '../../components/ProjectContextModal';
-import HeroVisual, { HERO_VISUAL_OPTIONS } from './HeroVisuals';
+import { TerminalVisual } from './HeroVisuals';
 
 // Icons as inline SVGs - matching Sail UI / Stripe Dashboard icons from Figma
 const HomeIcon = () => (
@@ -238,7 +238,7 @@ const DashboardView = () => {
   const [hasStartedSetup, setHasStartedSetup] = useState(false);
   const [savedStep, setSavedStep] = useState(0);
   const [showSetupTypeStep, setShowSetupTypeStep] = useState(false);
-  const [heroVisualStyle, setHeroVisualStyle] = useState('terminal');
+
   const [initialAgentInteraction, setInitialAgentInteraction] = useState(null);
 
   const handleResetPrototype = () => {
@@ -675,7 +675,7 @@ const DashboardView = () => {
                 </div>
 
                 {/* Card Visual — absolutely positioned to the right */}
-                <HeroVisual style={heroVisualStyle} />
+                <TerminalVisual />
               </div>
 
               {/* Info Cards */}
@@ -806,18 +806,6 @@ const DashboardView = () => {
             />
             <span className="text-sm text-gray-700">Show "Choose setup type" step</span>
           </label>
-        </div>
-        <div className="border-t border-gray-200 pt-3 space-y-2">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Hero visual style</p>
-          <select
-            value={heroVisualStyle}
-            onChange={(e) => setHeroVisualStyle(e.target.value)}
-            className="w-full text-sm border border-gray-300 rounded-md px-2 py-1.5 bg-white text-gray-700"
-          >
-            {HERO_VISUAL_OPTIONS.map(opt => (
-              <option key={opt.id} value={opt.id}>{opt.label}</option>
-            ))}
-          </select>
         </div>
         <div className="border-t border-gray-200 pt-3 space-y-1">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Jump to step</p>

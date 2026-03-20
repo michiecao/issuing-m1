@@ -330,11 +330,48 @@ const continueButtonClasses = (disabled) =>
       : 'bg-[#533afd] hover:bg-[#4730d9]'
   }`;
 
+const DESCRIPTION_PLACEHOLDERS = {
+  corporate: 'e.g. Our finance team funds corporate cards from our operating account for department leads to manage team travel, software subscriptions, and office supplies. Each cardholder has a monthly limit set by their manager.',
+  b2b: 'e.g. We run an e-commerce procurement platform and issue cards to our merchant partners to purchase inventory from verified suppliers. Funds are pre-loaded from merchant deposits held in their platform accounts.',
+  ondemand: 'e.g. Our platform dispatches delivery drivers who use cards to purchase items on behalf of customers. Cards are loaded per-order from customer prepayments processed through our platform.',
+};
+
+const DESCRIPTION_PREFILLS = {
+  corporate: 'Our company issues virtual debit cards to department leads and project managers for business-related expenses including software subscriptions, team travel, client entertainment, and office supplies. Cards are funded from our corporate operating account and each cardholder is assigned a monthly spending limit approved by the finance team.',
+  b2b: 'We operate a wholesale procurement platform connecting retailers with suppliers. We issue virtual cards to our merchant partners so they can purchase inventory directly from our verified supplier network. Card balances are funded from merchant deposits held in their platform wallets, with per-transaction limits based on order size.',
+  ondemand: 'Our on-demand delivery platform issues single-use virtual cards to couriers for purchasing items on behalf of customers. Each card is loaded with the exact order amount from customer prepayments collected at checkout. Cards are automatically deactivated after the purchase is completed.',
+};
+
+const DESCRIPTION_MIN_CHARS = 200;
+
+const isLowQualityDescription = (text) => {
+  const trimmed = text.trim();
+  if (trimmed.length < 30) return true;
+  const words = trimmed.toLowerCase().split(/\s+/);
+  const uniqueWords = new Set(words);
+  if (uniqueWords.size <= 3 && words.length > 3) return true;
+  if (/^(.)\1{10,}$/.test(trimmed.replace(/\s/g, ''))) return true;
+  return false;
+};
+
 // Step 2: Use Case Content
 const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selectedIndustry, setSelectedIndustry, description, setDescription }) => {
   const [descriptionTouched, setDescriptionTouched] = useState(false);
+  const [showNudge, setShowNudge] = useState(false);
+  const [hasNudged, setHasNudged] = useState(false);
   const needsIndustry = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
-  const canContinue = selectedUseCase && description.trim().length >= 100 && (!needsIndustry || selectedIndustry);
+  const canContinue = selectedUseCase && description.trim().length >= DESCRIPTION_MIN_CHARS && (!needsIndustry || selectedIndustry);
+
+  const handleDescriptionBlur = () => {
+    setDescriptionTouched(true);
+    if (!hasNudged && description.trim().length > 0 && isLowQualityDescription(description)) {
+      setShowNudge(true);
+      setHasNudged(true);
+    }
+  };
+
+  const placeholder = DESCRIPTION_PLACEHOLDERS[selectedUseCase] || DESCRIPTION_PLACEHOLDERS.corporate;
+  const prefill = DESCRIPTION_PREFILLS[selectedUseCase] || DESCRIPTION_PREFILLS.corporate;
 
   return (
     <div className="w-full max-w-[580px] px-4">
@@ -400,22 +437,34 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
 
       {/* Description Textarea */}
       <div className="mb-8">
-        <label className="block font-semibold text-[16px] text-[#353a44] mb-1">
-          Describe your card program
-        </label>
-        <p className="text-[14px] text-[#596171] leading-5 mb-2">This requirement helps us review your use case.</p>
+        <div className="flex items-baseline gap-1 mb-1">
+          <label className="block font-semibold text-[16px] text-[#353a44]">
+            Tell us about your card program
+          </label>
+        </div>
+        <p className="text-[14px] text-[#596171] leading-5 mb-2">We'll review this to evaluate your use case. A thorough description helps us move quickly.</p>
         <textarea
           value={description}
           onChange={(e) => {
             setDescription(e.target.value);
+            if (showNudge) setShowNudge(false);
           }}
-          onBlur={() => setDescriptionTouched(true)}
-          placeholder="e.g. We want to issue virtual cards to our sales team for client entertainment expenses."
-          className="w-full h-[88px] px-3 py-2 border border-[#d8dee4] rounded-md text-sm text-[#353a44] placeholder-[#6c7688] resize-y focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
+          onBlur={handleDescriptionBlur}
+          placeholder={placeholder}
+          className="w-full h-[120px] px-3 py-2 border border-[#d8dee4] rounded-md text-sm text-[#353a44] placeholder-[#6c7688] resize-y focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
         />
         <div className="flex justify-between items-center mt-1">
-          <span className="text-[13px] text-[#d8dee4] hover:text-[#a3acba] cursor-pointer transition-colors select-none" onClick={() => setDescription('We want to issue virtual debit cards to our sales team for client entertainment and travel expenses. Cards will be assigned per employee with monthly spend limits.')}>Prefill</span>
-          <p className="text-[13px] text-[#6c7688]">{description.length}/100 character minimum</p>
+          <span className="text-[13px] text-[#d8dee4] hover:text-[#a3acba] cursor-pointer transition-colors select-none" onClick={() => setDescription(prefill)}>Prefill</span>
+          <p className="text-[13px] text-[#6c7688]">{description.length}/200 character minimum</p>
+        </div>
+        {/* Soft quality nudge — shown once on blur if description looks low-effort */}
+        <div className={`overflow-hidden transition-all duration-300 ${showNudge ? 'max-h-24 opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'}`}>
+          <div className="flex items-start gap-2 bg-[#f6f8fa] rounded-md px-3 py-2.5">
+            <Icon name="info" size="xxsmall" fill="#6c7688" className="flex-shrink-0 mt-[3px]" />
+            <p className="text-[14px] text-[#596171] leading-5">
+              Is there more detail you can add? A thorough description goes a long way toward getting you up and running quickly.
+            </p>
+          </div>
         </div>
       </div>
       
