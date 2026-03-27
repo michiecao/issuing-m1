@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Icon } from '../../icons/SailIcons';
 import { Button } from '../../components/sail/Button';
 import SandboxBanner from '../../components/SandboxBanner';
@@ -798,6 +798,9 @@ const SubmitReviewContent = ({
   selectedIndustry,
   description,
   agentInteraction,
+  selectedSetupType,
+  onEditSetupType,
+  onEditAgentUsage,
   agreedTerms,
   setAgreedTerms,
 }) => {
@@ -900,8 +903,20 @@ const SubmitReviewContent = ({
             </div>
             {agentInteraction && (
               <div>
-                <h4 className="font-semibold text-[14px] text-[#353a44]">AI agent usage</h4>
-                <p className="text-sm text-[#414552] leading-5">{agentInteraction === 'yes' ? 'Yes — agents will interact with Issuing' : 'No — no agent usage planned'}</p>
+                <div className="flex items-center justify-between">
+                  <h4 className="font-semibold text-[14px] text-[#353a44]">AI agent usage</h4>
+                  <button onClick={onEditAgentUsage} className="text-[14px] font-semibold text-[#533afd] hover:underline">Edit</button>
+                </div>
+                <p className="text-sm text-[#414552] leading-5">{agentInteraction === 'yes' ? 'Yes' : 'No'}</p>
+              </div>
+            )}
+            {selectedSetupType && (
+              <div>
+                <div className="flex items-center justify-between">
+                  <h4 className="font-semibold text-[14px] text-[#353a44]">Setup type</h4>
+                  <button onClick={onEditSetupType} className="text-[14px] font-semibold text-[#533afd] hover:underline">Edit</button>
+                </div>
+                <p className="text-sm text-[#414552] leading-5">{selectedSetupType === 'starter' ? 'Starter' : 'Growth'}</p>
               </div>
             )}
             {(selectedUseCase === 'b2b' || selectedUseCase === 'ondemand') && (
@@ -1694,7 +1709,7 @@ const isNonBusinessCardholder = (cardHolder) => {
 };
 
 // Main Modal Component
-const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, initialAgentInteraction = null, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox, showSetupTypeStep = false }) => {
+const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, initialAgentInteraction = null, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
@@ -1704,6 +1719,13 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   const [descriptionTouched, setDescriptionTouched] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
   const [agentInteraction, setAgentInteraction] = useState(initialAgentInteraction);
+
+  const setUseCase = useCallback((value) => {
+    setSelectedUseCase(value);
+    if (value !== 'corporate') {
+      setSelectedSetupType(null);
+    }
+  }, []);
   
   // Track if user has been declined (computed immediately when decline criteria is met)
   // null = not yet determined, true = declined, false = approved
@@ -1747,6 +1769,10 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
 
   if (!isOpen) return null;
 
+  const needsSetupTypeStep =
+    (onboardingPath === 'happy' || onboardingPath === 'auto-create-card') &&
+    selectedUseCase === 'corporate';
+
   // Step flow with immediate decline feedback:
   //   Happy path:
   //     0: Choose cardholders → If non-business → processing → declined
@@ -1756,7 +1782,8 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
   //     1: Choose cardholders → If non-business → processing → declined
   //     2: Describe use case → If specialized → processing → declined
   //
-  // Approved flow:
+  // Approved flow (happy / auto-create-card):
+  //   3: Choose setup type (corporate use case only)
   //   4: Review and submit
   //   5: Processing
   //   6: Success
@@ -1777,7 +1804,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
       if (showAgentStep) {
         steps.push({ label: 'Confirm agent usage', status: currentStep === 2 ? 'active' : currentStep > 2 ? 'complete' : 'pending', stepNumber: 2 });
       }
-      if (showSetupTypeStep) {
+      if (needsSetupTypeStep) {
         steps.push({ label: 'Choose setup type', status: currentStep === 3 ? 'active' : currentStep > 3 ? 'complete' : 'pending', stepNumber: 3 });
       }
       steps.push({ label: 'Review and submit', status: currentStep === 4 ? 'active' : currentStep > 4 ? 'complete' : 'pending', stepNumber: 4 });
@@ -1847,7 +1874,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
         if (selectedUseCase === 'ondemand') {
           setAgentInteraction('yes');
           setIsDeclined(false);
-          setCurrentStep(showSetupTypeStep ? 3 : 4);
+          setCurrentStep(4);
           return;
         }
         setCurrentStep(2);
@@ -1856,7 +1883,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
 
       if (currentStep === 2) {
         setIsDeclined(false);
-        setCurrentStep(showSetupTypeStep ? 3 : 4);
+        setCurrentStep(selectedUseCase === 'corporate' ? 3 : 4);
         return;
       }
     }
@@ -1966,7 +1993,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                         <UseCaseContent 
                           onContinue={handleContinue}
                           selectedUseCase={selectedUseCase}
-                          setSelectedUseCase={setSelectedUseCase}
+                          setSelectedUseCase={setUseCase}
                           selectedIndustry={selectedIndustry}
                           setSelectedIndustry={setSelectedIndustry}
                           description={description}
@@ -1995,7 +2022,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                         <UseCaseContent 
                           onContinue={handleContinue}
                           selectedUseCase={selectedUseCase}
-                          setSelectedUseCase={setSelectedUseCase}
+                          setSelectedUseCase={setUseCase}
                           selectedIndustry={selectedIndustry}
                           setSelectedIndustry={setSelectedIndustry}
                           description={description}
@@ -2011,7 +2038,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                       )}
                     </>
                   )}
-                  {showSetupTypeStep && onboardingPath !== 'kyc' && currentStep === 3 && (
+                  {needsSetupTypeStep && currentStep === 3 && (
                     <ChooseSetupTypeContent
                       onContinue={handleContinue}
                       selectedSetupType={selectedSetupType}
@@ -2036,6 +2063,9 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                           selectedIndustry={selectedIndustry}
                           description={description}
                           agentInteraction={agentInteraction}
+                          selectedSetupType={selectedSetupType}
+                          onEditSetupType={() => setCurrentStep(3)}
+                          onEditAgentUsage={() => setCurrentStep(2)}
                           agreedTerms={agreedTerms}
                           setAgreedTerms={setAgreedTerms}
                         />
@@ -2065,7 +2095,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
           {/* Right Sidebar - Contextual content (hidden during intro) */}
           <div className="w-[310px] min-w-[310px] pt-6 pr-8 shrink-0">
             {((onboardingPath === 'kyc' ? currentStep === 2 : currentStep === 1)) && <UseCaseCallout />}
-            {showSetupTypeStep && currentStep === 3 && <CustomSetupCallout />}
+            {needsSetupTypeStep && currentStep === 3 && <CustomSetupCallout />}
             {isDeclinedScreen && <DeclinedSidebarContent />}
           </div>
         </div>
