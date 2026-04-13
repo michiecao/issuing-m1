@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist -m 'Deploy to GitHub Pages GIT_VALID_PII_OVERRIDE'"
   },
   "dependencies": {
     "react": "^19.2.0",
