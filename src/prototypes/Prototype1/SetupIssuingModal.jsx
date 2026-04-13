@@ -1029,6 +1029,35 @@ const ProcessingContent = () => (
   </div>
 );
 
+// Timeout Content — shown when processing takes too long (30s+ in production)
+const TimeoutContent = ({ onClose }) => (
+  <div className="w-full max-w-[580px] px-4">
+    <div className="mb-8">
+      <div className="w-[48px] h-[48px] bg-[#f6f8fa] rounded-lg flex items-center justify-center">
+        <Icon name="clock" size="medium" fill="#596171" />
+      </div>
+    </div>
+
+    <div className="mb-6">
+      <h1 className="text-[28px] font-bold text-[#353a44] leading-[36px] mb-3">
+        Your setup is still in progress
+      </h1>
+      <p className="text-[16px] text-[#596171] leading-[24px]">
+        Some verifications are taking longer than expected. We'll email you with an update once we've finished reviewing your application. Feel free to close this and come back later.
+      </p>
+    </div>
+
+    <div className="flex flex-col gap-4">
+      <button
+        onClick={onClose}
+        className="w-full py-3 bg-[#675dff] hover:bg-[#5650e0] text-white font-bold text-[16px] rounded-md transition-colors shadow-[0px_1px_1px_rgba(47,14,99,0.32)]"
+      >
+        Got it
+      </button>
+    </div>
+  </div>
+);
+
 // Feature Highlight Component
 const FeatureHighlight = ({ icon: Icon, title, children }) => (
   <div className="flex gap-4 items-start">
@@ -1709,7 +1738,7 @@ const isNonBusinessCardholder = (cardHolder) => {
 };
 
 // Main Modal Component
-const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, initialAgentInteraction = null, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox }) => {
+const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, onSimulatePurchase, onViewDocs, onGoToBalances, initialStep = 0, initialAgentInteraction = null, onboardingPath = 'happy', isSandboxMode = false, onExitSandbox, showTimeout = false }) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [selectedSetupType, setSelectedSetupType] = useState(null);
   const [selectedUseCase, setSelectedUseCase] = useState(null);
@@ -1757,15 +1786,15 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
     }
   }, [isOpen, initialStep, isDirectDeclinePath, initialAgentInteraction]);
 
-  // Auto-transition from processing to success/declined after 3 seconds
+  // Auto-transition from processing to success/declined after 3 seconds (skip if timeout state)
   useEffect(() => {
-    if (currentStep === processingStep) {
+    if (currentStep === processingStep && !showTimeout) {
       const timer = setTimeout(() => {
         setCurrentStep(finalStep);
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [currentStep, processingStep, finalStep]);
+  }, [currentStep, processingStep, finalStep, showTimeout]);
 
   if (!isOpen) return null;
 
@@ -2071,7 +2100,7 @@ const SetupIssuingModal = ({ isOpen, onClose, onComplete, onStartIntegrating, on
                         />
                       )}
                       {currentStep === 5 && (
-                        <ProcessingContent />
+                        showTimeout ? <TimeoutContent onClose={onClose} /> : <ProcessingContent />
                       )}
                       {currentStep === 6 && (
                         onboardingPath === 'auto-create-card' ? (

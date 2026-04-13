@@ -239,6 +239,7 @@ const DashboardView = () => {
   const [savedStep, setSavedStep] = useState(0);
 
   const [initialAgentInteraction, setInitialAgentInteraction] = useState(null);
+  const [showTimeout, setShowTimeout] = useState(false);
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
@@ -255,6 +256,7 @@ const DashboardView = () => {
     setShowSetupGuide(false);
     setSetupGuideCompletedTasks(1);
     setIsSandboxMode(false);
+    setShowTimeout(false);
   };
   
   // Handle "Explore in sandbox" button click
@@ -288,12 +290,24 @@ const DashboardView = () => {
     setShowBlueprintOverlay(false);
     setIsBlueprintMinimized(false);
     setInitialAgentInteraction(agentMode);
+    setShowTimeout(false);
     setModalInitialStep(onboardingPath === 'declined' ? 4 : 6);
     setModalKey(prev => prev + 1);
     setIsModalOpen(true);
   };
 
   
+  const handleJumpToTimeout = () => {
+    setIsOnboardingComplete(false);
+    setShowQuickstartGuide(false);
+    setShowBlueprintOverlay(false);
+    setIsBlueprintMinimized(false);
+    setShowTimeout(true);
+    setModalInitialStep(5);
+    setModalKey(prev => prev + 1);
+    setIsModalOpen(true);
+  };
+
   // Jump to Issuing dashboard view (with charts) - shows blueprint minimized
   const handleJumpToDashboard = () => {
     setIsOnboardingComplete(true);
@@ -447,6 +461,12 @@ const DashboardView = () => {
                       className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
                     >
                       2b. "You're ready" (agent)
+                    </button>
+                    <button
+                      onClick={handleJumpToTimeout}
+                      className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+                    >
+                      2c. Setup timeout
                     </button>
                   </>
                 )}
@@ -706,6 +726,7 @@ const DashboardView = () => {
         onboardingPath={onboardingPath}
         isSandboxMode={isSandboxMode}
         onExitSandbox={handleExitSandbox}
+        showTimeout={showTimeout}
       />
 
       {/* Prototype Control Panel */}
@@ -814,6 +835,12 @@ const DashboardView = () => {
                   className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
                 >
                   2b. "You're ready" (agent)
+                </button>
+                <button
+                  onClick={handleJumpToTimeout}
+                  className="text-sm text-[#675dff] hover:text-[#5650e0] hover:underline text-left transition-colors"
+                >
+                  2c. Setup timeout
                 </button>
               </>
             )}
