@@ -348,6 +348,45 @@ const DESCRIPTION_PREFILL_GIBBERISH = 'test test test test test test test test t
 
 const DESCRIPTION_MIN_CHARS = 200;
 
+const CharacterProgressRing = ({ current, target }) => {
+  const met = current >= target;
+  const size = 18;
+  const strokeWidth = 3;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const progress = Math.min(current / target, 1);
+  const dashOffset = circumference * (1 - progress);
+
+  if (met) {
+    return (
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="flex-shrink-0">
+        <circle cx={size / 2} cy={size / 2} r={size / 2} fill="#2B8700" />
+        <path
+          d="M5.5 9.5L7.5 11.5L12.5 6.5"
+          fill="none"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="flex-shrink-0" style={{ transform: 'rotate(-90deg)' }}>
+      <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#e5e7eb" strokeWidth={strokeWidth} />
+      <circle
+        cx={size / 2} cy={size / 2} r={radius}
+        fill="none" stroke="#9ca3af" strokeWidth={strokeWidth}
+        strokeDasharray={circumference} strokeDashoffset={dashOffset}
+        strokeLinecap="butt"
+        className="transition-all duration-200"
+      />
+    </svg>
+  );
+};
+
 const isGibberishDescription = (text) => {
   const trimmed = text.trim();
   if (trimmed.length < DESCRIPTION_MIN_CHARS) return false;
@@ -533,7 +572,6 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
               </div>
             )}
           </div>
-          <p className="text-[13px] text-[#6c7688]">{description.length}/200 character minimum</p>
         </div>
         {/* Gibberish error — persistent until user fixes input */}
         <div className={`overflow-hidden transition-all duration-300 ${gibberish ? 'max-h-24 opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'}`}>
