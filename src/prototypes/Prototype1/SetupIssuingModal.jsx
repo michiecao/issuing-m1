@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Icon } from '../../icons/SailIcons';
 import { Button } from '../../components/sail/Button';
 import SandboxBanner from '../../components/SandboxBanner';
@@ -342,7 +342,26 @@ const DESCRIPTION_PREFILLS = {
   ondemand: 'Our on-demand delivery platform issues single-use virtual cards to couriers for purchasing items on behalf of customers. Each card is loaded with the exact order amount from customer prepayments collected at checkout. Cards are automatically deactivated after the purchase is completed.',
 };
 
+const DESCRIPTION_PREFILL_LOW_QUALITY = 'We are a company that wants to issue cards. We think Stripe Issuing would be a great fit for our needs. We would like to get started as soon as possible and are excited to begin using the product. Please approve our application so we can move forward with our plans.';
+
+const DESCRIPTION_PREFILL_GIBBERISH = 'test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test';
+
 const DESCRIPTION_MIN_CHARS = 200;
+
+const isGibberishDescription = (text) => {
+  const trimmed = text.trim();
+  if (trimmed.length < DESCRIPTION_MIN_CHARS) return false;
+  const words = trimmed.toLowerCase().split(/\s+/);
+  const uniqueWords = new Set(words);
+  if (uniqueWords.size <= 3 && words.length > 5) return true;
+  if (/^(.)\1{10,}$/.test(trimmed.replace(/\s/g, ''))) return true;
+  const nonsenseWords = words.filter(w => w.length > 2 && !/[aeiou]/i.test(w));
+  if (words.length > 3 && nonsenseWords.length / words.length > 0.6) return true;
+  const avgWordLen = words.reduce((sum, w) => sum + w.length, 0) / words.length;
+  if (words.length > 5 && uniqueWords.size / words.length < 0.25) return true;
+  if (avgWordLen > 12 && uniqueWords.size < 5) return true;
+  return false;
+};
 
 const isLowQualityDescription = (text) => {
   const trimmed = text.trim();
@@ -359,19 +378,55 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
   const [descriptionTouched, setDescriptionTouched] = useState(false);
   const [showNudge, setShowNudge] = useState(false);
   const [hasNudged, setHasNudged] = useState(false);
+  const [showGibberishError, setShowGibberishError] = useState(false);
   const needsIndustry = selectedUseCase === 'b2b' || selectedUseCase === 'ondemand';
-  const canContinue = selectedUseCase && description.trim().length >= DESCRIPTION_MIN_CHARS && (!needsIndustry || selectedIndustry);
+  const gibberish = showGibberishError && isGibberishDescription(description);
+  const canContinue = selectedUseCase && description.trim().length >= DESCRIPTION_MIN_CHARS && !gibberish && (!needsIndustry || selectedIndustry);
 
   const handleDescriptionBlur = () => {
     setDescriptionTouched(true);
+    if (description.trim().length >= DESCRIPTION_MIN_CHARS && isGibberishDescription(description)) {
+      setShowGibberishError(true);
+      setShowNudge(false);
+      return;
+    }
+    setShowGibberishError(false);
     if (!hasNudged && description.trim().length > 0 && isLowQualityDescription(description)) {
       setShowNudge(true);
       setHasNudged(true);
     }
   };
 
+  const [showPrefillMenu, setShowPrefillMenu] = useState(false);
+  const prefillRef = useRef(null);
+  const textareaRef = useRef(null);
   const placeholder = DESCRIPTION_PLACEHOLDERS[selectedUseCase] || DESCRIPTION_PLACEHOLDERS.corporate;
   const prefill = DESCRIPTION_PREFILLS[selectedUseCase] || DESCRIPTION_PREFILLS.corporate;
+
+  useEffect(() => {
+    if (!showPrefillMenu) return;
+    const handleClickOutside = (e) => {
+      if (prefillRef.current && !prefillRef.current.contains(e.target)) {
+        setShowPrefillMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showPrefillMenu]);
+
+  const handlePrefill = (text, type) => {
+    setDescription(text);
+    setShowPrefillMenu(false);
+    setShowNudge(false);
+    setShowGibberishError(false);
+    setHasNudged(false);
+    if (type === 'lowQuality') {
+      setShowNudge(true);
+      setHasNudged(true);
+    } else if (type === 'gibberish') {
+      setShowGibberishError(true);
+    }
+  };
 
   return (
     <div className="w-full max-w-[580px] px-4">
@@ -444,22 +499,54 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
         </div>
         <p className="text-[14px] text-[#596171] leading-5 mb-2">Describe who your cardholders are, what they'll spend on, and where the funds to load the cards will come from.</p>
         <textarea
+          ref={textareaRef}
           value={description}
           onChange={(e) => {
             setDescription(e.target.value);
             if (showNudge) setShowNudge(false);
+            if (showGibberishError) setShowGibberishError(false);
           }}
           onBlur={handleDescriptionBlur}
           placeholder={placeholder}
           className="w-full h-[120px] px-3 py-2 border border-[#d8dee4] rounded-md text-sm text-[#353a44] placeholder-[#6c7688] resize-y focus:outline-none focus:border-[#675dff] focus:ring-1 focus:ring-[#675dff]"
         />
         <div className="flex justify-between items-center mt-1">
-          <span className="text-[13px] text-[#d8dee4] hover:text-[#a3acba] cursor-pointer transition-colors select-none" onClick={() => setDescription(prefill)}>Prefill</span>
+          <div className="relative" ref={prefillRef}>
+            <span
+              className="text-[13px] text-[#d8dee4] hover:text-[#a3acba] cursor-pointer transition-colors select-none inline-flex items-center gap-0.5"
+              onClick={() => setShowPrefillMenu(prev => !prev)}
+            >
+              Prefill
+              <Icon name="chevronDown" size="xxsmall" fill="currentColor" className={`transition-transform ${showPrefillMenu ? 'rotate-180' : ''}`} />
+            </span>
+            {showPrefillMenu && (
+              <div className="absolute left-0 top-full mt-1 bg-white border border-[#d8dee4] rounded-md shadow-lg z-10 min-w-[180px] py-1">
+                <button onClick={() => handlePrefill(prefill, 'good')} className="w-full text-left px-3 py-1.5 text-[13px] text-[#353a44] hover:bg-[#f6f8fa] transition-colors">
+                  Good answer
+                </button>
+                <button onClick={() => handlePrefill(DESCRIPTION_PREFILL_LOW_QUALITY, 'lowQuality')} className="w-full text-left px-3 py-1.5 text-[13px] text-[#353a44] hover:bg-[#f6f8fa] transition-colors">
+                  Low quality
+                </button>
+                <button onClick={() => handlePrefill(DESCRIPTION_PREFILL_GIBBERISH, 'gibberish')} className="w-full text-left px-3 py-1.5 text-[13px] text-[#353a44] hover:bg-[#f6f8fa] transition-colors">
+                  Gibberish
+                </button>
+              </div>
+            )}
+          </div>
           <p className="text-[13px] text-[#6c7688]">{description.length}/200 character minimum</p>
         </div>
+        {/* Gibberish error — persistent until user fixes input */}
+        <div className={`overflow-hidden transition-all duration-300 ${gibberish ? 'max-h-24 opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'}`}>
+          <div className="flex items-start gap-3 bg-[#fdf0f2] border border-[#FBD3DC] rounded-lg p-4">
+            <Icon name="warningCircle" size="xxsmall" fill="#df1b41" className="flex-shrink-0 mt-[3px]" />
+            <p className="text-[14px] text-[#C0123C] leading-5 tracking-[-0.15px]">
+              Please provide a valid description of your card program. We need this to evaluate your application.
+            </p>
+          </div>
+        </div>
         {/* Soft quality nudge — shown once on blur if description looks low-effort */}
-        <div className={`overflow-hidden transition-all duration-300 ${showNudge ? 'max-h-24 opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'}`}>
-          <div className="flex items-start gap-2 bg-[#f6f8fa] rounded-md px-3 py-2.5">
+        <div className={`overflow-hidden transition-all duration-300 ${showNudge && !gibberish ? 'max-h-24 opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'}`}>
+          <div className="flex items-start gap-3 bg-[#f6f8fa] border border-[#D4DEE9] rounded-lg p-4">
             <Icon name="info" size="xxsmall" fill="#6c7688" className="flex-shrink-0 mt-[3px]" />
             <p className="text-[14px] text-[#596171] leading-5">
               Is there more detail you can add? Addressing each of the points above helps us get you up and running faster.
