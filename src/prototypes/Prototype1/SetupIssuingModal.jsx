@@ -442,7 +442,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
             Tell us about your card program
           </label>
         </div>
-        <p className="text-[14px] text-[#596171] leading-5 mb-2">Provide a detailed description to help us evaluate your use case.</p>
+        <p className="text-[14px] text-[#596171] leading-5 mb-2">Describe who your cardholders are, what they'll spend on, and where the funds to load the cards will come from.</p>
         <textarea
           value={description}
           onChange={(e) => {
@@ -462,7 +462,7 @@ const UseCaseContent = ({ onContinue, selectedUseCase, setSelectedUseCase, selec
           <div className="flex items-start gap-2 bg-[#f6f8fa] rounded-md px-3 py-2.5">
             <Icon name="info" size="xxsmall" fill="#6c7688" className="flex-shrink-0 mt-[3px]" />
             <p className="text-[14px] text-[#596171] leading-5">
-              Is there more detail you can add? A thorough description goes a long way toward getting you up and running quickly.
+              Is there more detail you can add? Addressing each of the points above helps us get you up and running faster.
             </p>
           </div>
         </div>
