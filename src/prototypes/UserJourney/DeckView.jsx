@@ -116,6 +116,9 @@ const allPrograms = [
   },
 ];
 
+const businessPrograms = allPrograms.filter(p => p.label === 'For your business');
+const customerPrograms = allPrograms.filter(p => p.label === 'For your customers');
+
 const Slide2 = () => (
   <div style={{ marginTop: 80, width: '100%' }}>
   <Browser url="stripe.com/issuing" fillHeight>
@@ -132,8 +135,19 @@ const Slide2 = () => (
         </button>
       </div>
     </div>
-    <div className="flex gap-3 mt-6">
-      {allPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
+    <div className="flex flex-col gap-6 mt-6">
+      <div className="flex flex-col gap-3">
+        <div className="text-sm font-semibold" style={{ color: '#0a2540' }}>For your business</div>
+        <div className="flex gap-3">
+          {businessPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
+        </div>
+      </div>
+      <div className="flex flex-col gap-3">
+        <div className="text-sm font-semibold" style={{ color: '#0a2540' }}>For your customers</div>
+        <div className="flex gap-3">
+          {customerPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
+        </div>
+      </div>
     </div>
   </div>
   </Browser>

@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeftIcon } from '../../components/icons';
 import stripeIssuingLanding from '../../assets/stripe-issuing-landing.png';
 import stripeTreasuryLanding from '../../assets/stripe-treasury-landing.png';
+import galteeBalances from '../../assets/galtee-balances.png';
+import issuingLandingView from '../../assets/issuing-landing-view.png';
+import galteePrimaryNav from '../../assets/galtee-primary-nav.png';
+import flowChartUrl from '../../assets/flow-chart.svg';
 
 // ─── Slide 1: Card Programs Comparison ───────────────────────────────────────
 
@@ -229,8 +233,8 @@ const MiniDash = ({ accountName, activeNav, children }) => (
 );
 
 const TOGGLE_TABS = [
-  { key: 'issuing', label: 'Issuing', src: stripeIssuingLanding },
-  { key: 'treasury', label: 'Treasury', src: stripeTreasuryLanding },
+  { key: 'issuing', label: 'Issuing site', src: stripeIssuingLanding, caption: 'The cards being marketed here are the Premium Debit and Spend Cards.' },
+  { key: 'treasury', label: 'Treasury site', src: stripeTreasuryLanding, caption: 'The card being marketed here is the Standard Debit Card.' },
 ];
 
 const Slide2 = () => {
@@ -245,7 +249,7 @@ const Slide2 = () => {
         </h1>
       </div>
 
-      <div className="flex-1 flex flex-col gap-3">
+      <div className="flex-1 flex flex-col gap-5">
         {/* Toggle */}
         <div className="flex items-center gap-1 p-1 rounded-lg self-start" style={{ background: '#e9eaec' }}>
           {TOGGLE_TABS.map(t => (
@@ -264,6 +268,11 @@ const Slide2 = () => {
           ))}
         </div>
 
+        {/* Caption */}
+        {tab.caption && (
+          <p className="text-xs text-gray-500 leading-relaxed">{tab.caption}</p>
+        )}
+
         {/* Screenshot in browser chrome */}
         <MiniBrowser url={tab.key === 'issuing' ? 'stripe.com/issuing' : 'stripe.com/treasury'}>
           <img
@@ -278,92 +287,192 @@ const Slide2 = () => {
   );
 };
 
-const Slide3 = () => (
-  <div className="flex gap-16 w-full items-start">
-    <div className="w-72 shrink-0">
-      <h1 className="text-3xl font-light" style={{ lineHeight: '36px', color: '#353a44' }}>
-        For businesses with an intent to get a specific type of card, there is no way for them to provide that intent upfront and easily onboard onto it in the dashboard.
-      </h1>
+const ICON_SIZE = 16;
+const ICON_GAP = 8;
+
+const NavRow = ({ label, active, chevron, chevronDown, indent, noIcon, activeTab }) => {
+  const isActive = active === activeTab;
+  const indentPx = noIcon ? (4 + ICON_SIZE + ICON_GAP) : (indent ? 20 : 4);
+  return (
+    <div className="flex items-center py-1.5 rounded" style={{ paddingLeft: indentPx, gap: ICON_GAP }}>
+      {!indent && !noIcon && <div className="shrink-0" style={{ width: ICON_SIZE, height: ICON_SIZE, borderRadius: 3, background: isActive ? '#635bff' : '#edf0f2' }} />}
+      {label
+        ? <span style={{ color: isActive ? '#635bff' : '#9ca3af', fontWeight: isActive ? 500 : 400, fontSize: 12 }}>{label}</span>
+        : <div style={{ height: 7, borderRadius: 3, background: '#edf0f2', width: `${indent ? 44 : 52}%` }} />
+      }
+      {(chevron || chevronDown) && (
+        <span style={{ fontSize: 8, color: '#c8cdd4', marginLeft: 'auto' }}>{chevronDown ? '˅' : '˄'}</span>
+      )}
+    </div>
+  );
+};
+
+const MockNav = ({ activeTab }) => (
+  <div className="flex flex-col bg-white rounded-xl border border-gray-200 shadow-lg py-3 px-3" style={{ width: 220 }}>
+    {/* Account name */}
+    <div className="flex items-center pb-2.5 mb-1 px-1" style={{ gap: ICON_GAP }}>
+      <div className="shrink-0" style={{ width: ICON_SIZE, height: ICON_SIZE, background: '#edf0f2', borderRadius: 3 }} />
+      <span style={{ fontSize: 12, fontWeight: 400, color: '#9ca3af' }}>Galtee Insurance</span>
     </div>
 
-    <div className="flex-1 relative" style={{ height: 640 }}>
-      {/* Top browser: Balances */}
-      <div className="absolute" style={{ top: 0, left: 0, width: '60%', zIndex: 1 }}>
-        <div className="mb-2 font-medium" style={{ fontSize: 10, color: '#6b7280' }}>
-          The Balances tab implicitly onboards users onto the Standard debit card
-        </div>
-        <MiniBrowser url="dashboard.stripe.com/balances">
-          <MiniDash accountName="Galtee Insurance" activeNav="balances">
-            <div className="p-3">
-              <div className="font-bold text-gray-900 mb-0.5" style={{ fontSize: 13 }}>
-                Balances <span className="font-normal">$0.00</span>
-              </div>
-              <div className="text-gray-400 mb-3 leading-snug" style={{ fontSize: 8 }}>
-                Track incoming earnings, manage your money, pay expenses, and more.
-              </div>
-              <div className="grid grid-cols-3 gap-1.5 mb-3">
-                {[
-                  { title: 'Create cards for free', body: 'Get free physical and virtual cards and earn 2% cashback.', link: 'Create card' },
-                  { title: 'Get paid globally', body: 'Receive money from customers and vendors worldwide.', link: 'Request funds' },
-                  { title: 'Fund your account', body: 'Earn Stripe fee credits when you store funds here.', link: 'Add funds' },
-                ].map(c => (
-                  <div key={c.title} className="rounded p-1.5" style={{ background: '#f9fafb' }}>
-                    <div className="font-semibold text-gray-800 mb-0.5 leading-tight" style={{ fontSize: 8 }}>{c.title}</div>
-                    <div className="text-gray-400 leading-snug mb-1" style={{ fontSize: 7 }}>{c.body}</div>
-                    <div className="font-medium" style={{ fontSize: 7, color: '#635bff' }}>{c.link}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="rounded" style={{ background: 'linear-gradient(135deg, #635bff 0%, #8b5cf6 100%)', height: 36, width: 56 }} />
-            </div>
-          </MiniDash>
-        </MiniBrowser>
-      </div>
+    {/* Top nav items */}
+    <div className="flex flex-col gap-0.5 mb-2">
+      <NavRow activeTab={activeTab} />
+      <NavRow label="Balances" active="balances" activeTab={activeTab} />
+      <NavRow activeTab={activeTab} />
+      <NavRow activeTab={activeTab} />
+    </div>
 
-      {/* Bottom browser: Issuing landing */}
-      <div className="absolute" style={{ top: 280, right: 0, width: '70%', zIndex: 2 }}>
-        <MiniBrowser url="dashboard.stripe.com/issuing">
-          <MiniDash accountName="Mickey's Mochis" activeNav="issuing">
-            <div className="p-3">
-              <div className="text-gray-400 mb-1" style={{ fontSize: 7 }}>Issuing</div>
-              <div className="font-bold text-gray-900 leading-snug mb-1" style={{ fontSize: 13 }}>
-                Issue cards with programmable spend
-              </div>
-              <div className="text-gray-500 leading-snug mb-2" style={{ fontSize: 8 }}>
-                Use APIs to create cards, define spending rules and automate transactions from your software systems.
-              </div>
-              <div className="flex gap-2 mb-3">
-                <button className="font-medium text-white px-2.5 py-1 rounded" style={{ fontSize: 8, background: '#635bff' }}>Get started</button>
-                <button className="font-medium px-2.5 py-1 rounded border border-gray-200 text-gray-700" style={{ fontSize: 8 }}>Explore in sandbox</button>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { title: 'Supportable use cases', body: "See which card programs Issuing supports and what's required for each." },
-                  { title: 'Quickstart guide', body: 'Learn how to quickly set up a card issuing program using the Stripe Issuing API.' },
-                ].map(c => (
-                  <div key={c.title} className="p-2 rounded border border-gray-100">
-                    <div className="font-semibold text-gray-800 mb-0.5 leading-tight" style={{ fontSize: 8 }}>{c.title}</div>
-                    <div className="text-gray-500 leading-snug mb-1" style={{ fontSize: 7 }}>{c.body}</div>
-                    <div className="font-medium" style={{ fontSize: 7, color: '#635bff' }}>View docs</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </MiniDash>
-        </MiniBrowser>
-        <div className="mt-2 font-medium" style={{ fontSize: 10, color: '#6b7280' }}>
-          Issuing tab does check to see what cards will work best for the user, but in order for a user to get here, they must know to tap on Issuing (and not Treasury, Cards, etc)
-        </div>
-      </div>
+    {/* Products section */}
+    <div className="px-1 mb-1" style={{ fontSize: 12, color: '#9ca3af' }}>Products</div>
+    <div className="flex flex-col gap-0.5">
+      <NavRow chevron activeTab={activeTab} />
+      <NavRow label="More" chevronDown activeTab={activeTab} />
+      <NavRow label="Issuing" active="issuing" noIcon activeTab={activeTab} />
     </div>
   </div>
 );
 
+const DASH_TABS = [
+  {
+    key: 'balances',
+    label: 'Balances tab',
+    url: 'dashboard.stripe.com/balances',
+    src: galteeBalances,
+    caption: 'The Balances tab implicitly onboards users onto the Standard debit card. Since financial accounts are expected to roll out to everyone, most users will encounter this path first.',
+  },
+  {
+    key: 'issuing',
+    label: 'Issuing tab',
+    url: 'dashboard.stripe.com/issuing',
+    src: issuingLandingView,
+    caption: 'Issuing routes users to the right card program, but only if they already know to look here, not Treasury or Cards.',
+  },
+];
+
+const Slide3 = () => {
+  const [activeTab, setActiveTab] = useState('balances');
+  const tab = DASH_TABS.find(t => t.key === activeTab);
+
+  return (
+    <div className="flex gap-16 w-full items-start">
+      <div className="w-72 shrink-0 flex flex-col justify-between" style={{ alignSelf: 'stretch' }}>
+        <h1 className="text-3xl font-light" style={{ lineHeight: '36px', color: '#353a44' }}>
+          Businesses can't specify which type of card they need or get onboarded to it directly.
+        </h1>
+        <MockNav activeTab={activeTab} />
+      </div>
+
+      <div className="flex-1 flex flex-col gap-5">
+          <div className="flex items-center gap-1 p-1 rounded-lg self-start" style={{ background: '#e9eaec' }}>
+            {DASH_TABS.map(t => (
+              <button
+                key={t.key}
+                onClick={() => setActiveTab(t.key)}
+                className="px-3 py-1 rounded-md text-sm font-medium transition-all"
+                style={{
+                  background: activeTab === t.key ? '#fff' : 'transparent',
+                  color: activeTab === t.key ? '#111827' : '#6b7280',
+                  boxShadow: activeTab === t.key ? '0 1px 3px rgba(0,0,0,0.12)' : 'none',
+                }}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <p className="text-xs text-gray-500 leading-relaxed">{tab.caption}</p>
+
+          <MiniBrowser url={tab.url}>
+            <img
+              src={tab.src}
+              alt={tab.label}
+              className="w-full block"
+              style={{ maxHeight: 480, objectFit: 'cover', objectPosition: 'top' }}
+            />
+          </MiniBrowser>
+      </div>
+    </div>
+  );
+};
+
+// ─── Slide 4: Opportunities ───────────────────────────────────────────────────
+
+const FLOW_GREEN = '#1e6b3c';
+
+const OPPORTUNITIES = [
+  'Educate users about card programs',
+  'Allow users to indicate intent for cards',
+  'Educate users about all card programs',
+];
+
+// SVG box coords [x, y, w, h] in the 826×716 viewBox, one per opportunity
+const OPPORTUNITY_BOXES = [
+  [307,   1,   212, 70],   // Stripe.com
+  [208.5, 184, 409, 70],   // Stripe initial onboarding
+  [439,   581, 386, 134],  // Issuing
+];
+
+const Slide4 = () => {
+  const [hovered, setHovered] = useState(0);
+
+  return (
+    <div className="flex gap-16 w-full items-start">
+      {/* Left: title + opportunity list */}
+      <div className="shrink-0 flex flex-col" style={{ width: 460 }}>
+        <h1 className="text-3xl font-light" style={{ lineHeight: '36px', color: '#353a44' }}>
+          Opportunities
+        </h1>
+        <div className="flex flex-col gap-3" style={{ marginTop: 40 }}>
+          {OPPORTUNITIES.map((text, i) => (
+            <div
+              key={i}
+              className="flex gap-3 items-center rounded-lg border px-8 py-5 cursor-default transition-colors"
+              style={{
+                borderColor: hovered === i ? '#635bff' : '#e5e7eb',
+                background: hovered === i ? '#f9fafb' : 'transparent',
+              }}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <span className="text-xl shrink-0 text-gray-700">{i + 1}.</span>
+              <span className="text-xl leading-snug text-gray-700">{text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right: flowchart with hover overlay */}
+      <div className="flex-1 flex justify-end items-start" style={{ paddingTop: 80, paddingRight: 48 }}>
+        <div className="relative" style={{ width: '90%', maxWidth: 520 }}>
+          <img src={flowChartUrl} alt="Opportunities flowchart" style={{ width: '100%', display: 'block' }} />
+          {hovered !== null && (() => {
+            const [bx, by, bw, bh] = OPPORTUNITY_BOXES[hovered];
+            const dimPath = `M0 0 H826 V716 H0 Z M${bx} ${by} H${bx + bw} V${by + bh} H${bx} Z`;
+            return (
+              <svg
+                viewBox="0 0 826 716"
+                className="absolute inset-0 pointer-events-none"
+                style={{ width: '100%', height: '100%' }}
+              >
+                {/* dim overlay with evenodd cutout for highlighted box */}
+                <path d={dimPath} fillRule="evenodd" fill="rgba(245,246,248,0.45)" />
+                {/* highlight border */}
+                <rect x={bx} y={by} width={bw} height={bh} rx="7" fill="white" stroke="#635bff" strokeWidth="1.5" />
+              </svg>
+            );
+          })()}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ─── Deck shell ───────────────────────────────────────────────────────────────
 
-const BEATS = ['', '', ''];
-const SLIDES = [Slide1, Slide2, Slide3];
-const DARK_BG = [false, false, false];
+const BEATS = ['', '', '', ''];
+const SLIDES = [Slide1, Slide2, Slide3, Slide4];
+const DARK_BG = [false, false, false, false];
 
 const ProblemContextDeck = ({ onBack }) => {
   const [current, setCurrent] = useState(0);
