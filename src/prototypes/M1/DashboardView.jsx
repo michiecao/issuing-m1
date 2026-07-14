@@ -215,8 +215,16 @@ const CalloutCard = ({ title, description, linkText }) => (
   </div>
 );
 
+const NavPlaceholder = ({ width = 60, indent = false }) => (
+  <div className={`h-[30px] flex items-center gap-2 ${indent ? 'pl-8' : ''}`}>
+    {!indent && <div className="w-4 h-4 rounded bg-[#ebeef1] shrink-0 ml-0.5" />}
+    {indent && <div className="w-6 shrink-0" />}
+    <div className="h-2.5 rounded-full bg-[#ebeef1]" style={{ width }} />
+  </div>
+);
+
 // Main Dashboard View Component
-const DashboardView = () => {
+const DashboardView = ({ simplifiedNav = false }) => {
   const [activeNav, setActiveNav] = useState('issuing');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalKey, setModalKey] = useState(0); // Used to reset modal state
@@ -235,6 +243,7 @@ const DashboardView = () => {
   const [showProjectContext, setShowProjectContext] = useState(false);
   const [showPopulatedState, setShowPopulatedState] = useState(false);
   const [multipleFinancialAccounts, setMultipleFinancialAccounts] = useState(false);
+  const [liveMode, setLiveMode] = useState(false);
   const [hasStartedSetup, setHasStartedSetup] = useState(false);
   const [savedStep, setSavedStep] = useState(0);
 
@@ -523,6 +532,52 @@ const DashboardView = () => {
 
         {/* Navigation */}
         <div className="flex-1 overflow-y-auto px-5 py-5">
+          {simplifiedNav ? (
+            <div className="flex flex-col gap-7">
+              {/* Top Level Nav — placeholders */}
+              <div className="flex flex-col">
+                <NavPlaceholder width={48} />
+                <NavPlaceholder width={64} />
+                <NavPlaceholder width={80} />
+                <NavPlaceholder width={56} />
+                <NavPlaceholder width={92} />
+              </div>
+
+              {/* Shortcuts — placeholders */}
+              <div className="flex flex-col">
+                <SectionHeading label="Shortcuts" />
+                <NavPlaceholder width={56} />
+                <NavPlaceholder width={36} />
+                <NavPlaceholder width={52} />
+              </div>
+
+              {/* Products — placeholders + real Issuing */}
+              <div className="flex flex-col">
+                <SectionHeading label="Products" />
+                <NavPlaceholder width={52} />
+                <NavPlaceholder width={60} />
+                <NavPlaceholder width={44} />
+                <NavPlaceholder width={68} />
+                {/* More group expanded showing Issuing */}
+                <div className="w-full">
+                  <div className="h-[30px] flex items-center gap-2">
+                    <div className="w-4 h-4 rounded bg-[#ebeef1] shrink-0 ml-0.5" />
+                    <div className="h-2.5 rounded-full bg-[#ebeef1]" style={{ width: 36 }} />
+                  </div>
+                  <div className="pb-1">
+                    <NavPlaceholder width={32} indent />
+                    <NavPlaceholder width={52} indent />
+                    <NavPlaceholder width={40} indent />
+                    <div className="pl-8"><NavItem label="Issuing" indent active={true} /></div>
+                    <NavPlaceholder width={76} indent />
+                    <NavPlaceholder width={44} indent />
+                    <NavPlaceholder width={48} indent />
+                    <NavPlaceholder width={84} indent />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
           <div className="flex flex-col gap-7">
             {/* Top Level Nav */}
             <div className="flex flex-col">
@@ -573,6 +628,7 @@ const DashboardView = () => {
             </div>
 
           </div>
+          )}
         </div>
       </div>
 
@@ -629,6 +685,7 @@ const DashboardView = () => {
               onExitSandbox={handleExitSandbox}
               showEmptyState={!showPopulatedState}
               multipleFinancialAccounts={multipleFinancialAccounts}
+              liveMode={liveMode}
             />
             <SetupGuide 
               isOpen={showBlueprintOverlay || showSetupGuide} 
@@ -804,6 +861,15 @@ const DashboardView = () => {
               className="w-4 h-4 text-blue-600 rounded"
             />
             <span className="text-sm text-gray-700">Multiple financial accounts</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={liveMode}
+              onChange={(e) => setLiveMode(e.target.checked)}
+              className="w-4 h-4 text-blue-600 rounded"
+            />
+            <span className="text-sm text-gray-700">Live mode (fraud charts)</span>
           </label>
         </div>
         <div className="border-t border-gray-200 pt-3 space-y-1">

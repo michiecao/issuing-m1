@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PrototypeWrapper from './PrototypeWrapper';
 import Prototype1, {
   initialVariables as prototype1InitialVars
-} from './prototypes/Prototype1';
+} from './prototypes/M1';
+import UserJourney, { initialVariables as userJourneyInitialVars } from './prototypes/UserJourney';
 
 // Prototype definitions - edit this array to add/modify prototypes
 const PROTOTYPES = [
@@ -14,6 +15,15 @@ const PROTOTYPES = [
     component: Prototype1,
     initialVariables: prototype1InitialVars,
     initialControlVariables: { currentView: 'platform', showWrapper: true },
+  },
+  {
+    id: 'user-journey',
+    title: 'User Journey: Issuing Adoption',
+    description: 'Illustrative deck walkthrough of the end-to-end Issuing product adoption story.',
+    status: 'in-progress',
+    component: UserJourney,
+    initialVariables: userJourneyInitialVars,
+    initialControlVariables: {},
   },
 ];
 

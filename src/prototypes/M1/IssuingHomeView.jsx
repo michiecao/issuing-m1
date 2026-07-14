@@ -1291,7 +1291,179 @@ const EmptyStateView = ({ icon, title, description }) => (
   </div>
 );
 
-const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete, isSandboxMode = false, onExitSandbox, showEmptyState = false, multipleFinancialAccounts = false }) => {
+// --- Fraud & Risk Chart Components ---
+
+const LiveModeNotice = () => (
+  <div className="bg-[#f5f6f8] rounded-lg p-4 flex items-start gap-3">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="mt-0.5 shrink-0">
+      <path fillRule="evenodd" clipRule="evenodd" d="M8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5ZM0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z" fill="#6C7688"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M8 4C8.41421 4 8.75 4.33579 8.75 4.75V8.25C8.75 8.66421 8.41421 9 8 9C7.58579 9 7.25 8.66421 7.25 8.25V4.75C7.25 4.33579 7.58579 4 8 4Z" fill="#6C7688"/>
+      <path d="M8 11.5C8.55228 11.5 9 11.0523 9 10.5C9 9.94772 8.55228 9.5 8 9.5C7.44772 9.5 7 9.94772 7 10.5C7 11.0523 7.44772 11.5 8 11.5Z" fill="#6C7688"/>
+    </svg>
+    <span className="text-[13px] text-[#596171] leading-5">This chart is only available in live mode. Please switch to live mode to access this information.</span>
+  </div>
+);
+
+const BarChart = ({ data, maxValue, color = '#635bff', comparisonColor = '#c4c8d0', height = 140, labels }) => {
+  const barWidth = 24;
+  const gap = 8;
+  const chartWidth = data.length * (barWidth + gap) - gap;
+  const labelHeight = 24;
+  
+  return (
+    <div className="w-full">
+      <svg width="100%" height={height + labelHeight} viewBox={`0 0 ${chartWidth + 40} ${height + labelHeight}`} preserveAspectRatio="xMinYMid meet">
+        {[0.25, 0.5, 0.75, 1].map((pct, i) => (
+          <line key={i} x1="0" y1={height - height * pct} x2={chartWidth + 40} y2={height - height * pct} stroke="#ebeef1" strokeWidth="1" />
+        ))}
+        <line x1="0" y1={height} x2={chartWidth + 40} y2={height} stroke="#ebeef1" strokeWidth="1" />
+        {data.map((item, i) => {
+          const x = i * (barWidth + gap) + 20;
+          const currentH = (item.current / maxValue) * (height - 10);
+          const prevH = item.previous != null ? (item.previous / maxValue) * (height - 10) : 0;
+          return (
+            <g key={i}>
+              {item.previous != null && (
+                <rect x={x - 5} y={height - prevH} width={barWidth / 2 - 1} height={prevH} rx="2" fill={comparisonColor} opacity="0.5" />
+              )}
+              <rect x={item.previous != null ? x + barWidth / 2 - 4 : x} y={height - currentH} width={item.previous != null ? barWidth / 2 - 1 : barWidth} height={currentH} rx="2" fill={color} />
+              {labels && labels[i] && (
+                <text x={x + barWidth / 2 - 5} y={height + 16} textAnchor="middle" fontSize="10" fill="#6c7688">{labels[i]}</text>
+              )}
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+};
+
+const AreaLineChart = ({ data, comparisonData, color = '#635bff', comparisonColor = '#c4c8d0', height = 140, labels, yLabels }) => {
+  const padding = { left: 36, right: 12, top: 8, bottom: 28 };
+  const chartW = 320;
+  const chartH = height - padding.top - padding.bottom;
+  const totalW = chartW + padding.left + padding.right;
+  const totalH = height;
+  
+  const maxVal = Math.max(...data, ...(comparisonData || []));
+  const safeMax = maxVal === 0 ? 1 : maxVal;
+  
+  const toX = (i) => padding.left + (i / (data.length - 1)) * chartW;
+  const toY = (v) => padding.top + chartH - (v / safeMax) * chartH;
+  
+  const buildPath = (pts) => pts.map((v, i) => `${i === 0 ? 'M' : 'L'}${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' ');
+  const buildArea = (pts) => {
+    const line = buildPath(pts);
+    return `${line} L${toX(pts.length - 1).toFixed(1)},${(padding.top + chartH).toFixed(1)} L${toX(0).toFixed(1)},${(padding.top + chartH).toFixed(1)} Z`;
+  };
+  
+  return (
+    <svg width="100%" height={totalH} viewBox={`0 0 ${totalW} ${totalH}`} preserveAspectRatio="xMinYMid meet">
+      {[0, 0.25, 0.5, 0.75, 1].map((pct, i) => {
+        const y = padding.top + chartH - chartH * pct;
+        return (
+          <g key={i}>
+            <line x1={padding.left} y1={y} x2={totalW - padding.right} y2={y} stroke="#ebeef1" strokeWidth="1" />
+            {yLabels && yLabels[i] != null && (
+              <text x={padding.left - 6} y={y + 3} textAnchor="end" fontSize="10" fill="#6c7688">{yLabels[i]}</text>
+            )}
+          </g>
+        );
+      })}
+      {comparisonData && (
+        <>
+          <path d={buildArea(comparisonData)} fill={comparisonColor} opacity="0.1" />
+          <path d={buildPath(comparisonData)} fill="none" stroke={comparisonColor} strokeWidth="1.5" strokeDasharray="4 3" />
+        </>
+      )}
+      <path d={buildArea(data)} fill={color} opacity="0.08" />
+      <path d={buildPath(data)} fill="none" stroke={color} strokeWidth="2" />
+      {labels && labels.map((label, i) => (
+        <text key={i} x={toX(i * Math.floor((data.length - 1) / (labels.length - 1)))} y={totalH - 4} textAnchor="middle" fontSize="10" fill="#6c7688">{label}</text>
+      ))}
+    </svg>
+  );
+};
+
+const FraudMetricCard = ({ title, value, subtitle, liveMode, chartType = 'area', chartData, change, changeIsGood }) => (
+  <div className="flex-1">
+    <div className="flex items-center gap-1.5 mb-1">
+      <span className="text-[14px] font-medium text-[#353a44]">{title}</span>
+      <InfoIcon />
+      {liveMode && change != null && (
+        <span className={`text-[12px] font-medium px-1.5 py-0.5 rounded ${changeIsGood ? 'bg-[#f0f5f2] text-[#0e6245]' : 'bg-[#fef3f1] text-[#c0123c]'}`}>
+          {change > 0 ? '↑' : '↓'}{Math.abs(change)}%
+        </span>
+      )}
+    </div>
+    <div className="text-[14px] text-[#353a44] mb-3">{value}</div>
+    {liveMode ? (
+      <div className="border border-[#ebeef1] rounded-lg p-3">
+        {chartType === 'bar' ? (
+          <BarChart {...chartData} />
+        ) : (
+          <AreaLineChart {...chartData} />
+        )}
+        {subtitle && <div className="text-[11px] text-[#6c7688] mt-2 text-center">{subtitle}</div>}
+      </div>
+    ) : (
+      <LiveModeNotice />
+    )}
+  </div>
+);
+
+const FRAUD_MOCK = {
+  fraudVolume: {
+    data: [680, 720, 640, 590, 550, 480, 510, 430, 390, 350, 320, 310],
+    comparison: [820, 870, 790, 750, 710, 680, 640, 610, 580, 540, 500, 470],
+    labels: ['Jan 14', 'Jan 18', 'Jan 22', 'Jan 26', 'Jan 30', 'Feb 3'],
+    yLabels: ['$0', '$250', '$500', '$750', '$1k'],
+  },
+  fraudRate: {
+    data: [2.4, 2.5, 2.2, 2.0, 1.8, 1.6, 1.7, 1.4, 1.3, 1.1, 1.0, 0.9],
+    comparison: [3.1, 3.2, 2.9, 2.7, 2.5, 2.4, 2.2, 2.1, 1.9, 1.8, 1.7, 1.6],
+    labels: ['Jan 14', 'Jan 18', 'Jan 22', 'Jan 26', 'Jan 30', 'Feb 3'],
+    yLabels: ['0%', '1%', '2%', '3%', '4%'],
+  },
+  cardholderFraud: {
+    data: [420, 450, 390, 370, 340, 310, 320, 280, 260, 240, 220, 210],
+    comparison: [580, 610, 550, 520, 490, 470, 450, 430, 400, 380, 360, 340],
+    labels: ['Jan 14', 'Jan 18', 'Jan 22', 'Jan 26', 'Jan 30', 'Feb 3'],
+    yLabels: ['$0', '$200', '$400', '$600', '$800'],
+  },
+  disputeWinRate: {
+    data: [72, 75, 78, 76, 82, 84, 81, 86, 88, 90, 91, 93],
+    comparison: [48, 50, 52, 51, 55, 57, 54, 58, 60, 62, 63, 65],
+    labels: ['Jan 14', 'Jan 18', 'Jan 22', 'Jan 26', 'Jan 30', 'Feb 3'],
+    yLabels: ['0%', '25%', '50%', '75%', '100%'],
+  },
+  disputeVolumeWinRate: {
+    data: [65, 68, 71, 69, 75, 77, 74, 80, 82, 84, 86, 88],
+    comparison: [42, 44, 46, 45, 49, 51, 48, 53, 55, 57, 58, 60],
+    labels: ['Jan 14', 'Jan 18', 'Jan 22', 'Jan 26', 'Jan 30', 'Feb 3'],
+    yLabels: ['0%', '25%', '50%', '75%', '100%'],
+  },
+  lostFraudVolume: {
+    data: [125, 120, 110, 100, 90, 80, 85, 70, 65, 55, 50, 45],
+    comparison: [250, 240, 220, 210, 195, 180, 170, 155, 140, 130, 120, 110],
+    labels: ['Jan 14', 'Jan 18', 'Jan 22', 'Jan 26', 'Jan 30', 'Feb 3'],
+    yLabels: ['$0', '$75', '$150', '$225', '$300'],
+  },
+  overallDisputeWinRate: {
+    data: [18, 20, 22, 21, 24, 26, 25, 28, 30, 32, 34, 36],
+    comparison: [12, 13, 14, 13, 15, 16, 15, 17, 18, 19, 20, 21],
+    labels: ['Jan 14', 'Jan 18', 'Jan 22', 'Jan 26', 'Jan 30', 'Feb 3'],
+    yLabels: ['0', '10', '20', '30', '40'],
+  },
+  lostDisputeVolume: {
+    data: [225, 210, 195, 185, 170, 150, 160, 140, 125, 110, 100, 90],
+    comparison: [440, 420, 390, 370, 345, 320, 310, 285, 260, 240, 220, 205],
+    labels: ['Jan 14', 'Jan 18', 'Jan 22', 'Jan 26', 'Jan 30', 'Feb 3'],
+    yLabels: ['$0', '$125', '$250', '$375', '$500'],
+  },
+};
+
+const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose, onAddFundsComplete, isSandboxMode = false, onExitSandbox, showEmptyState = false, multipleFinancialAccounts = false, liveMode = false }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [compareEnabled, setCompareEnabled] = useState(true);
   const [selectedAccount, setSelectedAccount] = useState({ id: '1', label: 'Commercial program 1' });
@@ -2296,58 +2468,58 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
               <p className="text-[14px] text-[#596171] mb-4">Understand more about how transaction fraud is impacting your program.</p>
               
               <div className="flex gap-6">
-                {/* Fraud Volume Card */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[14px] font-medium text-[#353a44]">Fraud volume</span>
-                    <InfoIcon />
-                  </div>
-                  <div className="text-[14px] text-[#353a44] mb-3">Total $0.00</div>
-                  <div className="bg-[#f5f6f8] rounded-lg p-4 flex items-start gap-3">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="mt-0.5 shrink-0">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5ZM0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z" fill="#6C7688"/>
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 4C8.41421 4 8.75 4.33579 8.75 4.75V8.25C8.75 8.66421 8.41421 9 8 9C7.58579 9 7.25 8.66421 7.25 8.25V4.75C7.25 4.33579 7.58579 4 8 4Z" fill="#6C7688"/>
-                      <path d="M8 11.5C8.55228 11.5 9 11.0523 9 10.5C9 9.94772 8.55228 9.5 8 9.5C7.44772 9.5 7 9.94772 7 10.5C7 11.0523 7.44772 11.5 8 11.5Z" fill="#6C7688"/>
-                    </svg>
-                    <span className="text-[13px] text-[#596171] leading-5">This chart is only available in live mode. Please switch to live mode to access this information.</span>
-                  </div>
-                </div>
-                
-                {/* Fraud Rate Card */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[14px] font-medium text-[#353a44]">Fraud rate</span>
-                    <InfoIcon />
-                  </div>
-                  <div className="text-[14px] text-[#353a44] mb-3">Average 0%</div>
-                  <div className="bg-[#f5f6f8] rounded-lg p-4 flex items-start gap-3">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="mt-0.5 shrink-0">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5ZM0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z" fill="#6C7688"/>
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 4C8.41421 4 8.75 4.33579 8.75 4.75V8.25C8.75 8.66421 8.41421 9 8 9C7.58579 9 7.25 8.66421 7.25 8.25V4.75C7.25 4.33579 7.58579 4 8 4Z" fill="#6C7688"/>
-                      <path d="M8 11.5C8.55228 11.5 9 11.0523 9 10.5C9 9.94772 8.55228 9.5 8 9.5C7.44772 9.5 7 9.94772 7 10.5C7 11.0523 7.44772 11.5 8 11.5Z" fill="#6C7688"/>
-                    </svg>
-                    <span className="text-[13px] text-[#596171] leading-5">This chart is only available in live mode. Please switch to live mode to access this information.</span>
-                  </div>
-                </div>
+                <FraudMetricCard
+                  title="Fraud volume"
+                  value={liveMode ? 'Total $5,970.00' : 'Total $0.00'}
+                  change={-25}
+                  changeIsGood
+                  liveMode={liveMode}
+                  chartData={{
+                    data: FRAUD_MOCK.fraudVolume.data,
+                    comparisonData: FRAUD_MOCK.fraudVolume.comparison,
+                    labels: FRAUD_MOCK.fraudVolume.labels,
+                    yLabels: FRAUD_MOCK.fraudVolume.yLabels,
+                  }}
+                />
+                <FraudMetricCard
+                  title="Fraud rate"
+                  value={liveMode ? 'Average 1.6%' : 'Average 0%'}
+                  change={-29}
+                  changeIsGood
+                  liveMode={liveMode}
+                  chartData={{
+                    data: FRAUD_MOCK.fraudRate.data,
+                    comparisonData: FRAUD_MOCK.fraudRate.comparison,
+                    labels: FRAUD_MOCK.fraudRate.labels,
+                    yLabels: FRAUD_MOCK.fraudRate.yLabels,
+                  }}
+                />
               </div>
             </div>
 
             {/* Cardholder Fraud Section */}
             <div className="mb-10">
-              <div className="flex items-center gap-1.5 mb-4">
+              <div className="flex items-center gap-1.5 mb-1">
                 <h2 className="text-[16px] font-semibold text-[#353a44]">Cardholder fraud</h2>
                 <InfoIcon />
               </div>
-              
+              <p className="text-[14px] text-[#596171] mb-4">Cardholders responsible for the most fraud dispute volume.</p>
+
               <div className="w-1/2 pr-3">
-                <div className="bg-[#f5f6f8] rounded-lg p-4 flex items-start gap-3">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="mt-0.5 shrink-0">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5ZM0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z" fill="#6C7688"/>
-                    <path fillRule="evenodd" clipRule="evenodd" d="M8 4C8.41421 4 8.75 4.33579 8.75 4.75V8.25C8.75 8.66421 8.41421 9 8 9C7.58579 9 7.25 8.66421 7.25 8.25V4.75C7.25 4.33579 7.58579 4 8 4Z" fill="#6C7688"/>
-                    <path d="M8 11.5C8.55228 11.5 9 11.0523 9 10.5C9 9.94772 8.55228 9.5 8 9.5C7.44772 9.5 7 9.94772 7 10.5C7 11.0523 7.44772 11.5 8 11.5Z" fill="#6C7688"/>
-                  </svg>
-                  <span className="text-[13px] text-[#596171] leading-5">This chart is only available in live mode. Please switch to live mode to access this information.</span>
-                </div>
+                <FraudMetricCard
+                  title="Fraud dispute volume"
+                  value={liveMode ? 'Total $3,810.00' : 'Total $0.00'}
+                  change={-32}
+                  changeIsGood
+                  liveMode={liveMode}
+                  chartData={{
+                    data: FRAUD_MOCK.cardholderFraud.data,
+                    comparisonData: FRAUD_MOCK.cardholderFraud.comparison,
+                    labels: FRAUD_MOCK.cardholderFraud.labels,
+                    yLabels: FRAUD_MOCK.cardholderFraud.yLabels,
+                    color: '#e56910',
+                  }}
+                />
               </div>
             </div>
 
@@ -2356,95 +2528,83 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
               <h2 className="text-[16px] font-semibold text-[#353a44] mb-1">Dispute performance</h2>
               <p className="text-[14px] text-[#596171] mb-4">Understand dispute outcomes and their financial impact on your program.</p>
               
-              {/* First Row */}
               <div className="flex gap-6 mb-6">
-                {/* Fraud Dispute Win Rate */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[14px] font-medium text-[#353a44]">Fraud dispute win rate</span>
-                    <InfoIcon />
-                  </div>
-                  <div className="text-[14px] text-[#353a44] mb-3">Average 0%</div>
-                  <div className="bg-[#f5f6f8] rounded-lg p-4 flex items-start gap-3">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="mt-0.5 shrink-0">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5ZM0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z" fill="#6C7688"/>
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 4C8.41421 4 8.75 4.33579 8.75 4.75V8.25C8.75 8.66421 8.41421 9 8 9C7.58579 9 7.25 8.66421 7.25 8.25V4.75C7.25 4.33579 7.58579 4 8 4Z" fill="#6C7688"/>
-                      <path d="M8 11.5C8.55228 11.5 9 11.0523 9 10.5C9 9.94772 8.55228 9.5 8 9.5C7.44772 9.5 7 9.94772 7 10.5C7 11.0523 7.44772 11.5 8 11.5Z" fill="#6C7688"/>
-                    </svg>
-                    <span className="text-[13px] text-[#596171] leading-5">This chart is only available in live mode. Please switch to live mode to access this information.</span>
-                  </div>
-                </div>
-                
-                {/* Fraud Volume Dispute Win Rate */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[14px] font-medium text-[#353a44]">Fraud volume dispute win rate</span>
-                    <InfoIcon />
-                  </div>
-                  <div className="text-[14px] text-[#353a44] mb-3">Average 0%</div>
-                  <div className="bg-[#f5f6f8] rounded-lg p-4 flex items-start gap-3">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="mt-0.5 shrink-0">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5ZM0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z" fill="#6C7688"/>
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 4C8.41421 4 8.75 4.33579 8.75 4.75V8.25C8.75 8.66421 8.41421 9 8 9C7.58579 9 7.25 8.66421 7.25 8.25V4.75C7.25 4.33579 7.58579 4 8 4Z" fill="#6C7688"/>
-                      <path d="M8 11.5C8.55228 11.5 9 11.0523 9 10.5C9 9.94772 8.55228 9.5 8 9.5C7.44772 9.5 7 9.94772 7 10.5C7 11.0523 7.44772 11.5 8 11.5Z" fill="#6C7688"/>
-                    </svg>
-                    <span className="text-[13px] text-[#596171] leading-5">This chart is only available in live mode. Please switch to live mode to access this information.</span>
-                  </div>
-                </div>
+                <FraudMetricCard
+                  title="Fraud dispute win rate"
+                  value={liveMode ? 'Average 83%' : 'Average 0%'}
+                  change={48}
+                  changeIsGood
+                  liveMode={liveMode}
+                  chartData={{
+                    data: FRAUD_MOCK.disputeWinRate.data,
+                    comparisonData: FRAUD_MOCK.disputeWinRate.comparison,
+                    labels: FRAUD_MOCK.disputeWinRate.labels,
+                    yLabels: FRAUD_MOCK.disputeWinRate.yLabels,
+                    color: '#0e6245',
+                  }}
+                />
+                <FraudMetricCard
+                  title="Fraud volume dispute win rate"
+                  value={liveMode ? 'Average 77%' : 'Average 0%'}
+                  change={51}
+                  changeIsGood
+                  liveMode={liveMode}
+                  chartData={{
+                    data: FRAUD_MOCK.disputeVolumeWinRate.data,
+                    comparisonData: FRAUD_MOCK.disputeVolumeWinRate.comparison,
+                    labels: FRAUD_MOCK.disputeVolumeWinRate.labels,
+                    yLabels: FRAUD_MOCK.disputeVolumeWinRate.yLabels,
+                    color: '#0e6245',
+                  }}
+                />
               </div>
               
-              {/* Second Row */}
               <div className="flex gap-6 mb-6">
-                {/* Total Volume of Lost Fraud Disputes */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[14px] font-medium text-[#353a44]">Total volume of lost fraud disputes</span>
-                    <InfoIcon />
-                  </div>
-                  <div className="text-[14px] text-[#353a44] mb-3">Total $0.00</div>
-                  <div className="bg-[#f5f6f8] rounded-lg p-4 flex items-start gap-3">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="mt-0.5 shrink-0">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5ZM0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z" fill="#6C7688"/>
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 4C8.41421 4 8.75 4.33579 8.75 4.75V8.25C8.75 8.66421 8.41421 9 8 9C7.58579 9 7.25 8.66421 7.25 8.25V4.75C7.25 4.33579 7.58579 4 8 4Z" fill="#6C7688"/>
-                      <path d="M8 11.5C8.55228 11.5 9 11.0523 9 10.5C9 9.94772 8.55228 9.5 8 9.5C7.44772 9.5 7 9.94772 7 10.5C7 11.0523 7.44772 11.5 8 11.5Z" fill="#6C7688"/>
-                    </svg>
-                    <span className="text-[13px] text-[#596171] leading-5">This chart is only available in live mode. Please switch to live mode to access this information.</span>
-                  </div>
-                </div>
-                
-                {/* Overall Dispute Win Rate (count) */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[14px] font-medium text-[#353a44]">Overall dispute win rate (count)</span>
-                    <InfoIcon />
-                  </div>
-                  <div className="text-[14px] text-[#353a44] mb-3">Average 0%</div>
-                  <div className="bg-[#f5f6f8] rounded-lg p-4 flex items-start gap-3">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="mt-0.5 shrink-0">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5ZM0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z" fill="#6C7688"/>
-                      <path fillRule="evenodd" clipRule="evenodd" d="M8 4C8.41421 4 8.75 4.33579 8.75 4.75V8.25C8.75 8.66421 8.41421 9 8 9C7.58579 9 7.25 8.66421 7.25 8.25V4.75C7.25 4.33579 7.58579 4 8 4Z" fill="#6C7688"/>
-                      <path d="M8 11.5C8.55228 11.5 9 11.0523 9 10.5C9 9.94772 8.55228 9.5 8 9.5C7.44772 9.5 7 9.94772 7 10.5C7 11.0523 7.44772 11.5 8 11.5Z" fill="#6C7688"/>
-                    </svg>
-                    <span className="text-[13px] text-[#596171] leading-5">This chart is only available in live mode. Please switch to live mode to access this information.</span>
-                  </div>
-                </div>
+                <FraudMetricCard
+                  title="Total volume of lost fraud disputes"
+                  value={liveMode ? 'Total $995.00' : 'Total $0.00'}
+                  change={-53}
+                  changeIsGood
+                  liveMode={liveMode}
+                  chartData={{
+                    data: FRAUD_MOCK.lostFraudVolume.data,
+                    comparisonData: FRAUD_MOCK.lostFraudVolume.comparison,
+                    labels: FRAUD_MOCK.lostFraudVolume.labels,
+                    yLabels: FRAUD_MOCK.lostFraudVolume.yLabels,
+                    color: '#c0123c',
+                  }}
+                />
+                <FraudMetricCard
+                  title="Overall dispute win rate (count)"
+                  value={liveMode ? 'Average 26' : 'Average 0'}
+                  change={64}
+                  changeIsGood
+                  liveMode={liveMode}
+                  chartData={{
+                    data: FRAUD_MOCK.overallDisputeWinRate.data,
+                    comparisonData: FRAUD_MOCK.overallDisputeWinRate.comparison,
+                    labels: FRAUD_MOCK.overallDisputeWinRate.labels,
+                    yLabels: FRAUD_MOCK.overallDisputeWinRate.yLabels,
+                    color: '#0e6245',
+                  }}
+                />
               </div>
               
-              {/* Third Row - Single Card */}
               <div className="w-1/2 pr-3">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <span className="text-[14px] font-medium text-[#353a44]">Total volume of lost disputes</span>
-                  <InfoIcon />
-                </div>
-                <div className="text-[14px] text-[#353a44] mb-3">Total $0.00</div>
-                <div className="bg-[#f5f6f8] rounded-lg p-4 flex items-start gap-3">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="mt-0.5 shrink-0">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5ZM0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z" fill="#6C7688"/>
-                    <path fillRule="evenodd" clipRule="evenodd" d="M8 4C8.41421 4 8.75 4.33579 8.75 4.75V8.25C8.75 8.66421 8.41421 9 8 9C7.58579 9 7.25 8.66421 7.25 8.25V4.75C7.25 4.33579 7.58579 4 8 4Z" fill="#6C7688"/>
-                    <path d="M8 11.5C8.55228 11.5 9 11.0523 9 10.5C9 9.94772 8.55228 9.5 8 9.5C7.44772 9.5 7 9.94772 7 10.5C7 11.0523 7.44772 11.5 8 11.5Z" fill="#6C7688"/>
-                  </svg>
-                  <span className="text-[13px] text-[#596171] leading-5">This chart is only available in live mode. Please switch to live mode to access this information.</span>
-                </div>
+                <FraudMetricCard
+                  title="Total volume of lost disputes"
+                  value={liveMode ? 'Total $1,860.00' : 'Total $0.00'}
+                  change={-51}
+                  changeIsGood
+                  liveMode={liveMode}
+                  chartData={{
+                    data: FRAUD_MOCK.lostDisputeVolume.data,
+                    comparisonData: FRAUD_MOCK.lostDisputeVolume.comparison,
+                    labels: FRAUD_MOCK.lostDisputeVolume.labels,
+                    yLabels: FRAUD_MOCK.lostDisputeVolume.yLabels,
+                    color: '#c0123c',
+                  }}
+                />
               </div>
             </div>
           </div>

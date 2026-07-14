@@ -97,6 +97,9 @@ const PrototypeControlPanel = ({ children }) => {
     setIsDragging(true);
   };
 
+  // Temporarily hidden
+  return null;
+
   if (!children) {
     return null;
   }
