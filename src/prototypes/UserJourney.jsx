@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import DeckView from './UserJourney/DeckView';
+import ProblemContextDeck from './UserJourney/ProblemContextDeck';
 
 export const featureDefaults = {};
 export { featureDefaults as initialVariables };
@@ -22,9 +23,27 @@ const flows = [
 const FlowSelection = ({ onSelect }) => (
   <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-100 flex flex-col items-center justify-center px-6">
     <div className="w-full max-w-2xl">
-      <div className="mb-10">
-        <h1 className="text-2xl text-gray-900 mb-2">User Flows</h1>
+      {/* Problem context */}
+      <div className="mb-8">
+        <button
+          onClick={() => onSelect('problem-context')}
+          className="w-full text-left flex items-center justify-between px-5 py-4 rounded-xl border bg-white border-gray-200 hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer"
+        >
+          <div className="font-medium text-gray-900 text-sm">Problem context</div>
+          <svg className="w-5 h-5 text-gray-400 shrink-0 ml-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
+
+      {/* Divider */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="flex-1 h-px bg-gray-200" />
+        <span className="text-xs text-gray-400">User flows</span>
+        <div className="flex-1 h-px bg-gray-200" />
+      </div>
+
+      {/* User flows */}
       <div className="flex flex-col gap-3">
         {flows.map((flow) => (
           <button
@@ -66,13 +85,17 @@ const FlowSelection = ({ onSelect }) => (
 );
 
 const UserJourney = () => {
-  const [selectedFlow, setSelectedFlow] = useState(null);
+  const [selected, setSelected] = useState(null);
 
-  if (!selectedFlow) {
-    return <FlowSelection onSelect={setSelectedFlow} />;
+  if (!selected) {
+    return <FlowSelection onSelect={setSelected} />;
   }
 
-  return <DeckView />;
+  if (selected === 'problem-context') {
+    return <ProblemContextDeck onBack={() => setSelected(null)} />;
+  }
+
+  return <DeckView onBack={() => setSelected(null)} />;
 };
 
 export default UserJourney;

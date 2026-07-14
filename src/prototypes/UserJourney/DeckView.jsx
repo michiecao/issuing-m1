@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DashboardView from '../M1/DashboardView';
+import { ArrowLeftIcon } from '../../components/icons';
 
 const BEATS = [
   'User is interested in finding a card issuing solution and researches possible solutions.',
@@ -392,17 +393,15 @@ const recommendedProgram = {
 };
 
 const SlideCardProgram = () => (
-  <div className="flex items-center justify-center w-full">
+  <div className="flex flex-col items-center gap-4 w-full">
+    {/* Annotation */}
+    <div className="flex items-start gap-2.5 px-4 py-3 rounded-lg" style={{ background: '#fffbe6', border: '1px solid #ffe58f', maxWidth: 440 }}>
+      <span style={{ fontSize: 14, lineHeight: 1 }}>💬</span>
+      <p className="text-xs leading-relaxed" style={{ color: '#7c6200' }}>
+        <span className="font-semibold">Open question:</span> Where should this live in the flow and dashboard?
+      </p>
+    </div>
     <div className="bg-white flex flex-col overflow-hidden" style={{ width: 440, borderRadius: 12, boxShadow: '0 8px 40px rgba(0,0,0,0.2)' }}>
-      {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3">
-        <span className="text-base font-bold" style={{ color: '#0a2540' }}>stripe</span>
-        <div className="flex items-center gap-3">
-          <div className="h-1 rounded-full" style={{ background: '#635bff', width: 52 }} />
-          <span className="text-gray-400 text-xl leading-none cursor-pointer">×</span>
-        </div>
-      </div>
-
       {/* Body */}
       <div className="px-10 pt-5 pb-6 flex flex-col gap-5">
         <div className="flex flex-col gap-1">
@@ -449,12 +448,13 @@ const SlideCardProgram = () => (
         <button className="px-4 py-1.5 text-xs font-semibold text-white" style={{ background: '#635bff', borderRadius: 6 }}>Go to Issuing</button>
       </div>
     </div>
+
   </div>
 );
 
 const SLIDES = [Slide1, Slide2, Slide5, Slide6, SlideCardProgram, Slide7];
 
-const DeckView = () => {
+const DeckView = ({ onBack }) => {
   const [current, setCurrent] = useState(0);
   const [dir, setDir] = useState(1);
   const [visible, setVisible] = useState(true);
@@ -544,6 +544,14 @@ const DeckView = () => {
           <Slide />
         </div>
       </div>
+
+      {onBack && (
+        <button onClick={onBack}
+          className="fixed left-3 bottom-3 z-50 flex items-center gap-1.5 px-2.5 py-1.5 bg-white rounded-lg shadow-lg border border-gray-200 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors">
+          <ArrowLeftIcon size={12} />
+          Back to main view
+        </button>
+      )}
     </div>
   );
 };
