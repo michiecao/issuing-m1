@@ -7,6 +7,7 @@ const BEATS = [
   'User is interested in Stripe and learns more about the card programs it offers.',
   'User decides to move forward with Stripe Issuing and creates an account.',
   'During onboarding, user indicates they want to use Stripe to issue cards.',
+  'User selects card issuing as their intended use case.',
   'In the onboarding flow, Stripe determines the card program that works best for the user.',
   'User is routed to the Issuing tab in the dashboard.',
 ];
@@ -119,9 +120,9 @@ const businessPrograms = allPrograms.filter(p => p.label === 'For your business'
 const customerPrograms = allPrograms.filter(p => p.label === 'For your customers');
 
 const Slide2 = () => (
-  <div style={{ marginTop: 80, width: '100%' }}>
+  <div style={{ width: '100%', marginTop: 30 }}>
   <Browser url="stripe.com/issuing" fillHeight>
-  <div style={{ height: 480, overflowY: 'auto' }}>
+  <div style={{ height: 'calc(100vh - 154px)', overflowY: 'auto' }}>
   <div className="p-8 flex flex-col gap-5">
     <div className="flex flex-col items-center text-center gap-4">
       <div className="text-xs font-medium self-start" style={{ color: '#0a2540' }}>Issuing</div>
@@ -256,7 +257,10 @@ const Slide4 = () => (
 const Slide5 = () => {
   const [showPassword, setShowPassword] = useState(false);
   return (
-    <div className="flex items-center justify-center w-full">
+  <div style={{ width: '100%', marginTop: 30 }}>
+  <Browser url="stripe.com/register" fillHeight>
+  <div style={{ overflow: 'hidden', height: 'calc(100vh - 154px)' }}>
+    <div className="flex items-center justify-center w-full p-12" style={{ background: 'rgba(0,0,0,0.4)', height: '100%' }}>
       <div className="bg-white rounded-2xl border p-6 flex flex-col gap-3 w-full max-w-sm" style={{ borderColor: '#ebeef1', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
         <div className="flex flex-col gap-0.5">
           <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-black text-sm mb-1" style={{ background: '#635bff' }}>S</div>
@@ -318,6 +322,9 @@ const Slide5 = () => {
         </div>
       </div>
     </div>
+  </div>
+  </Browser>
+  </div>
   );
 };
 
@@ -336,7 +343,9 @@ const products = [
 ];
 
 const Slide6 = () => (
-  <div className="flex items-center justify-center w-full">
+  <div style={{ width: '100%', marginTop: 30 }}>
+  <Browser url="dashboard.stripe.com" fillHeight>
+  <div style={{ overflow: 'hidden', height: 'calc(100vh - 154px)', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.3)' }}>
       <div className="bg-white flex flex-col overflow-hidden" style={{ width: 440, borderRadius: 12, boxShadow: '0 8px 40px rgba(0,0,0,0.2)' }}>
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3">
@@ -396,6 +405,8 @@ const Slide6 = () => (
         </div>
       </div>
   </div>
+  </Browser>
+  </div>
 );
 
 const Slide7 = () => (
@@ -404,6 +415,102 @@ const Slide7 = () => (
       <div style={{ overflow: 'hidden' }}>
         <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%` }}>
           <DashboardView simplifiedNav />
+        </div>
+      </div>
+    </Browser>
+  </div>
+);
+
+const wordCloudItems = [
+  { label: 'Non-recurring payments', checked: false },
+  { label: 'Recurring payments', checked: false },
+  { label: 'Invoices', checked: false },
+  { label: 'Build a platform or marketplace', checked: false },
+  { label: 'Tax collection', checked: false },
+  { label: 'In-person payments', checked: false },
+  { label: 'Card issuing', checked: true },
+  { label: 'Identity verification', checked: false },
+  { label: 'Climate contributions', checked: false },
+  { label: 'Fraud protection', checked: false },
+  { label: 'Financial services', checked: false },
+  { label: 'Bank data access', checked: false },
+  { label: 'Connect with a business using Stripe', checked: false },
+];
+
+const SlideWordCloud = () => (
+  <div style={{ width: '100%', marginTop: 30 }}>
+    <Browser url="dashboard.stripe.com" fillHeight>
+      <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)', background: 'rgba(182,192,205,0.7)' }}>
+        {/* Modal */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+          paddingTop: 40,
+        }}>
+          <div style={{
+            background: '#fff',
+            borderRadius: 12,
+            boxShadow: '0 15px 35px rgba(48,49,61,0.08), 0 5px 15px rgba(0,0,0,0.12)',
+            width: '88%', maxWidth: 860,
+            display: 'flex', flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+            {/* Modal header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 32px 16px' }}>
+              <span style={{ fontSize: 18, fontWeight: 700, color: '#0a2540', letterSpacing: '-0.3px' }}>stripe</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <div style={{ height: 5, width: 7, borderRadius: 100, background: '#675dff' }} />
+                <div style={{ height: 5, width: 100, borderRadius: 100, background: '#f5f6f8' }} />
+              </div>
+            </div>
+
+            {/* Modal body */}
+            <div style={{ padding: '8px 32px 24px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <p style={{ fontSize: 16, color: '#21252c', margin: 0, lineHeight: '24px' }}>
+                <strong>Select how you want to use Stripe.</strong>{' '}
+                <span style={{ color: '#99a5b8' }}>You can always add or remove products later.</span>
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {wordCloudItems.map((item) => (
+                  <div
+                    key={item.label}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '10px 12px',
+                      borderRadius: 8,
+                      border: item.checked ? '2px solid #675dff' : '1.5px solid #ebeef1',
+                      background: item.checked ? '#fff' : '#f5f6f8',
+                      width: 'calc(50% - 4px)',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    <div style={{
+                      width: 14, height: 14, borderRadius: 3, flexShrink: 0,
+                      border: item.checked ? '1.5px solid #675dff' : '1.5px solid #d8dee4',
+                      background: item.checked ? '#533afd' : '#fff',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      {item.checked && (
+                        <svg width="8" height="6" viewBox="0 0 9 7" fill="none">
+                          <path d="M1 3.5l2.5 2.5 4.5-5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
+                    </div>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: '#353a44', letterSpacing: '-0.15px' }}>{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Modal footer */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 32px 20px' }}>
+              <span style={{ fontSize: 13, color: '#533afd', cursor: 'pointer' }}>← Back</span>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <button style={{ padding: '8px 16px', fontSize: 13, fontWeight: 500, color: '#353a44', background: '#fff', border: '1.5px solid #d8dee4', borderRadius: 6, cursor: 'pointer' }}>Skip</button>
+                <button style={{ padding: '8px 20px', fontSize: 13, fontWeight: 600, color: '#fff', background: '#533afd', border: 'none', borderRadius: 6, cursor: 'pointer' }}>Continue</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </Browser>
@@ -478,7 +585,117 @@ const SlideCardProgram = () => (
   </div>
 );
 
-const SLIDES = [Slide1, Slide2, Slide5, Slide6, SlideCardProgram, Slide7];
+const SlideWelcome = () => (
+  <div style={{ width: '100%', marginTop: 30 }}>
+  <Browser url="dashboard.stripe.com/acct/welcome" fillHeight>
+  <div style={{ height: 'calc(100vh - 154px)', overflowY: 'auto', position: 'relative', background: '#f5f6f8' }}>
+    {/* Modal overlay */}
+    <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.3)' }}>
+      <div className="bg-white flex flex-col" style={{ width: 440, borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.2)', overflow: 'hidden' }}>
+        {/* Modal header */}
+        <div className="flex items-center justify-between px-6 pt-5 pb-4">
+          <span className="text-base font-bold" style={{ color: '#0a2540' }}>stripe</span>
+          <div className="h-0.5 w-16 rounded-full" style={{ background: '#635bff' }} />
+        </div>
+        {/* Body */}
+        <div className="px-6 pb-6 flex flex-col gap-4">
+          <p className="text-sm leading-relaxed" style={{ color: '#0a2540' }}>
+            <span className="font-semibold" style={{ color: '#635bff' }}>Welcome to Stripe.</span>{' '}
+            Tell us a bit about your business and we'll set things up for you.
+          </p>
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-medium" style={{ color: '#353a44' }}>Business name</label>
+              <input
+                readOnly
+                value="Acme Inc"
+                className="border px-3 py-2 text-sm"
+                style={{ borderColor: '#d8dee4', borderRadius: 4, color: '#353a44' }}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-medium flex items-center gap-1" style={{ color: '#353a44' }}>
+                Business location
+                <span className="text-xs rounded-full border flex items-center justify-center" style={{ width: 14, height: 14, borderColor: '#9ca3af', color: '#9ca3af', fontSize: 9 }}>i</span>
+              </label>
+              <div className="border px-3 py-2 text-sm flex items-center gap-2" style={{ borderColor: '#d8dee4', borderRadius: 4, color: '#353a44' }}>
+                <span>🇺🇸</span>
+                <span className="flex-1">United States</span>
+                <span style={{ color: '#9ca3af' }}>⌄</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Footer */}
+        <div className="flex justify-end px-6 py-4 border-t" style={{ borderColor: '#ebeef1' }}>
+          <button className="px-5 py-2 text-sm font-semibold text-white" style={{ background: '#635bff', borderRadius: 4 }}>
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </Browser>
+  </div>
+);
+
+const SlideDescribeBusiness = () => (
+  <div style={{ width: '100%', marginTop: 30 }}>
+  <Browser url="dashboard.stripe.com/acct/welcome" fillHeight>
+  <div style={{ height: 'calc(100vh - 154px)', overflowY: 'auto', position: 'relative', background: '#f5f6f8' }}>
+    {/* Modal overlay */}
+    <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.3)' }}>
+      <div className="bg-white flex flex-col" style={{ width: 440, borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.2)', overflow: 'hidden' }}>
+        {/* Modal header */}
+        <div className="flex items-center justify-between px-6 pt-5 pb-4">
+          <span className="text-base font-bold" style={{ color: '#0a2540' }}>stripe</span>
+          <div className="h-0.5 w-16 rounded-full" style={{ background: '#635bff' }} />
+        </div>
+        {/* Body */}
+        <div className="px-6 pb-6 flex flex-col gap-4">
+          <p className="text-sm leading-relaxed" style={{ color: '#0a2540' }}>
+            <span className="font-semibold">Describe your business in a few words.</span>{' '}
+            This helps us recommend the best setup.
+          </p>
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-medium" style={{ color: '#353a44' }}>Website</label>
+              <input
+                readOnly
+                value=""
+                placeholder=""
+                className="border px-3 py-2 text-sm"
+                style={{ borderColor: '#635bff', borderRadius: 4, color: '#353a44', outline: 'none', boxShadow: '0 0 0 2px rgba(99,91,255,0.15)' }}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-medium" style={{ color: '#353a44' }}>What does your business do?</label>
+              <textarea
+                readOnly
+                value="I design custom logos and brand materials, billing clients through online invoices."
+                className="border px-3 py-2 text-sm resize-none"
+                rows={4}
+                style={{ borderColor: '#d8dee4', borderRadius: 4, color: '#353a44' }}
+              />
+            </div>
+          </div>
+        </div>
+        {/* Footer */}
+        <div className="flex items-center justify-between px-6 py-4 border-t" style={{ borderColor: '#ebeef1' }}>
+          <span className="text-xs flex items-center gap-1 cursor-pointer" style={{ color: '#635bff' }}>← Back</span>
+          <div className="flex items-center gap-2">
+            <button className="px-4 py-2 text-sm font-medium border bg-white" style={{ color: '#0a2540', borderColor: '#d8dee4', borderRadius: 4 }}>Skip</button>
+            <button className="px-5 py-2 text-sm font-semibold text-white" style={{ background: '#635bff', borderRadius: 4 }}>Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </Browser>
+  </div>
+);
+
+const SLIDES = [Slide1, Slide2, Slide5, Slide6, SlideWordCloud, SlideCardProgram, Slide7];
 
 const DeckView = ({ onBack }) => {
   const [current, setCurrent] = useState(0);
@@ -529,7 +746,7 @@ const DeckView = ({ onBack }) => {
 
       {/* Content area — centers slide in the space below the description */}
       <div
-        className="flex-1 relative flex items-center justify-center px-16 overflow-hidden"
+        className={`flex-1 relative flex justify-center px-16 overflow-hidden ${[1, 2, 3, 4, 6].includes(current) ? 'items-start' : 'items-center'}`}
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : `translateY(${dir * 12}px)`,
