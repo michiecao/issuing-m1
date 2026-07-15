@@ -401,16 +401,25 @@ const Slide3 = () => {
 const FLOW_GREEN = '#1e6b3c';
 
 const OPPORTUNITIES = [
-  'Educate users about card programs',
-  'Allow users to indicate intent for cards',
-  'Educate users about all card programs',
+  {
+    title: 'Proactively educate users about card programs',
+    description: 'Surface information about all card programs Stripe offers on stripe.com and via the Issuing tab so users can learn about them and figure out which one they\'re interested in.',
+  },
+  {
+    title: 'Allow users to indicate the right intent for cards',
+    description: 'Today\'s onboarding surfaces "Card issuing" as an option, but routes users straight to the Issuing tab — built for Stripe-as-infrastructure programs. We need to surface both card offering types and let users choose between them.',
+  },
+  {
+    title: 'Give users an easy exit to the right card program',
+    description: 'Users who begin onboarding for one card program may quickly realize it\'s not the right fit. We should surface a clear way to switch at the start of onboarding, before they\'ve gone too far down the wrong path.',
+  },
 ];
 
-// SVG box coords [x, y, w, h] in the 826×716 viewBox, one per opportunity
+// SVG box coords [[x, y, w, h], ...] in the 826×766 viewBox, one array per opportunity
 const OPPORTUNITY_BOXES = [
-  [307,   1,   212, 70],   // Stripe.com
-  [208.5, 184, 409, 70],   // Stripe initial onboarding
-  [439,   581, 386, 134],  // Issuing
+  [[307, 1, 195, 71], [439, 498, 387, 71], [439, 635, 387, 131]],  // Stripe.com + Issuing (header + content)
+  [[273, 138, 283, 71]],                                             // Initial onboarding
+  [[1, 635, 387, 131], [439, 635, 387, 131]],                       // Card + Issuing onboarding content
 ];
 
 const Slide4 = () => {
@@ -419,15 +428,15 @@ const Slide4 = () => {
   return (
     <div className="flex gap-16 w-full items-start">
       {/* Left: title + opportunity list */}
-      <div className="shrink-0 flex flex-col" style={{ width: 460 }}>
+      <div className="shrink-0 flex flex-col" style={{ width: 560 }}>
         <h1 className="text-3xl font-light" style={{ lineHeight: '36px', color: '#353a44' }}>
           Opportunities
         </h1>
         <div className="flex flex-col gap-3" style={{ marginTop: 40 }}>
-          {OPPORTUNITIES.map((text, i) => (
+          {OPPORTUNITIES.map((o, i) => (
             <div
               key={i}
-              className="flex gap-3 items-center rounded-lg border px-8 py-5 cursor-default transition-colors"
+              className="flex gap-1 items-start rounded-lg border px-8 py-5 cursor-default transition-colors"
               style={{
                 borderColor: hovered === i ? '#635bff' : '#e5e7eb',
                 background: hovered === i ? '#f9fafb' : 'transparent',
@@ -435,8 +444,11 @@ const Slide4 = () => {
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
             >
-              <span className="text-xl shrink-0 text-gray-700">{i + 1}.</span>
-              <span className="text-xl leading-snug text-gray-700">{text}</span>
+              <span className="text-xl shrink-0 text-gray-700" style={{ width: 36 }}>{i + 1}.</span>
+              <div className="flex flex-col gap-1">
+                <span className="text-xl leading-snug text-gray-700">{o.title}</span>
+                <span className="text-sm leading-snug text-gray-500">{o.description}</span>
+              </div>
             </div>
           ))}
         </div>
@@ -445,20 +457,33 @@ const Slide4 = () => {
       {/* Right: flowchart with hover overlay */}
       <div className="flex-1 flex justify-end items-start" style={{ paddingTop: 80, paddingRight: 48 }}>
         <div className="relative" style={{ width: '90%', maxWidth: 520 }}>
-          <img src={flowChartUrl} alt="Opportunities flowchart" style={{ width: '100%', display: 'block' }} />
+          {/* White fill — behind the img so text renders on top */}
+          {hovered !== null && (
+            <svg viewBox="0 0 826 766" className="absolute inset-0 pointer-events-none"
+              style={{ width: '100%', height: '100%', zIndex: 1 }}>
+              {OPPORTUNITY_BOXES[hovered].map(([bx, by, bw, bh], i) => (
+                <rect key={i} x={bx} y={by} width={bw} height={bh} rx="7" fill="white" />
+              ))}
+            </svg>
+          )}
+
+          <img src={flowChartUrl} alt="Opportunities flowchart"
+            style={{ width: '100%', display: 'block', position: 'relative', zIndex: 2 }} />
+
+          {/* Dim + border overlay — above the img */}
           {hovered !== null && (() => {
-            const [bx, by, bw, bh] = OPPORTUNITY_BOXES[hovered];
-            const dimPath = `M0 0 H826 V716 H0 Z M${bx} ${by} H${bx + bw} V${by + bh} H${bx} Z`;
+            const boxes = OPPORTUNITY_BOXES[hovered];
+            const holes = boxes.map(([bx, by, bw, bh]) =>
+              `M${bx} ${by} H${bx + bw} V${by + bh} H${bx} Z`
+            ).join(' ');
+            const dimPath = `M0 0 H826 V716 H0 Z ${holes}`;
             return (
-              <svg
-                viewBox="0 0 826 716"
-                className="absolute inset-0 pointer-events-none"
-                style={{ width: '100%', height: '100%' }}
-              >
-                {/* dim overlay with evenodd cutout for highlighted box */}
+              <svg viewBox="0 0 826 766" className="absolute inset-0 pointer-events-none"
+                style={{ width: '100%', height: '100%', zIndex: 3 }}>
                 <path d={dimPath} fillRule="evenodd" fill="rgba(245,246,248,0.45)" />
-                {/* highlight border */}
-                <rect x={bx} y={by} width={bw} height={bh} rx="7" fill="white" stroke="#635bff" strokeWidth="1.5" />
+                {boxes.map(([bx, by, bw, bh], i) => (
+                  <rect key={i} x={bx} y={by} width={bw} height={bh} rx="7" fill="none" stroke="#635bff" strokeWidth="1.5" />
+                ))}
               </svg>
             );
           })()}
@@ -501,18 +526,12 @@ const ProblemContextDeck = ({ onBack }) => {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: dark ? '#1a1b25' : '#f5f6f8', transition: 'background 0.3s ease' }}>
-      {/* Header */}
-      <div className="px-16 pt-5 pb-3 flex flex-col items-center gap-2">
-        <div className="flex items-center gap-2">
-          {SLIDES.map((_, i) => (
-            <button key={i} onClick={() => goTo(i)} className="rounded-full transition-all"
-              style={{ width: 6, height: 6, background: i === current ? (dark ? '#fff' : PURPLE) : (dark ? 'rgba(255,255,255,0.25)' : '#d8dee4') }} />
-          ))}
-        </div>
-        {BEATS[current] && (
+      {/* Header — beats only */}
+      {BEATS[current] && (
+        <div className="px-16 pt-5 pb-3 flex flex-col items-center">
           <p className="text-3xl font-light text-center" style={{ color: dark ? '#fff' : '#353a44' }}>{BEATS[current]}</p>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Left arrow — fixed to viewport center */}
       <button onClick={() => goTo(current - 1)} disabled={current === 0}
@@ -538,6 +557,14 @@ const ProblemContextDeck = ({ onBack }) => {
         →
       </button>
 
+      {/* Progress dots — bottom center */}
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2">
+        {SLIDES.map((_, i) => (
+          <button key={i} onClick={() => goTo(i)} className="rounded-full transition-all"
+            style={{ width: 6, height: 6, background: i === current ? (dark ? '#fff' : PURPLE) : (dark ? 'rgba(255,255,255,0.25)' : '#d8dee4') }} />
+        ))}
+      </div>
+
       {/* Back — outside transform container so fixed positioning works */}
       <button onClick={onBack}
         className="fixed left-3 bottom-3 z-50 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg shadow-lg text-xs font-medium transition-colors"
@@ -552,7 +579,7 @@ const ProblemContextDeck = ({ onBack }) => {
 
       {/* Content */}
       <div
-        className="flex-1 relative flex px-12 pb-8 pt-2"
+        className="flex-1 relative flex px-12 pb-8 pt-8"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : `translateY(${dir * 12}px)`,
