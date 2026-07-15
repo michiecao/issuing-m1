@@ -12,6 +12,7 @@ const flows = [
     title: 'User story 1: Business joins Stripe to get a card for an on-demand use case',
     status: 'in-progress',
     available: true,
+    badge: 'Work in progress!!',
   },
   {
     id: 'expense',
@@ -55,6 +56,9 @@ const FlowSelection = ({ onSelect }) => (
               <span className={`text-sm ${flow.available ? 'text-default group-hover:text-[#635bff] transition-colors' : 'text-gray-400'}`}>
                 {flow.title}
               </span>
+              {flow.badge && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 whitespace-nowrap">{flow.badge}</span>
+              )}
             </div>
             {flow.available && <Icon name="chevronRight" size="xsmall" fill="currentColor" className="text-gray-400 group-hover:text-[#635bff] transition-colors shrink-0" />}
           </button>

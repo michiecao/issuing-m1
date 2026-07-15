@@ -27,13 +27,18 @@ const PROTOTYPES = [
   },
 ];
 
-const PrototypeCard = ({ title, description, status, href, disabled }) => (
+const PrototypeCard = ({ title, description, status, href, disabled, badge }) => (
   <tr
     className={`border-b border-gray-200 last:border-b-0 relative ${disabled ? 'opacity-50' : 'cursor-pointer hover:bg-gray-50'} transition-colors`}
   >
     <td className="px-6 py-4">
       {!disabled && <a href={href} className="absolute inset-1" aria-label={title} />}
-      <div className="font-medium text-gray-900">{title}</div>
+      <div className="flex items-center gap-2">
+        <span className="font-medium text-gray-900">{title}</span>
+        {badge && (
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 whitespace-nowrap">{badge}</span>
+        )}
+      </div>
     </td>
     <td className="px-6 py-4">
       <span
@@ -106,6 +111,7 @@ const HomePage = () => (
                 description={prototype.description}
                 status={prototype.status}
                 disabled={prototype.disabled}
+                badge={prototype.badge}
                 href={`#${prototype.id}`}
               />
             ))}

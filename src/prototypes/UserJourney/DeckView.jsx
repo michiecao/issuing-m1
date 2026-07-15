@@ -6,8 +6,9 @@ const BEATS = [
   'User is interested in finding a card issuing solution and researches possible solutions.',
   'User is interested in Stripe and learns more about the card programs it offers.',
   'User decides to move forward with Stripe Issuing and creates an account.',
-  'During onboarding, user indicates they want to use Stripe to issue cards.',
-  'User selects card issuing as their intended use case.',
+  'Stripe asks the user to describe their business to personalize setup recommendations.',
+  'Based on the website, Stripe presents personalized product recommendations.',
+  'User can also explicitly select cards on their own.',
   'In the onboarding flow, Stripe determines the card program that works best for the user.',
   'User is routed to the Issuing tab in the dashboard.',
 ];
@@ -63,11 +64,11 @@ const ProgramCard = ({ name, desc, label, cardGradient, network }) => (
   <div className="flex flex-col flex-1 overflow-hidden" style={{ background: '#fff', border: '1px solid #ebeef1', borderRadius: 4 }}>
     <div
       className="flex items-center justify-center relative overflow-hidden"
-      style={{ background: '#f7f8fa', height: 160 }}
+      style={{ background: '#f7f8fa', height: 200 }}
     >
       <div
         className="p-3 flex flex-col justify-between relative overflow-hidden"
-        style={{ background: cardGradient, width: 150, height: 95, color: '#fff', borderRadius: 6, boxShadow: '0 4px 12px rgba(0,0,0,0.18)' }}
+        style={{ background: cardGradient, width: 200, height: 126, color: '#fff', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.18)' }}
       >
         <div className="flex justify-between items-start">
           <div className="w-4 h-3 rounded-sm opacity-70" style={{ background: 'rgba(255,255,255,0.5)' }} />
@@ -144,20 +145,20 @@ const Slide2 = () => (
     <div className="flex flex-col gap-6 mt-6">
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-0.5">
-          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards for your business</div>
-          <div className="text-sm" style={{ color: '#596171' }}>Equip your team with cards, spend controls, and real-time visibility</div>
-        </div>
-        <div className="flex gap-3">
-          {businessPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
-        </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-col gap-0.5">
-          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards for your customers</div>
+          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards to launch a card program</div>
           <div className="text-sm" style={{ color: '#596171' }}>Build a fully branded card program for your customers with custom controls</div>
         </div>
         <div className="flex gap-3">
           {customerPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
+        </div>
+      </div>
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-0.5">
+          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards for your business banking</div>
+          <div className="text-sm" style={{ color: '#596171' }}>Equip your team with cards, spend controls, and real-time visibility</div>
+        </div>
+        <div className="flex gap-3">
+          {businessPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
         </div>
       </div>
     </div>
@@ -328,6 +329,200 @@ const Slide5 = () => {
   );
 };
 
+const typeaheadSuggestions = [
+  'I sell a product or service',
+  "I'm an AI startup and need help getting started",
+  'I want to build a Stripe App',
+  'I want to open a Financial Account',
+];
+
+const SlideTellUs = () => (
+  <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
+    <Browser url="dashboard.stripe.com" fillHeight>
+      <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)' }}>
+        {/* Dashboard background */}
+        <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%`, pointerEvents: 'none' }}>
+          <DashboardView simplifiedNav />
+        </div>
+        {/* Backdrop */}
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(182,192,205,0.7)' }} />
+        {/* Modal */}
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: 41 }}>
+          <div style={{
+            background: '#fff',
+            borderRadius: 12,
+            boxShadow: '0 15px 35px rgba(48,49,61,0.08), 0 5px 15px rgba(0,0,0,0.12)',
+            width: '93%',
+            height: 600,
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            {/* Stripe logo */}
+            <div style={{ position: 'absolute', left: 42, top: 28, fontSize: 18, fontWeight: 700, color: '#0a2540', letterSpacing: '-0.3px' }}>stripe</div>
+            {/* Progress bar */}
+            <div style={{ position: 'absolute', right: 42, top: 36, display: 'flex', gap: 4 }}>
+              <div style={{ height: 5, width: 7, borderRadius: 100, background: '#675dff' }} />
+              <div style={{ height: 5, width: 100, borderRadius: 100, background: '#f5f6f8' }} />
+            </div>
+
+            {/* Centered content column */}
+            <div style={{
+              position: 'absolute',
+              left: '50%', top: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 426,
+              display: 'flex', flexDirection: 'column', gap: 24,
+            }}>
+              <p style={{ fontSize: 20, color: '#21252c', margin: 0, lineHeight: '28px', letterSpacing: '0.3px' }}>
+                <strong>Tell us more about your business.</strong>{' '}
+                <span style={{ color: '#99a5b8', fontWeight: 400 }}>This helps us make setup recommendations for you.</span>
+              </p>
+
+              {/* Website field */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <label style={{ fontSize: 16, color: '#353a44', lineHeight: '24px' }}>Website</label>
+                <div style={{ border: '1px solid #d8dee4', borderRadius: 6, padding: '12px 16px', background: '#fff' }}>
+                  <span style={{ fontSize: 16, color: '#6c7688', lineHeight: '24px' }}>www.yoursite.com</span>
+                </div>
+              </div>
+
+              {/* How do you want to get started */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <label style={{ fontSize: 16, color: '#353a44', lineHeight: '24px' }}>How do you want to get started?</label>
+                <div style={{ border: '1px solid #d8dee4', borderRadius: 6, padding: '12px 16px', background: '#fff', height: 118, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden' }}>
+                  <div style={{ overflow: 'hidden', height: 24 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 17 }}>
+                      {typeaheadSuggestions.map((s, i) => (
+                        <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ fontSize: 16, color: i === 0 ? '#6c7688' : '#818da0', lineHeight: '24px', whiteSpace: 'nowrap' }}>{s}</span>
+                          {i === 0 && (
+                            <span style={{ background: '#f5f6f8', borderRadius: 4, padding: '0 8px', fontSize: 12, fontWeight: 700, color: '#818da0', textTransform: 'uppercase', letterSpacing: 0.5 }}>Tab</span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Back link */}
+            <span style={{ position: 'absolute', left: 42, bottom: 28, fontSize: 16, color: '#533afd', cursor: 'pointer', letterSpacing: '-0.3px' }}>← Back</span>
+            {/* Skip + Continue */}
+            <div style={{ position: 'absolute', right: 32, bottom: 20, display: 'flex', gap: 16 }}>
+              <button style={{ padding: '10px 20px', fontSize: 14, fontWeight: 500, color: '#353a44', background: '#fff', border: '1.5px solid #d8dee4', borderRadius: 6, cursor: 'pointer' }}>Skip</button>
+              <button style={{ padding: '10px 24px', fontSize: 14, fontWeight: 600, color: '#fff', background: '#533afd', border: 'none', borderRadius: 6, cursor: 'pointer' }}>Continue</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Browser>
+  </div>
+);
+
+const moreRecsProducts = [
+  { name: 'Cards for banking', desc: 'Equip your team with cards, spend controls, and real-time visibility into every transaction.' },
+  { name: 'Cards to power card programs', desc: 'Build a fully branded card program for your customers with custom controls and instant issuance.' },
+];
+
+const SlideRecFromWebsite = () => (
+  <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
+    <Browser url="dashboard.stripe.com" fillHeight>
+      <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)' }}>
+        {/* Dashboard background */}
+        <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%`, pointerEvents: 'none' }}>
+          <DashboardView simplifiedNav />
+        </div>
+        {/* Backdrop */}
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(182,192,205,0.7)' }} />
+        {/* Modal container */}
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <div style={{
+            background: '#fff',
+            borderRadius: 12,
+            boxShadow: '0 15px 35px rgba(48,49,61,0.08), 0 5px 15px rgba(0,0,0,0.12)',
+            width: '93%',
+            height: 'calc(100% - 60px)',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+            {/* Stripe logo */}
+            <div style={{ position: 'absolute', left: 42, top: 32, fontSize: 18, fontWeight: 700, color: '#0a2540', letterSpacing: '-0.3px', zIndex: 1 }}>stripe</div>
+            {/* Progress bar */}
+            <div style={{ position: 'absolute', right: 42, top: 42, display: 'flex', gap: 4, zIndex: 1 }}>
+              <div style={{ height: 5, width: 7, borderRadius: 100, background: '#675dff' }} />
+              <div style={{ height: 5, width: 125, borderRadius: 100, background: '#f5f6f8' }} />
+            </div>
+
+            {/* Scrollable content */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '135px 0 16px' }}>
+              <div style={{ width: 658, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 32 }}>
+                {/* Heading */}
+                <p style={{ fontSize: 20, margin: 0, lineHeight: '28px', letterSpacing: '0.3px' }}>
+                  <strong style={{ color: '#21252c', fontWeight: 700 }}>Great, here's the products we recommend based on the information you provided.</strong>{' '}
+                  <span style={{ color: '#99a5b8', fontWeight: 400 }}>You can always add or remove products later.</span>
+                </p>
+
+                {/* Primary recommendations (checked) */}
+                <div style={{ background: '#ebecff', borderRadius: 8, padding: 8, display: 'flex', gap: 8 }}>
+                  {[
+                    { name: 'Non-recurring payments', desc: 'Accept payments for products and services using a checkout page or invoices.' },
+                    { name: 'Recurring payments', desc: 'Offer subscriptions and bill customers for ongoing usage and services.' },
+                  ].map((p) => (
+                    <div key={p.name} style={{ flex: 1, background: '#fff', border: '2px solid #675dff', borderRadius: 8, padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                      <div style={{ width: 14, height: 14, borderRadius: 4, background: '#675dff', border: '1px solid #675dff', flexShrink: 0, marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="8" height="6" viewBox="0 0 9 7" fill="none"><path d="M1 3.5l2.5 2.5 4.5-5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: '#353a44', lineHeight: '20px', letterSpacing: '-0.15px' }}>{p.name}</div>
+                        <div style={{ fontSize: 12, color: '#596171', lineHeight: '16px' }}>{p.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* More recommendations */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <div style={{ fontSize: 18, color: '#596171', lineHeight: '28px', letterSpacing: '-0.48px' }}>More recommendations</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      {moreRecsProducts.slice(0, 2).map((p) => (
+                        <div key={p.name} style={{ flex: 1, background: '#f5f6f8', borderRadius: 8, padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                          <div style={{ width: 14, height: 14, borderRadius: 4, background: '#fff', border: '1px solid #d8dee4', flexShrink: 0, marginTop: 2, boxShadow: '0 1px 1px rgba(33,37,44,0.16)' }} />
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            <div style={{ fontSize: 14, fontWeight: 600, color: '#353a44', lineHeight: '20px', letterSpacing: '-0.15px' }}>{p.name}</div>
+                            <div style={{ fontSize: 12, color: '#596171', lineHeight: '16px' }}>{p.desc}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* See all products */}
+                    <div style={{ background: '#f7f5fd', borderRadius: 8, padding: '8px 16px', display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 14, color: '#533afd', letterSpacing: '-0.15px' }}>See all products</span>
+                      <span style={{ fontSize: 14, color: '#533afd' }}>→</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div style={{ flexShrink: 0, padding: '12px 42px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 16, color: '#533afd', cursor: 'pointer', letterSpacing: '-0.31px' }}>← Back</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                <span style={{ fontSize: 16, color: '#533afd', cursor: 'pointer', letterSpacing: '-0.31px' }}>I want a different setup</span>
+                <button style={{ padding: '10px 24px', fontSize: 14, fontWeight: 600, color: '#fff', background: '#533afd', border: 'none', borderRadius: 6, cursor: 'pointer' }}>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Browser>
+  </div>
+);
+
 const steps = [
   { label: 'Account', done: true },
   { label: 'Business', done: true },
@@ -428,8 +623,9 @@ const wordCloudItems = [
   { label: 'Build a platform or marketplace', checked: false },
   { label: 'Tax collection', checked: false },
   { label: 'In-person payments', checked: false },
-  { label: 'Card issuing', checked: true },
+  { label: 'Cards for banking', checked: true },
   { label: 'Identity verification', checked: false },
+  { label: 'Cards to launch card program', checked: false },
   { label: 'Climate contributions', checked: false },
   { label: 'Fraud protection', checked: false },
   { label: 'Financial services', checked: false },
@@ -695,7 +891,7 @@ const SlideDescribeBusiness = () => (
   </div>
 );
 
-const SLIDES = [Slide1, Slide2, Slide5, Slide6, SlideWordCloud, SlideCardProgram, Slide7];
+const SLIDES = [Slide1, Slide2, Slide5, SlideTellUs, SlideRecFromWebsite, SlideWordCloud, SlideCardProgram, Slide7];
 
 const DeckView = ({ onBack }) => {
   const [current, setCurrent] = useState(0);
@@ -746,7 +942,7 @@ const DeckView = ({ onBack }) => {
 
       {/* Content area — centers slide in the space below the description */}
       <div
-        className={`flex-1 relative flex justify-center px-16 overflow-hidden ${[1, 2, 3, 4, 6].includes(current) ? 'items-start' : 'items-center'}`}
+        className={`flex-1 relative flex justify-center px-16 overflow-hidden ${[1, 2, 3, 4, 5, 7].includes(current) ? 'items-start' : 'items-center'}`}
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : `translateY(${dir * 12}px)`,
