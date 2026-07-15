@@ -59,14 +59,14 @@ const featureHighlights = [
 
 
 const ProgramCard = ({ name, desc, label, cardGradient, network }) => (
-  <div className="bg-white flex flex-col flex-1 overflow-hidden" style={{ border: '1px solid #ebeef1', borderRadius: 4 }}>
+  <div className="flex flex-col flex-1 overflow-hidden" style={{ background: '#fff', border: '1px solid #ebeef1', borderRadius: 4 }}>
     <div
       className="flex items-center justify-center relative overflow-hidden"
-      style={{ background: '#fff', height: 160 }}
+      style={{ background: '#f7f8fa', height: 160 }}
     >
       <div
         className="p-3 flex flex-col justify-between relative overflow-hidden"
-        style={{ background: cardGradient, width: 150, height: 95, color: '#fff', borderRadius: 6 }}
+        style={{ background: cardGradient, width: 150, height: 95, color: '#fff', borderRadius: 6, boxShadow: '0 4px 12px rgba(0,0,0,0.18)' }}
       >
         <div className="flex justify-between items-start">
           <div className="w-4 h-3 rounded-sm opacity-70" style={{ background: 'rgba(255,255,255,0.5)' }} />
@@ -77,10 +77,9 @@ const ProgramCard = ({ name, desc, label, cardGradient, network }) => (
         </div>
       </div>
     </div>
-    <div className="p-4 flex flex-col gap-1.5">
-      <div className="text-xs font-semibold" style={{ color: '#9ca3af' }}>{label}</div>
+    <div className="p-4 flex flex-col gap-0">
       <div className="font-semibold text-sm" style={{ color: '#353a44' }}>{name}</div>
-      <p className="text-xs leading-relaxed" style={{ color: '#596171' }}>{desc}</p>
+      <div className="mt-3" style={{ height: 8, borderRadius: 2, background: '#ebeef1', width: '100%' }} />
     </div>
   </div>
 );
@@ -89,28 +88,28 @@ const allPrograms = [
   {
     label: 'For your business',
     name: 'Standard Debit Card',
-    desc: 'Equip your team with cards for everyday business expenses.',
+    desc: 'Description placeholder',
     cardGradient: 'linear-gradient(135deg, #635bff 0%, #8b5cf6 100%)',
     network: 'MC',
   },
   {
     label: 'For your business',
     name: 'Standard Charge Card',
-    desc: 'Cards for larger expenses with more time to pay back.',
+    desc: 'Description placeholder',
     cardGradient: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
     network: 'MC',
   },
   {
     label: 'For your customers',
     name: 'Premium Debit Card',
-    desc: 'Build a fully branded card program for your customers.',
+    desc: 'Description placeholder',
     cardGradient: 'linear-gradient(135deg, #0f766e 0%, #0d9488 100%)',
     network: 'VISA',
   },
   {
     label: 'For your customers',
     name: 'Premium Spend Card',
-    desc: 'Advanced spend controls for your platform customers.',
+    desc: 'Description placeholder',
     cardGradient: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
     network: 'VISA',
   },
@@ -122,33 +121,46 @@ const customerPrograms = allPrograms.filter(p => p.label === 'For your customers
 const Slide2 = () => (
   <div style={{ marginTop: 80, width: '100%' }}>
   <Browser url="stripe.com/issuing" fillHeight>
-  <div className="p-8 flex flex-col gap-5" style={{ minHeight: '100vh' }}>
-    <div className="flex flex-col gap-4">
-      <div className="text-xs font-medium" style={{ color: '#0a2540' }}>Issuing</div>
+  <div style={{ height: 480, overflowY: 'auto' }}>
+  <div className="p-8 flex flex-col gap-5">
+    <div className="flex flex-col items-center text-center gap-4">
+      <div className="text-xs font-medium self-start" style={{ color: '#0a2540' }}>Issuing</div>
       <h2 className="text-3xl font-light leading-tight" style={{ color: '#0a2540' }}>Launch a card program for every need</h2>
-      <p className="text-sm leading-relaxed" style={{ color: '#596171', fontWeight: 400 }}>
-        Equip your own team or build for your customers—Stripe Issuing handles the infrastructure so you can focus on growth.
-      </p>
       <div>
         <button className="px-5 py-2.5 text-sm font-semibold text-white" style={{ background: '#635bff', borderRadius: 4 }}>
           Get started
         </button>
       </div>
     </div>
+    <div className="w-full flex items-center justify-center gap-2" style={{ background: '#f7f8fa', height: 160, borderRadius: 4 }}>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+        <path d="M21 15l-5-5L5 21" />
+      </svg>
+      <span className="text-xs font-medium" style={{ color: '#9ca3af' }}>Hero image TBD</span>
+    </div>
     <div className="flex flex-col gap-6 mt-6">
       <div className="flex flex-col gap-3">
-        <div className="text-sm font-semibold" style={{ color: '#0a2540' }}>For your business</div>
+        <div className="flex flex-col gap-0.5">
+          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards for your business</div>
+          <div className="text-sm" style={{ color: '#596171' }}>Equip your team with cards, spend controls, and real-time visibility</div>
+        </div>
         <div className="flex gap-3">
           {businessPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
         </div>
       </div>
       <div className="flex flex-col gap-3">
-        <div className="text-sm font-semibold" style={{ color: '#0a2540' }}>For your customers</div>
+        <div className="flex flex-col gap-0.5">
+          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards for your customers</div>
+          <div className="text-sm" style={{ color: '#596171' }}>Build a fully branded card program for your customers with custom controls</div>
+        </div>
         <div className="flex gap-3">
           {customerPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
         </div>
       </div>
     </div>
+  </div>
   </div>
   </Browser>
   </div>
@@ -497,7 +509,7 @@ const DeckView = ({ onBack }) => {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#f5f6f8' }}>
       {/* Header */}
-      <div className="px-16 pt-6 pb-4 text-center flex flex-col items-center gap-3">
+      <div className="px-16 pt-6 pb-4 text-center flex flex-col items-center gap-6">
         <div className="flex items-center gap-2">
           {SLIDES.map((_, i) => (
             <button
