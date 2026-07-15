@@ -410,16 +410,17 @@ const OPPORTUNITIES = [
     description: 'Today\'s onboarding surfaces "Card issuing" as an option, but routes users straight to the Issuing tab — built for Stripe-as-infrastructure programs. We need to surface both card offering types and let users choose between them.',
   },
   {
-    title: 'Give users an easy exit to the right card program',
+    title: 'Let users course-correct to the right program',
     description: 'Users who begin onboarding for one card program may quickly realize it\'s not the right fit. We should surface a clear way to switch at the start of onboarding, before they\'ve gone too far down the wrong path.',
   },
 ];
 
-// SVG box coords [[x, y, w, h], ...] in the 826×766 viewBox, one array per opportunity
+// Each entry: { highlight: [[x,y,w,h],...], undimmed: [[x,y,w,h],...] }
+// highlight = white fill + blue border; undimmed = just a hole in the dim, no fill/border
 const OPPORTUNITY_BOXES = [
-  [[307, 1, 195, 71], [439, 498, 387, 71], [439, 635, 387, 131]],  // Stripe.com + Issuing (header + content)
-  [[273, 138, 283, 71]],                                             // Initial onboarding
-  [[1, 635, 387, 131], [439, 635, 387, 131]],                       // Card + Issuing onboarding content
+  { highlight: [[307, 1, 195, 71], [439, 498, 387, 71]] },
+  { highlight: [[273, 138, 283, 71]] },
+  { highlight: [[1, 635, 387, 131], [439, 635, 387, 131]], undimmed: [[388, 635, 52, 131]] },
 ];
 
 const Slide4 = () => {
@@ -461,7 +462,7 @@ const Slide4 = () => {
           {hovered !== null && (
             <svg viewBox="0 0 826 766" className="absolute inset-0 pointer-events-none"
               style={{ width: '100%', height: '100%', zIndex: 1 }}>
-              {OPPORTUNITY_BOXES[hovered].map(([bx, by, bw, bh], i) => (
+              {OPPORTUNITY_BOXES[hovered].highlight.map(([bx, by, bw, bh], i) => (
                 <rect key={i} x={bx} y={by} width={bw} height={bh} rx="7" fill="white" />
               ))}
             </svg>
@@ -472,16 +473,16 @@ const Slide4 = () => {
 
           {/* Dim + border overlay — above the img */}
           {hovered !== null && (() => {
-            const boxes = OPPORTUNITY_BOXES[hovered];
-            const holes = boxes.map(([bx, by, bw, bh]) =>
+            const { highlight, undimmed = [] } = OPPORTUNITY_BOXES[hovered];
+            const allHoles = [...highlight, ...undimmed].map(([bx, by, bw, bh]) =>
               `M${bx} ${by} H${bx + bw} V${by + bh} H${bx} Z`
             ).join(' ');
-            const dimPath = `M0 0 H826 V716 H0 Z ${holes}`;
+            const dimPath = `M0 0 H826 V766 H0 Z ${allHoles}`;
             return (
               <svg viewBox="0 0 826 766" className="absolute inset-0 pointer-events-none"
                 style={{ width: '100%', height: '100%', zIndex: 3 }}>
                 <path d={dimPath} fillRule="evenodd" fill="rgba(245,246,248,0.45)" />
-                {boxes.map(([bx, by, bw, bh], i) => (
+                {highlight.map(([bx, by, bw, bh], i) => (
                   <rect key={i} x={bx} y={by} width={bw} height={bh} rx="7" fill="none" stroke="#635bff" strokeWidth="1.5" />
                 ))}
               </svg>
