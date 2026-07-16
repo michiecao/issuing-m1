@@ -239,7 +239,7 @@ const Slide3 = () => (
 
 const Slide4 = () => (
   <div className="flex items-center justify-center w-full">
-    <div className="bg-white rounded-2xl border p-10 flex flex-col items-center text-center gap-5 w-full max-w-md" style={{ borderColor: '#ebeef1', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
+    <div className="bg-white border p-10 flex flex-col items-center text-center gap-5 w-full max-w-md" style={{ borderRadius: 12, borderColor: '#ebeef1', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
       <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#596171' }}>You've chosen</span>
       <div className="flex items-center gap-3">
         <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-xl" style={{ background: '#635bff' }}>S</div>
@@ -257,15 +257,13 @@ const Slide4 = () => (
 );
 
 const Slide5 = () => {
-  const [showPassword, setShowPassword] = useState(false);
   return (
   <div style={{ width: '100%', marginTop: 30 }}>
   <Browser url="stripe.com/register" fillHeight>
   <div style={{ overflow: 'hidden', height: 'calc(100vh - 154px)' }}>
     <div className="flex items-center justify-center w-full p-12" style={{ background: 'rgba(0,0,0,0.4)', height: '100%' }}>
-      <div className="bg-white rounded-2xl border p-6 flex flex-col gap-3 w-full max-w-sm" style={{ borderColor: '#ebeef1', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
+      <div className="bg-white border p-6 flex flex-col gap-3 w-full max-w-sm" style={{ borderRadius: 12, borderColor: '#ebeef1', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
         <div className="flex flex-col gap-0.5">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-black text-sm mb-1" style={{ background: '#635bff' }}>S</div>
           <h2 className="text-lg font-bold" style={{ color: '#353a44' }}>Create your Stripe account</h2>
         </div>
         <div className="flex flex-col gap-2">
@@ -288,34 +286,29 @@ const Slide5 = () => {
             />
           </div>
           <div className="flex flex-col gap-0.5">
-            <label className="text-xs font-medium" style={{ color: '#353a44' }}>Password</label>
-            <div className="relative">
-              <input
-                readOnly
-                type={showPassword ? 'text' : 'password'}
-                value="supersecret123"
-                className="border rounded-lg px-3 py-1.5 text-sm w-full pr-10"
-                style={{ borderColor: '#d8dee4', color: '#353a44' }}
-              />
-              <button
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs"
-                style={{ color: '#635bff' }}
-                onClick={() => setShowPassword((v) => !v)}
-              >
-                {showPassword ? 'Hide' : 'Show'}
-              </button>
+            <label className="text-xs font-medium" style={{ color: '#353a44' }}>Country</label>
+            <div className="border rounded-lg px-3 py-1.5 text-sm flex items-center justify-between" style={{ borderColor: '#d8dee4', color: '#353a44' }}>
+              <div className="flex items-center gap-2">
+                <span>🇺🇸</span>
+                <span>United States</span>
+              </div>
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#8792a2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </div>
+          </div>
+          <div className="flex flex-col gap-0.5">
+            <label className="text-xs font-medium" style={{ color: '#353a44' }}>Password</label>
+            <input
+              readOnly
+              type="password"
+              value="supersecret123"
+              className="border rounded-lg px-3 py-1.5 text-sm w-full"
+              style={{ borderColor: '#d8dee4', color: '#353a44' }}
+            />
           </div>
         </div>
         <button className="w-full py-2 rounded-lg text-white font-semibold text-sm" style={{ background: '#635bff' }}>
           Create account
         </button>
-        <p className="text-xs text-center" style={{ color: '#596171' }}>
-          By creating an account you agree to our{' '}
-          <span style={{ color: '#635bff' }}>Terms of Service</span>
-          {' '}and{' '}
-          <span style={{ color: '#635bff' }}>Privacy Policy</span>
-        </p>
         <div className="border-t pt-3 text-center" style={{ borderColor: '#ebeef1' }}>
           <span className="text-xs" style={{ color: '#596171' }}>
             Already have an account?{' '}
@@ -477,15 +470,24 @@ const SlideRecFromWebsite = () => (
                   <div style={{ fontSize: 18, color: '#596171', lineHeight: '28px', letterSpacing: '-0.48px' }}>More recommendations</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      {moreRecsProducts.slice(0, 2).map((p) => (
-                        <div key={p.name} style={{ flex: 1, background: '#f5f6f8', borderRadius: 8, padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                          <div style={{ width: 14, height: 14, borderRadius: 4, background: '#fff', border: '1px solid #d8dee4', flexShrink: 0, marginTop: 2, boxShadow: '0 1px 1px rgba(33,37,44,0.16)' }} />
+                      {moreRecsProducts.slice(0, 2).map((p) => {
+                        const isChecked = p.name === 'Cards to power your product';
+                        return (
+                        <div key={p.name} style={{ flex: 1, background: isChecked ? '#fff' : '#f5f6f8', border: isChecked ? '2px solid #675dff' : '1px solid transparent', borderRadius: 8, padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                          {isChecked ? (
+                            <div style={{ width: 14, height: 14, borderRadius: 4, background: '#675dff', border: '1px solid #675dff', flexShrink: 0, marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <svg width="8" height="6" viewBox="0 0 9 7" fill="none"><path d="M1 3.5l2.5 2.5 4.5-5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                            </div>
+                          ) : (
+                            <div style={{ width: 14, height: 14, borderRadius: 4, background: '#fff', border: '1px solid #d8dee4', flexShrink: 0, marginTop: 2, boxShadow: '0 1px 1px rgba(33,37,44,0.16)' }} />
+                          )}
                           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                             <div style={{ fontSize: 14, fontWeight: 600, color: '#353a44', lineHeight: '20px', letterSpacing: '-0.15px' }}>{p.name}</div>
                             <div style={{ fontSize: 12, color: '#596171', lineHeight: '16px' }}>{p.desc}</div>
                           </div>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                     {/* See all products */}
                     <div style={{ background: '#f7f5fd', borderRadius: 8, padding: '8px 16px', display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 8 }}>
@@ -778,7 +780,7 @@ const SlideWelcome = () => (
   <div style={{ height: 'calc(100vh - 154px)', overflowY: 'auto', position: 'relative', background: '#f5f6f8' }}>
     {/* Modal overlay */}
     <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.3)' }}>
-      <div className="bg-white flex flex-col" style={{ width: 440, borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.2)', overflow: 'hidden' }}>
+      <div className="bg-white flex flex-col" style={{ width: 440, borderRadius: 12, boxShadow: '0 8px 40px rgba(0,0,0,0.2)', overflow: 'hidden' }}>
         {/* Modal header */}
         <div className="flex items-center justify-between px-6 pt-5 pb-4">
           <span className="text-base font-bold" style={{ color: '#0a2540' }}>stripe</span>
@@ -832,7 +834,7 @@ const SlideDescribeBusiness = () => (
   <div style={{ height: 'calc(100vh - 154px)', overflowY: 'auto', position: 'relative', background: '#f5f6f8' }}>
     {/* Modal overlay */}
     <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.3)' }}>
-      <div className="bg-white flex flex-col" style={{ width: 440, borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.2)', overflow: 'hidden' }}>
+      <div className="bg-white flex flex-col" style={{ width: 440, borderRadius: 12, boxShadow: '0 8px 40px rgba(0,0,0,0.2)', overflow: 'hidden' }}>
         {/* Modal header */}
         <div className="flex items-center justify-between px-6 pt-5 pb-4">
           <span className="text-base font-bold" style={{ color: '#0a2540' }}>stripe</span>
@@ -938,7 +940,7 @@ const SlideSandbox = () => (
                 </div>
 
                 {/* Right: sandbox illustration */}
-                <div style={{ width: 398, height: 401, borderRadius: 8, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
+                <div style={{ width: 320, height: 320, borderRadius: 8, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #e8e4ff 0%, #c9daff 50%, #eef2ff 100%)' }} />
                   {/* Sandbox header bar */}
                   <div style={{ position: 'absolute', top: 75, left: 75, right: 0, height: 44, background: '#0e3359', display: 'flex', alignItems: 'center', padding: '0 20px', justifyContent: 'space-between', borderRadius: '8px 0 0 0' }}>
