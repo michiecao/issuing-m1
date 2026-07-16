@@ -8,16 +8,25 @@ export { featureDefaults as initialVariables };
 
 const flows = [
   {
-    id: 'on-demand',
+    id: 'story-1',
     title: 'User story 1: Business joins Stripe to get a card for an on-demand use case',
-    status: 'in-progress',
-    available: true,
-    badge: 'Work in progress!!',
+    directions: [
+      {
+        id: 'on-demand',
+        title: 'Direction A: Distinguish between cards for banking vs. cards for infra',
+        available: true,
+        badge: 'Work in progress',
+      },
+      {
+        id: 'on-demand-b',
+        title: 'Direction B: Cards for banking are default, cards for infra are add-ons',
+        available: false,
+      },
+    ],
   },
   {
     id: 'expense',
     title: 'User story 2: Business joins Stripe to get a card for a corporate expense management use case',
-    status: 'not-available',
     available: false,
   },
 ];
@@ -44,24 +53,51 @@ const FlowSelection = ({ onSelect }) => (
 
         {/* User flows */}
         {flows.map((flow) => (
-          <button
-            key={flow.id}
-            onClick={() => flow.available && onSelect(flow.id)}
-            disabled={!flow.available}
-            className={`w-full text-left flex items-center justify-between py-4 border-b border-gray-200 transition-colors ${
-              flow.available ? 'cursor-pointer group' : 'cursor-not-allowed opacity-50'
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <span className={`text-sm ${flow.available ? 'text-default group-hover:text-[#635bff] transition-colors' : 'text-gray-400'}`}>
-                {flow.title}
-              </span>
-              {flow.badge && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 whitespace-nowrap">{flow.badge}</span>
-              )}
-            </div>
-            {flow.available && <Icon name="chevronRight" size="xsmall" fill="currentColor" className="text-gray-400 group-hover:text-[#635bff] transition-colors shrink-0" />}
-          </button>
+          <div key={flow.id} className="border-b border-gray-200">
+            {flow.directions ? (
+              <>
+                {/* Story with directions — non-clickable header */}
+                <div className="py-4">
+                  <span className="text-sm text-default">{flow.title}</span>
+                </div>
+                {/* Direction sub-rows */}
+                {flow.directions.map((dir) => (
+                  <button
+                    key={dir.id}
+                    onClick={() => dir.available && onSelect(dir.id)}
+                    disabled={!dir.available}
+                    className={`w-full text-left flex items-center justify-between pl-5 pr-0 py-3 border-t border-gray-100 transition-colors ${
+                      dir.available ? 'cursor-pointer group' : 'cursor-not-allowed'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className={`text-sm ${dir.available ? 'text-default group-hover:text-[#635bff] transition-colors' : 'text-gray-400'}`}>
+                        {dir.title}
+                      </span>
+                      {dir.badge && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 whitespace-nowrap">{dir.badge}</span>
+                      )}
+                    </div>
+                    {dir.available && <Icon name="chevronRight" size="xsmall" fill="currentColor" className="text-gray-400 group-hover:text-[#635bff] transition-colors shrink-0" />}
+                  </button>
+                ))}
+              </>
+            ) : (
+              /* Flat story row */
+              <button
+                onClick={() => flow.available && onSelect(flow.id)}
+                disabled={!flow.available}
+                className={`w-full text-left flex items-center justify-between py-4 transition-colors ${
+                  flow.available ? 'cursor-pointer group' : 'cursor-not-allowed opacity-50'
+                }`}
+              >
+                <span className={`text-sm ${flow.available ? 'text-default group-hover:text-[#635bff] transition-colors' : 'text-gray-400'}`}>
+                  {flow.title}
+                </span>
+                {flow.available && <Icon name="chevronRight" size="xsmall" fill="currentColor" className="text-gray-400 group-hover:text-[#635bff] transition-colors shrink-0" />}
+              </button>
+            )}
+          </div>
         ))}
       </div>
     </div>

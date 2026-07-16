@@ -271,7 +271,7 @@ const Slide5 = () => {
             <label className="text-xs font-medium" style={{ color: '#353a44' }}>Email</label>
             <input
               readOnly
-              value="you@example.com"
+              value="alex@example.com"
               className="border rounded-lg px-3 py-1.5 text-sm"
               style={{ borderColor: '#d8dee4', color: '#596171' }}
             />
@@ -280,7 +280,7 @@ const Slide5 = () => {
             <label className="text-xs font-medium" style={{ color: '#353a44' }}>Full name</label>
             <input
               readOnly
-              value="Jane Smith"
+              value="Alex Chen"
               className="border rounded-lg px-3 py-1.5 text-sm"
               style={{ borderColor: '#d8dee4', color: '#353a44' }}
             />
@@ -324,13 +324,57 @@ const Slide5 = () => {
 };
 
 const typeaheadSuggestions = [
-  'I sell a product or service',
-  "I'm an AI startup and need help getting started",
-  'I want to build a Stripe App',
-  'I want to open a Financial Account',
+  'I want to issue cards to my platform users',
+  "I'm building a B2B platform with card features",
+  'I want to build a card program for my customers',
+  'I run a field services platform',
 ];
 
-const SlideTellUs = () => (
+const SlideTellUs = () => {
+  const WEBSITE = 'www.fieldwork.io';
+  const TYPEAHEAD = typeaheadSuggestions[0];
+
+  const [websiteTyped, setWebsiteTyped] = useState('');
+  const [typeaheadTyped, setTypeaheadTyped] = useState('');
+  const [phase, setPhase] = useState('idle');
+
+  useEffect(() => {
+    const timers = [];
+    timers.push(setTimeout(() => {
+      setPhase('website');
+      let i = 0;
+      const tickWebsite = () => {
+        i++;
+        setWebsiteTyped(WEBSITE.slice(0, i));
+        if (i < WEBSITE.length) {
+          timers.push(setTimeout(tickWebsite, 60));
+        } else {
+          setPhase('gap');
+          timers.push(setTimeout(() => {
+            setPhase('typeahead');
+            let j = 0;
+            const tickTypeahead = () => {
+              j++;
+              setTypeaheadTyped(TYPEAHEAD.slice(0, j));
+              if (j < TYPEAHEAD.length) {
+                timers.push(setTimeout(tickTypeahead, 35));
+              } else {
+                setPhase('done');
+              }
+            };
+            tickTypeahead();
+          }, 400));
+        }
+      };
+      tickWebsite();
+    }, 600));
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const websiteCursor = phase === 'website' || phase === 'gap';
+  const typeaheadCursor = phase === 'typeahead';
+
+  return (
   <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
     <Browser url="dashboard.stripe.com" fillHeight>
       <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)', background: 'rgba(182,192,205,0.7)' }}>
@@ -369,25 +413,26 @@ const SlideTellUs = () => (
               {/* Website field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <label style={{ fontSize: 16, color: '#353a44', lineHeight: '24px' }}>Website</label>
-                <div style={{ border: '1px solid #d8dee4', borderRadius: 6, padding: '12px 16px', background: '#fff' }}>
-                  <span style={{ fontSize: 16, color: '#6c7688', lineHeight: '24px' }}>www.yoursite.com</span>
+                <div style={{ border: `1px solid ${websiteCursor ? '#675dff' : '#d8dee4'}`, borderRadius: 6, padding: '12px 16px', background: '#fff', transition: 'border-color 0.15s' }}>
+                  <span style={{ fontSize: 16, color: '#353a44', lineHeight: '24px', display: 'block', minHeight: 24 }}>
+                    {websiteTyped}
+                    {websiteCursor && <span style={{ color: '#353a44', fontWeight: 300 }}>|</span>}
+                  </span>
                 </div>
               </div>
 
               {/* How do you want to get started */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <label style={{ fontSize: 16, color: '#353a44', lineHeight: '24px' }}>How do you want to get started?</label>
-                <div style={{ border: '1px solid #d8dee4', borderRadius: 6, padding: '12px 16px', background: '#fff', height: 118, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden' }}>
+                <div style={{ border: `1px solid ${typeaheadCursor ? '#675dff' : '#d8dee4'}`, borderRadius: 6, padding: '12px 16px', background: '#fff', height: 118, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden', transition: 'border-color 0.15s' }}>
                   <div style={{ overflow: 'hidden', height: 24 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 17 }}>
-                      {typeaheadSuggestions.map((s, i) => (
-                        <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ fontSize: 16, color: i === 0 ? '#6c7688' : '#818da0', lineHeight: '24px', whiteSpace: 'nowrap' }}>{s}</span>
-                          {i === 0 && (
-                            <span style={{ background: '#f5f6f8', borderRadius: 4, padding: '0 8px', fontSize: 12, fontWeight: 700, color: '#818da0', textTransform: 'uppercase', letterSpacing: 0.5 }}>Tab</span>
-                          )}
-                        </div>
-                      ))}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 16, color: '#353a44', lineHeight: '24px', whiteSpace: 'nowrap' }}>
+                        {typeaheadTyped}
+                      </span>
+                      {typeaheadCursor && (
+                        <span style={{ color: '#353a44', fontWeight: 300 }}>|</span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -406,7 +451,8 @@ const SlideTellUs = () => (
       </div>
     </Browser>
   </div>
-);
+  );
+};
 
 const moreRecsProducts = [
   { name: 'Cards for your business', desc: 'Equip your business with cards and spend controls, managed directly in the Dashboard.' },
@@ -596,7 +642,7 @@ const Slide6 = () => (
 );
 
 const Slide7 = () => (
-  <div style={{ marginTop: 10, width: '100%' }}>
+  <div style={{ marginTop: 30, width: '100%' }}>
     <Browser url="dashboard.stripe.com/issuing" fillHeight>
       <div style={{ overflow: 'hidden' }}>
         <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%` }}>
@@ -916,7 +962,7 @@ const SlideSandbox = () => (
             </div>
 
             {/* Main content */}
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '135px 0 16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div style={{ display: 'flex', gap: 45, alignItems: 'center' }}>
                 {/* Left: text */}
                 <div style={{ width: 440, display: 'flex', flexDirection: 'column', gap: 34 }}>
@@ -954,7 +1000,7 @@ const SlideSandbox = () => (
                       <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <div style={{ width: 14, height: 14, borderRadius: 2, background: 'rgba(103,93,255,0.5)' }} />
                       </div>
-                      <span style={{ fontSize: 14, fontWeight: 700, color: '#353a44', letterSpacing: '-0.31px' }}>Cactus practice</span>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: '#353a44', letterSpacing: '-0.31px' }}>Fieldwork</span>
                     </div>
                     {/* Nav items */}
                     <div style={{ position: 'absolute', left: 20, top: 76, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -1012,10 +1058,10 @@ const FigmaDashboard = () => (
       <div style={{ width: 228, borderRight: '1px solid #ebeef1', display: 'flex', flexDirection: 'column', flexShrink: 0, background: '#fff' }}>
         {/* Account row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px 10px', borderBottom: '1px solid #ebeef1' }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>🌵</div>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>🔧</div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: '#21252c', lineHeight: '18px' }}>Default sandbox</div>
-            <div style={{ fontSize: 12, color: '#8792a2', lineHeight: '16px' }}>Cactus Practice</div>
+            <div style={{ fontSize: 12, color: '#8792a2', lineHeight: '16px' }}>Fieldwork</div>
           </div>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}><path d="M6 9l6 6 6-6" stroke="#8792a2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </div>
@@ -1206,7 +1252,7 @@ const FigmaDashboard = () => (
 );
 
 const SlideIssuingSetup = () => (
-  <div style={{ width: '100%', marginTop: 10, overflow: 'hidden' }}>
+  <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
     <Browser url="dashboard.stripe.com/test/dashboard" fillHeight>
       <div style={{ overflow: 'hidden', height: 'calc(100vh - 134px)' }}>
         <div style={{ transform: 'scale(0.9)', transformOrigin: 'top left', width: `${100 / 0.9}%`, height: `${100 / 0.9}%`, pointerEvents: 'none' }}>

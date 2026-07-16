@@ -526,7 +526,7 @@ const DashboardView = ({ simplifiedNav = false, issuingHeadline, issuingDescript
                 <path d="M7 2L12 5V9L7 12L2 9V5L7 2Z" fill="white" fillOpacity="0.9"/>
               </svg>
             </div>
-            <span className="font-semibold text-[14px] leading-[20px] tracking-[-0.15px] text-[#353a44]">Mickey's Mochis</span>
+            <span className="font-semibold text-[14px] leading-[20px] tracking-[-0.15px] text-[#353a44]">Fieldwork</span>
             <ChevronDownIcon className="text-[#6c7688]" />
           </button>
         </div>
@@ -743,7 +743,9 @@ const DashboardView = ({ simplifiedNav = false, issuingHeadline, issuingDescript
                           </button>
                         ))}
                       </div>
-                      {heroMode === 'bank' ? <BankingVisual /> : <TerminalVisual />}
+                      <div style={{ position: 'relative', width: 500, height: 280, flexShrink: 0 }}>
+                        {heroMode === 'bank' ? <BankingVisual /> : <TerminalVisual />}
+                      </div>
                     </div>
                   </div>
                 </div>
