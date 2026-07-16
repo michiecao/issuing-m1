@@ -7,9 +7,10 @@ const BEATS = [
   'User is interested in Stripe and learns more about the card programs it offers.',
   'User decides to move forward with Stripe Issuing and creates an account.',
   'Stripe asks the user to describe their business to personalize setup recommendations.',
-  'Based on the website, Stripe presents personalized product recommendations.',
-  'User can also explicitly select cards on their own.',
-  'In the onboarding flow, Stripe determines the card program that works best for the user.',
+  'Stripe recommends products based on the user\'s business info, including cards as a potential fit.',
+  'If a user taps "See all products", they can also select cards on their own.',
+  'Stripe routes the user to a sandbox to complete setup and safely test before going live.',
+  'The user lands in the sandbox dashboard and is prompted to set up Issuing.',
   'User is routed to the Issuing tab in the dashboard.',
 ];
 
@@ -127,7 +128,7 @@ const Slide2 = () => (
   <div className="p-8 flex flex-col gap-5">
     <div className="flex flex-col items-center text-center gap-4">
       <div className="text-xs font-medium self-start" style={{ color: '#0a2540' }}>Issuing</div>
-      <h2 className="text-3xl font-light leading-tight" style={{ color: '#0a2540' }}>Launch a card program for every need</h2>
+      <h2 className="text-3xl font-light leading-tight" style={{ color: '#0a2540' }}>One platform, every card use case</h2>
       <div>
         <button className="px-5 py-2.5 text-sm font-semibold text-white" style={{ background: '#635bff', borderRadius: 4 }}>
           Get started
@@ -145,8 +146,8 @@ const Slide2 = () => (
     <div className="flex flex-col gap-6 mt-6">
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-0.5">
-          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards to launch a card program</div>
-          <div className="text-sm" style={{ color: '#596171' }}>Build a fully branded card program for your customers with custom controls</div>
+          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards to power your product</div>
+          <div className="text-sm" style={{ color: '#596171' }}>Build a branded card program and issue cards programmatically via the Stripe Issuing API</div>
         </div>
         <div className="flex gap-3">
           {customerPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
@@ -154,8 +155,8 @@ const Slide2 = () => (
       </div>
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-0.5">
-          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards for your business banking</div>
-          <div className="text-sm" style={{ color: '#596171' }}>Equip your team with cards, spend controls, and real-time visibility</div>
+          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards for your business</div>
+          <div className="text-sm" style={{ color: '#596171' }}>Equip your business with cards and spend controls, managed directly in the Dashboard</div>
         </div>
         <div className="flex gap-3">
           {businessPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
@@ -339,21 +340,15 @@ const typeaheadSuggestions = [
 const SlideTellUs = () => (
   <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
     <Browser url="dashboard.stripe.com" fillHeight>
-      <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)' }}>
-        {/* Dashboard background */}
-        <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%`, pointerEvents: 'none' }}>
-          <DashboardView simplifiedNav />
-        </div>
-        {/* Backdrop */}
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(182,192,205,0.7)' }} />
+      <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)', background: 'rgba(182,192,205,0.7)' }}>
         {/* Modal */}
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: 41 }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{
             background: '#fff',
             borderRadius: 12,
             boxShadow: '0 15px 35px rgba(48,49,61,0.08), 0 5px 15px rgba(0,0,0,0.12)',
             width: '93%',
-            height: 600,
+            height: 'calc(100% - 60px)',
             position: 'relative',
             overflow: 'hidden',
           }}>
@@ -421,20 +416,14 @@ const SlideTellUs = () => (
 );
 
 const moreRecsProducts = [
-  { name: 'Cards for banking', desc: 'Equip your team with cards, spend controls, and real-time visibility into every transaction.' },
-  { name: 'Cards to power card programs', desc: 'Build a fully branded card program for your customers with custom controls and instant issuance.' },
+  { name: 'Cards for your business', desc: 'Equip your business with cards and spend controls, managed directly in the Dashboard.' },
+  { name: 'Cards to power your product', desc: 'Build a branded card program and issue cards programmatically via the Stripe Issuing API.' },
 ];
 
 const SlideRecFromWebsite = () => (
   <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
     <Browser url="dashboard.stripe.com" fillHeight>
-      <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)' }}>
-        {/* Dashboard background */}
-        <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%`, pointerEvents: 'none' }}>
-          <DashboardView simplifiedNav />
-        </div>
-        {/* Backdrop */}
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(182,192,205,0.7)' }} />
+      <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)', background: 'rgba(182,192,205,0.7)' }}>
         {/* Modal container */}
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
           <div style={{
@@ -623,9 +612,9 @@ const wordCloudItems = [
   { label: 'Build a platform or marketplace', checked: false },
   { label: 'Tax collection', checked: false },
   { label: 'In-person payments', checked: false },
-  { label: 'Cards for banking', checked: true },
+  { label: 'Cards for your business', checked: false },
   { label: 'Identity verification', checked: false },
-  { label: 'Cards to launch card program', checked: false },
+  { label: 'Cards to power your product', checked: true },
   { label: 'Climate contributions', checked: false },
   { label: 'Fraud protection', checked: false },
   { label: 'Financial services', checked: false },
@@ -640,31 +629,32 @@ const SlideWordCloud = () => (
         {/* Modal */}
         <div style={{
           position: 'absolute', inset: 0,
-          display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-          paddingTop: 40,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           <div style={{
             background: '#fff',
             borderRadius: 12,
             boxShadow: '0 15px 35px rgba(48,49,61,0.08), 0 5px 15px rgba(0,0,0,0.12)',
-            width: '88%', maxWidth: 860,
+            width: '93%',
+            height: 'calc(100% - 60px)',
+            position: 'relative',
             display: 'flex', flexDirection: 'column',
             overflow: 'hidden',
           }}>
-            {/* Modal header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 32px 16px' }}>
-              <span style={{ fontSize: 18, fontWeight: 700, color: '#0a2540', letterSpacing: '-0.3px' }}>stripe</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <div style={{ height: 5, width: 7, borderRadius: 100, background: '#675dff' }} />
-                <div style={{ height: 5, width: 100, borderRadius: 100, background: '#f5f6f8' }} />
-              </div>
+            {/* Stripe logo */}
+            <div style={{ position: 'absolute', left: 42, top: 32, fontSize: 18, fontWeight: 700, color: '#0a2540', letterSpacing: '-0.3px', zIndex: 1 }}>stripe</div>
+            {/* Progress bar */}
+            <div style={{ position: 'absolute', right: 42, top: 42, display: 'flex', gap: 4, zIndex: 1 }}>
+              <div style={{ height: 5, width: 7, borderRadius: 100, background: '#675dff' }} />
+              <div style={{ height: 5, width: 100, borderRadius: 100, background: '#f5f6f8' }} />
             </div>
 
             {/* Modal body */}
-            <div style={{ padding: '8px 32px 24px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <p style={{ fontSize: 16, color: '#21252c', margin: 0, lineHeight: '24px' }}>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '135px 0 16px' }}>
+              <div style={{ width: 658, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <p style={{ fontSize: 20, color: '#21252c', margin: 0, lineHeight: '28px', letterSpacing: '0.3px' }}>
                 <strong>Select how you want to use Stripe.</strong>{' '}
-                <span style={{ color: '#99a5b8' }}>You can always add or remove products later.</span>
+                <span style={{ color: '#99a5b8', fontWeight: 400 }}>You can always add or remove products later.</span>
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {wordCloudItems.map((item) => (
@@ -696,10 +686,11 @@ const SlideWordCloud = () => (
                   </div>
                 ))}
               </div>
+              </div>
             </div>
 
             {/* Modal footer */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 32px 20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 42px 20px' }}>
               <span style={{ fontSize: 13, color: '#533afd', cursor: 'pointer' }}>← Back</span>
               <div style={{ display: 'flex', gap: 12 }}>
                 <button style={{ padding: '8px 16px', fontSize: 13, fontWeight: 500, color: '#353a44', background: '#fff', border: '1.5px solid #d8dee4', borderRadius: 6, cursor: 'pointer' }}>Skip</button>
@@ -891,7 +882,340 @@ const SlideDescribeBusiness = () => (
   </div>
 );
 
-const SLIDES = [Slide1, Slide2, Slide5, SlideTellUs, SlideRecFromWebsite, SlideWordCloud, SlideCardProgram, Slide7];
+const sandboxSteps = [
+  { n: 1, title: 'Complete your setup', desc: 'Follow the steps in your setup guide to explore features that fit your business needs.' },
+  { n: 2, title: 'Switch to live account', desc: "When you're ready to go live, answer some questions to verify your business." },
+  { n: 3, title: "You're ready to go", desc: 'Copy your work to your live account and start accepting payments and issuing cards.' },
+];
+
+const SlideSandbox = () => (
+  <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
+    <Browser url="dashboard.stripe.com" fillHeight>
+      <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)', background: 'rgba(182,192,205,0.7)' }}>
+        {/* Modal container */}
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <div style={{
+            background: '#fff',
+            borderRadius: 12,
+            boxShadow: '0 15px 35px rgba(48,49,61,0.08), 0 5px 15px rgba(0,0,0,0.12)',
+            width: '93%',
+            height: 'calc(100% - 60px)',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+            {/* Stripe logo */}
+            <div style={{ position: 'absolute', left: 42, top: 32, fontSize: 18, fontWeight: 700, color: '#0a2540', letterSpacing: '-0.3px', zIndex: 1 }}>stripe</div>
+            {/* Progress bar */}
+            <div style={{ position: 'absolute', right: 42, top: 42, display: 'flex', gap: 4, zIndex: 1 }}>
+              <div style={{ height: 5, width: 7, borderRadius: 100, background: '#675dff' }} />
+              <div style={{ height: 5, width: 125, borderRadius: 100, background: '#f5f6f8' }} />
+            </div>
+
+            {/* Main content */}
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', gap: 45, alignItems: 'center' }}>
+                {/* Left: text */}
+                <div style={{ width: 440, display: 'flex', flexDirection: 'column', gap: 34 }}>
+                  <p style={{ fontSize: 20, margin: 0, lineHeight: '28px', letterSpacing: '0.3px' }}>
+                    <strong style={{ color: '#21252c', fontWeight: 700 }}>Get started in your sandbox.</strong>{' '}
+                    <span style={{ color: '#99a5b8', fontWeight: 400 }}>You can safely test features without any real money movement.</span>
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                    {sandboxSteps.map(({ n, title, desc }) => (
+                      <div key={n} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                        <div style={{ width: 20, height: 20, borderRadius: 16, background: '#675dff', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: 12, fontWeight: 600, color: '#fff', lineHeight: '16px' }}>{n}</span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                          <div style={{ fontSize: 14, fontWeight: 600, color: '#353a44', lineHeight: '20px', letterSpacing: '-0.15px' }}>{title}</div>
+                          <div style={{ fontSize: 14, color: '#596171', lineHeight: '20px', letterSpacing: '-0.15px' }}>{desc}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right: sandbox illustration */}
+                <div style={{ width: 398, height: 401, borderRadius: 8, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #e8e4ff 0%, #c9daff 50%, #eef2ff 100%)' }} />
+                  {/* Sandbox header bar */}
+                  <div style={{ position: 'absolute', top: 75, left: 75, right: 0, height: 44, background: '#0e3359', display: 'flex', alignItems: 'center', padding: '0 20px', justifyContent: 'space-between', borderRadius: '8px 0 0 0' }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>Sandbox</span>
+                    <div style={{ padding: '4px 10px', background: '#675dff', borderRadius: 4, fontSize: 11, fontWeight: 600, color: '#fff' }}>Get your live account</div>
+                  </div>
+                  {/* Frosted glass panel */}
+                  <div style={{ position: 'absolute', top: 119, left: 75, right: 0, bottom: 0, background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+                    {/* Account row */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '16px 20px 0' }}>
+                      <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ width: 14, height: 14, borderRadius: 2, background: 'rgba(103,93,255,0.5)' }} />
+                      </div>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: '#353a44', letterSpacing: '-0.31px' }}>Cactus practice</span>
+                    </div>
+                    {/* Nav items */}
+                    <div style={{ position: 'absolute', left: 20, top: 76, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      {[57, 71, 71, 54].map((w, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div style={{ width: 14, height: 14, borderRadius: 7, background: 'rgba(255,255,255,0.7)' }} />
+                          <div style={{ height: 10, width: w, borderRadius: 10, background: 'rgba(255,255,255,0.7)' }} />
+                        </div>
+                      ))}
+                    </div>
+                    {/* Analytics widget */}
+                    <div style={{ position: 'absolute', right: 16, top: 64, width: 175, background: 'rgba(255,255,255,0.45)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 12, padding: 14, display: 'flex', flexDirection: 'column', gap: 14 }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <div style={{ height: 10, width: 77, background: 'rgba(255,255,255,0.9)', borderRadius: 8 }} />
+                        <div style={{ height: 10, width: 99, background: 'rgba(255,255,255,0.9)', borderRadius: 8 }} />
+                      </div>
+                      <svg width="120" height="56" viewBox="0 0 120 56" fill="none">
+                        <path d="M0 48 C20 38, 35 22, 55 28 C75 36, 85 8, 120 4" stroke="#675dff" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.8" />
+                        <path d="M0 48 C20 38, 35 22, 55 28 C75 36, 85 8, 120 4 L120 56 L0 56 Z" fill="#675dff" opacity="0.1" />
+                      </svg>
+                      <div style={{ height: 10, width: 32, background: 'rgba(255,255,255,0.9)', borderRadius: 8 }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div style={{ flexShrink: 0, padding: '12px 42px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 16, color: '#533afd', cursor: 'pointer', letterSpacing: '-0.31px' }}>← Back</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                <span style={{ fontSize: 16, color: '#533afd', cursor: 'pointer', letterSpacing: '-0.31px' }}>Go to my live account now</span>
+                <button style={{ padding: '10px 24px', fontSize: 14, fontWeight: 600, color: '#fff', background: '#533afd', border: 'none', borderRadius: 6, cursor: 'pointer' }}>Go to Dashboard</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Browser>
+  </div>
+);
+
+const FigmaDashboard = () => (
+  <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', background: '#fff', position: 'relative' }}>
+    {/* Sandbox Banner */}
+    <div style={{ height: 56, background: '#0a2540', display: 'flex', alignItems: 'center', padding: '0 20px', gap: 16 }}>
+      <span style={{ fontSize: 14, fontWeight: 600, color: '#fff', flexShrink: 0 }}>Sandbox</span>
+      <span style={{ flex: 1, fontSize: 14, color: 'rgba(255,255,255,0.75)', textAlign: 'center' }}>Get set up using test data and copy your work when going live.</span>
+      <button style={{ padding: '5px 14px', background: '#635bff', border: 'none', borderRadius: 6, fontSize: 13, fontWeight: 600, color: '#fff', cursor: 'pointer', flexShrink: 0 }}>Get your live account</button>
+    </div>
+
+    {/* Chrome */}
+    <div style={{ display: 'flex', height: 846 }}>
+      {/* Left Nav */}
+      <div style={{ width: 228, borderRight: '1px solid #ebeef1', display: 'flex', flexDirection: 'column', flexShrink: 0, background: '#fff' }}>
+        {/* Account row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px 10px', borderBottom: '1px solid #ebeef1' }}>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>🌵</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#21252c', lineHeight: '18px' }}>Default sandbox</div>
+            <div style={{ fontSize: 12, color: '#8792a2', lineHeight: '16px' }}>Cactus Practice</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}><path d="M6 9l6 6 6-6" stroke="#8792a2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </div>
+
+        {/* Nav items */}
+        <div style={{ padding: '8px', display: 'flex', flexDirection: 'column', gap: 1 }}>
+          {/* Home — active */}
+          <div style={{ padding: '7px 10px', borderRadius: 6, background: '#f0f0ff', display: 'flex', alignItems: 'center', gap: 9 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" fill="#635bff"/></svg>
+            <span style={{ fontSize: 13, fontWeight: 500, color: '#635bff' }}>Home</span>
+          </div>
+          {[
+            { label: 'Balances', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#596171" strokeWidth="1.5"/><path d="M3 10h18" stroke="#596171" strokeWidth="1.5"/></svg> },
+            { label: 'Transactions', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 9l4-4 4 4M7 5v14M21 15l-4 4-4-4M17 19V5" stroke="#596171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+            { label: 'Network', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#596171" strokeWidth="1.5"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="#596171" strokeWidth="1.5" strokeLinecap="round"/></svg> },
+            { label: 'Product catalog', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="#596171" strokeWidth="1.5" strokeLinecap="round"/></svg> },
+          ].map(({ label, icon }) => (
+            <div key={label} style={{ padding: '7px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 9 }}>
+              {icon}
+              <span style={{ fontSize: 13, color: '#596171' }}>{label}</span>
+            </div>
+          ))}
+
+          {/* Products section */}
+          <div style={{ padding: '10px 10px 4px', fontSize: 11, fontWeight: 600, color: '#8792a2', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Products</div>
+          {['Payments', 'Billing', 'Reporting', 'Risk', 'Apps', 'More'].map(item => (
+            <div key={item} style={{ padding: '7px 10px', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 13, color: '#596171' }}>{item}</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#c0c4cc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom: Developers */}
+        <div style={{ marginTop: 'auto', padding: '12px 14px', borderTop: '1px solid #ebeef1', display: 'flex', alignItems: 'center', gap: 9 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M14 6l-4 12" stroke="#596171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <span style={{ fontSize: 13, color: '#596171' }}>Developers</span>
+        </div>
+      </div>
+
+      {/* Main content */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* Topbar */}
+        <div style={{ height: 60, borderBottom: '1px solid #ebeef1', display: 'flex', alignItems: 'center', padding: '0 24px', gap: 16, flexShrink: 0 }}>
+          <div style={{ background: '#f5f6f8', borderRadius: 6, padding: '7px 12px', display: 'flex', alignItems: 'center', gap: 8, width: 280 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" strokeWidth="1.5"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round"/></svg>
+          </div>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
+            <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#ebeef1' }} />
+            <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#ebeef1' }} />
+            <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#635bff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#fff" strokeWidth="2" strokeLinecap="round"/></svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Page content */}
+        <div style={{ flex: 1, padding: '28px 32px', overflow: 'hidden' }}>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: '#21252c', margin: '0 0 24px', letterSpacing: '-0.5px' }}>Today</h1>
+
+          {/* Metrics + chart row */}
+          <div style={{ display: 'flex', gap: 0, marginBottom: 32 }}>
+            {/* Left: chart area */}
+            <div style={{ flex: 1, paddingRight: 32 }}>
+              <div style={{ display: 'flex', gap: 48, marginBottom: 20 }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 6 }}>
+                    <span style={{ fontSize: 13, color: '#596171' }}>Net volume</span>
+                    <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#596171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <div style={{ fontSize: 26, fontWeight: 600, color: '#21252c', lineHeight: '1' }}>$0.00</div>
+                  <div style={{ fontSize: 12, color: '#8792a2', marginTop: 3 }}>2:00 PM</div>
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 6 }}>
+                    <span style={{ fontSize: 13, color: '#596171' }}>Yesterday</span>
+                    <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#596171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <div style={{ fontSize: 22, fontWeight: 600, color: '#21252c', lineHeight: '1' }}>$0.00</div>
+                </div>
+              </div>
+              {/* Chart */}
+              <div style={{ height: 120, position: 'relative' }}>
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: '#ebeef1' }} />
+                <div style={{ position: 'absolute', bottom: 20, left: 0, right: 0, height: 1, background: '#ebeef1' }} />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'space-between', paddingTop: 4 }}>
+                  <span style={{ fontSize: 11, color: '#8792a2' }}>12:00 AM</span>
+                  <span style={{ fontSize: 11, color: '#635bff', fontWeight: 500 }}>Now, 2:00 PM</span>
+                  <span style={{ fontSize: 11, color: '#8792a2' }}>11:59 PM</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: USD Balance + Payouts */}
+            <div style={{ width: 260, borderLeft: '1px solid #ebeef1', paddingLeft: 32 }}>
+              <div style={{ marginBottom: 28 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span style={{ fontSize: 13, color: '#596171' }}>USD Balance</span>
+                    <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#596171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <span style={{ fontSize: 13, color: '#635bff' }}>View</span>
+                </div>
+                <div style={{ fontSize: 26, fontWeight: 600, color: '#21252c' }}>$0.00</div>
+                <div style={{ fontSize: 12, color: '#8792a2', marginTop: 3 }}>Available to pay out</div>
+              </div>
+              <div style={{ borderTop: '1px solid #ebeef1', paddingTop: 28 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                  <span style={{ fontSize: 13, color: '#596171' }}>Payouts</span>
+                  <span style={{ fontSize: 13, color: '#635bff' }}>View</span>
+                </div>
+                <div style={{ fontSize: 26, fontWeight: 600, color: '#21252c' }}>——</div>
+                <div style={{ fontSize: 12, color: '#8792a2', marginTop: 3 }}>Expected today</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Your overview */}
+          <h2 style={{ fontSize: 24, fontWeight: 700, color: '#21252c', margin: '0 0 16px', letterSpacing: '-0.3px' }}>Your overview</h2>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              {[
+                { label: 'Date range', value: 'Last 4 weeks', active: false },
+                { label: 'Daily', value: null, active: false },
+                { label: '⊕ Compare', value: null, active: false },
+                { label: 'Previous period', value: null, active: true },
+              ].map(({ label, value, active }) => (
+                <div key={label} style={{ padding: '4px 10px', border: `1px solid ${active ? '#635bff' : '#ebeef1'}`, borderRadius: 16, fontSize: 12, color: active ? '#635bff' : '#596171', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {label}{value && <span style={{ fontWeight: 500, color: '#21252c' }}> {value}</span>}
+                  {label !== '⊕ Compare' && <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke={active ? '#635bff' : '#8792a2'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button style={{ padding: '6px 12px', border: '1px solid #ebeef1', borderRadius: 6, fontSize: 12, color: '#596171', background: '#fff' }}>+ Add</button>
+              <button style={{ padding: '6px 12px', border: '1px solid #ebeef1', borderRadius: 6, fontSize: 12, color: '#596171', background: '#fff' }}>⚙ Edit</button>
+            </div>
+          </div>
+
+          {/* Chart cards — blurred */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+            {[
+              { title: 'Total spend card', value: '$0.00', sub: '+0%' },
+              { title: 'Spend by card', value: null, sub: null },
+              { title: 'Spending limits', value: null, sub: null },
+            ].map(({ title }, i) => (
+              <div key={i} style={{ border: '1px solid #ebeef1', borderRadius: 8, padding: 16, height: 200, filter: 'blur(3px)', overflow: 'hidden' }}>
+                <div style={{ height: 13, width: 120, background: '#d8dee4', borderRadius: 3, marginBottom: 10 }} />
+                <div style={{ height: 22, width: 70, background: '#c4cad4', borderRadius: 3, marginBottom: 6 }} />
+                <div style={{ height: 10, width: 48, background: '#e0e3e8', borderRadius: 2, marginBottom: 20 }} />
+                <div style={{ height: 80, background: '#f0f2f5', borderRadius: 4 }} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Setup guide — absolutely positioned over bottom-right */}
+    <div style={{ position: 'absolute', right: 16, bottom: 16, width: 342, background: '#fff', borderRadius: 8, border: '1px solid #e0e3e8', boxShadow: '0 4px 24px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px' }}>
+        <span style={{ fontSize: 14, fontWeight: 600, color: '#21252c' }}>Setup guide</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#8792a2" strokeWidth="1.5" strokeLinecap="round"/></svg>
+      </div>
+      {/* Progress bar */}
+      <div style={{ height: 4, background: '#ebeef1', margin: '0 12px 0' }}>
+        <div style={{ height: 4, width: 8, background: '#635bff', borderRadius: 2 }} />
+      </div>
+      {/* Set up Issuing — expanded */}
+      <div style={{ padding: '0 8px 4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 8px 6px' }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: '#21252c' }}>Set up Issuing</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 15l-6-6-6 6" stroke="#596171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </div>
+        <div style={{ padding: '6px 8px', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}><circle cx="8" cy="8" r="7" stroke="#c0c4cc" strokeWidth="1.5"/></svg>
+          <span style={{ fontSize: 14, color: '#353a44' }}>Get started with Issuing</span>
+        </div>
+      </div>
+      {/* Verify your account — collapsed */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', borderTop: '1px solid #ebeef1' }}>
+        <span style={{ fontSize: 14, color: '#353a44' }}>Verify your account</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#596171" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+);
+
+const SlideIssuingSetup = () => (
+  <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
+    <Browser url="dashboard.stripe.com/test/dashboard" fillHeight>
+      <div style={{ overflow: 'hidden', height: 'calc(100vh - 154px)' }}>
+        <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%`, pointerEvents: 'none' }}>
+          <FigmaDashboard />
+        </div>
+      </div>
+    </Browser>
+  </div>
+);
+
+const SLIDES = [Slide1, Slide2, Slide5, SlideTellUs, SlideRecFromWebsite, SlideWordCloud, SlideSandbox, SlideIssuingSetup, Slide7];
 
 const DeckView = ({ onBack }) => {
   const [current, setCurrent] = useState(0);
@@ -942,7 +1266,7 @@ const DeckView = ({ onBack }) => {
 
       {/* Content area — centers slide in the space below the description */}
       <div
-        className={`flex-1 relative flex justify-center px-16 overflow-hidden ${[1, 2, 3, 4, 5, 7].includes(current) ? 'items-start' : 'items-center'}`}
+        className={`flex-1 relative flex justify-center px-16 overflow-hidden ${[1, 2, 3, 4, 5, 6, 7, 8].includes(current) ? 'items-start' : 'items-center'}`}
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : `translateY(${dir * 12}px)`,
