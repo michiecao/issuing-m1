@@ -594,7 +594,7 @@ const Slide6 = () => (
 );
 
 const Slide7 = () => (
-  <div style={{ marginTop: 80, width: '100%' }}>
+  <div style={{ marginTop: 10, width: '100%' }}>
     <Browser url="dashboard.stripe.com/issuing" fillHeight>
       <div style={{ overflow: 'hidden' }}>
         <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%` }}>
@@ -996,7 +996,7 @@ const SlideSandbox = () => (
 );
 
 const FigmaDashboard = () => (
-  <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', background: '#fff', position: 'relative' }}>
+  <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', background: '#fff', position: 'relative', height: '100%', display: 'flex', flexDirection: 'column' }}>
     {/* Sandbox Banner */}
     <div style={{ height: 56, background: '#0a2540', display: 'flex', alignItems: 'center', padding: '0 20px', gap: 16 }}>
       <span style={{ fontSize: 14, fontWeight: 600, color: '#fff', flexShrink: 0 }}>Sandbox</span>
@@ -1005,7 +1005,7 @@ const FigmaDashboard = () => (
     </div>
 
     {/* Chrome */}
-    <div style={{ display: 'flex', height: 846 }}>
+    <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
       {/* Left Nav */}
       <div style={{ width: 228, borderRight: '1px solid #ebeef1', display: 'flex', flexDirection: 'column', flexShrink: 0, background: '#fff' }}>
         {/* Account row */}
@@ -1204,10 +1204,10 @@ const FigmaDashboard = () => (
 );
 
 const SlideIssuingSetup = () => (
-  <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
+  <div style={{ width: '100%', marginTop: 10, overflow: 'hidden' }}>
     <Browser url="dashboard.stripe.com/test/dashboard" fillHeight>
-      <div style={{ overflow: 'hidden', height: 'calc(100vh - 154px)' }}>
-        <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%`, pointerEvents: 'none' }}>
+      <div style={{ overflow: 'hidden', height: 'calc(100vh - 134px)' }}>
+        <div style={{ transform: 'scale(0.9)', transformOrigin: 'top left', width: `${100 / 0.9}%`, height: `${100 / 0.9}%`, pointerEvents: 'none' }}>
           <FigmaDashboard />
         </div>
       </div>
