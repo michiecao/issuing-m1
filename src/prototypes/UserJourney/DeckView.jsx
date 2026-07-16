@@ -128,7 +128,7 @@ const Slide2 = () => (
   <div className="p-8 flex flex-col gap-5">
     <div className="flex flex-col items-center text-center gap-4">
       <div className="text-xs font-medium self-start" style={{ color: '#0a2540' }}>Issuing</div>
-      <h2 className="text-3xl font-light leading-tight" style={{ color: '#0a2540' }}>One platform, every card use case</h2>
+      <h2 className="text-3xl font-light leading-tight" style={{ color: '#0a2540' }}>Launch a card program for every need</h2>
       <div>
         <button className="px-5 py-2.5 text-sm font-semibold text-white" style={{ background: '#635bff', borderRadius: 4 }}>
           Get started
@@ -598,7 +598,7 @@ const Slide7 = () => (
     <Browser url="dashboard.stripe.com/issuing" fillHeight>
       <div style={{ overflow: 'hidden' }}>
         <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: `${100 / 0.7}%` }}>
-          <DashboardView simplifiedNav />
+          <DashboardView simplifiedNav issuingHeadline="Launch a card program for every need" issuingDescription="Issue cards for your business or power a card program for your customers." />
         </div>
       </div>
     </Browser>

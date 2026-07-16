@@ -6,7 +6,7 @@ import BalancesView from './BalancesView';
 import PrototypeControlPanel from '../../components/PrototypeControlPanel';
 import SandboxBanner from '../../components/SandboxBanner';
 import ProjectContextModal from '../../components/ProjectContextModal';
-import { TerminalVisual } from './HeroVisuals';
+import { TerminalVisual, BankingVisual } from './HeroVisuals';
 
 // Icons as inline SVGs - matching Sail UI / Stripe Dashboard icons from Figma
 const HomeIcon = () => (
@@ -224,7 +224,7 @@ const NavPlaceholder = ({ width = 60, indent = false }) => (
 );
 
 // Main Dashboard View Component
-const DashboardView = ({ simplifiedNav = false }) => {
+const DashboardView = ({ simplifiedNav = false, issuingHeadline, issuingDescription }) => {
   const [activeNav, setActiveNav] = useState('issuing');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalKey, setModalKey] = useState(0); // Used to reset modal state
@@ -249,6 +249,7 @@ const DashboardView = ({ simplifiedNav = false }) => {
 
   const [initialAgentInteraction, setInitialAgentInteraction] = useState(null);
   const [showTimeout, setShowTimeout] = useState(false);
+  const [heroMode, setHeroMode] = useState('bank'); // 'bank' | 'program'
 
   const handleResetPrototype = () => {
     setIsModalOpen(false);
@@ -707,40 +708,66 @@ const DashboardView = ({ simplifiedNav = false }) => {
           <div className="flex-1 overflow-y-auto px-6 pb-10 pt-6">
             <div className="w-full">
               {/* Hero Section */}
-              <div className="bg-[#f5f6f8] rounded-xl px-[72px] py-[110px] relative overflow-hidden mb-4 w-full">
-                {/* Product Badge */}
-                <div className="absolute top-3 left-3 bg-white rounded-lg px-2 py-2">
-                  <span className="text-[12px] font-semibold text-[#353a44] leading-[16px]">Issuing</span>
-                </div>
-
-                {/* Content */}
-                <div className="flex flex-col gap-[22px] items-start relative z-10 w-[428px]">
-                  <div className="flex flex-col gap-2">
-                    <h1 className="text-[40px] font-bold text-[#353a44] leading-[48px] tracking-[0.37px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-                      Issue cards with programmable spend
-                    </h1>
-                    <p className="text-[20px] text-[#596171] leading-[28px] tracking-[0.3px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
-                      Use APIs to create cards, define spending rules and automate transactions from your software systems.
-                    </p>
+              <div className="bg-[#f5f6f8] rounded-xl relative overflow-hidden mb-4 w-full">
+                {/* Flex row: text left, visual centered in right half */}
+                <div className="flex items-center gap-8 px-[72px] py-[52px]">
+                  {/* Left: text content */}
+                  <div className="flex flex-col gap-[22px] items-start w-[520px] shrink-0">
+                    <div className="flex flex-col gap-2">
+                      <h1 className="text-[40px] font-bold text-[#353a44] leading-[48px] tracking-[0.37px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+                        {issuingHeadline || (heroMode === 'bank'
+                          ? 'Cards for your business'
+                          : 'Launch a card program for every need')}
+                      </h1>
+                      <p className="text-[20px] text-[#596171] leading-[28px] tracking-[0.3px]" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif' }}>
+                        {issuingDescription || (heroMode === 'bank'
+                          ? 'Equip your business with cards and spend controls, managed directly in the Dashboard.'
+                          : 'Build a branded card program and issue cards programmatically via the Stripe Issuing API.')}
+                      </p>
+                    </div>
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="px-4 py-2.5 bg-[#635bff] hover:bg-[#5851ea] text-white font-medium text-[14px] rounded-md transition-colors shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
+                      >
+                        {hasStartedSetup ? 'Continue setup' : 'Get started'}
+                      </button>
+                      <button
+                        onClick={handleExploreSandbox}
+                        className="px-4 py-2.5 bg-white hover:bg-gray-50 text-[#353a44] font-medium text-[14px] rounded-md border border-[#d8dee4] transition-colors shadow-[0_1px_1px_rgba(33,37,44,0.16)]"
+                      >
+                        Explore in sandbox
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex gap-4">
-                    <button 
-                      onClick={() => setIsModalOpen(true)}
-                      className="px-4 py-2.5 bg-[#635bff] hover:bg-[#5851ea] text-white font-medium text-[14px] rounded-md transition-colors shadow-[0_1px_1px_rgba(47,14,99,0.32)]"
-                    >
-                      {hasStartedSetup ? 'Continue setup' : 'Get started'}
-                    </button>
-                    <button 
-                      onClick={handleExploreSandbox}
-                      className="px-4 py-2.5 bg-white hover:bg-gray-50 text-[#353a44] font-medium text-[14px] rounded-md border border-[#d8dee4] transition-colors shadow-[0_1px_1px_rgba(33,37,44,0.16)]"
-                    >
-                      Explore in sandbox
-                    </button>
+
+                  {/* Right: toggle + visual, centered */}
+                  <div className="flex-1 flex flex-col items-center gap-9">
+                    <div className="flex items-center bg-[#ebeef1] rounded-full p-1 whitespace-nowrap">
+                      {[
+                        { id: 'bank', label: 'Cards for your business' },
+                        { id: 'program', label: 'Cards to power your product' },
+                      ].map(({ id, label }) => (
+                        <button
+                          key={id}
+                          onClick={() => setHeroMode(id)}
+                          className="px-3.5 py-1.5 rounded-full text-[13px] transition-all"
+                          style={{
+                            fontWeight: heroMode === id ? 600 : 400,
+                            background: heroMode === id ? '#fff' : 'transparent',
+                            color: heroMode === id ? '#353a44' : '#596171',
+                            border: 'none',
+                            cursor: 'pointer',
+                            boxShadow: heroMode === id ? '0 1px 3px rgba(0,0,0,0.12)' : 'none',
+                          }}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                    {heroMode === 'bank' ? <BankingVisual /> : <TerminalVisual />}
                   </div>
                 </div>
-
-                {/* Card Visual — absolutely positioned to the right */}
-                <TerminalVisual />
               </div>
 
               {/* Info Cards */}
