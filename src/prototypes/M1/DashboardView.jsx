@@ -779,7 +779,7 @@ const DashboardView = ({ simplifiedNav = false, issuingHeadline, issuingDescript
                 />
                 <CalloutCard
                   title="Quickstart guide"
-                  description="Learn how to quickly set up a card issuing program using the Stripe Issuing API."
+                  description="Learn how to build and launch a card program for your customers using the Stripe Issuing API."
                   linkText="View docs"
                 />
               </div>
