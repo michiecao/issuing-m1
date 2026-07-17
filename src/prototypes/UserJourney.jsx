@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import DeckView from './UserJourney/DeckView';
+import DeckViewB from './UserJourney/DeckViewB';
 import ProblemContextDeck from './UserJourney/ProblemContextDeck';
 import { Icon } from '../icons/SailIcons';
 
@@ -15,12 +16,12 @@ const flows = [
         id: 'on-demand',
         title: 'Direction A: Distinguish between cards for banking vs. cards for infra',
         available: true,
-        badge: 'Work in progress',
       },
       {
         id: 'on-demand-b',
         title: 'Direction B: Cards for banking are default, cards for infra are add-ons',
         available: false,
+        badge: 'Work in progress',
       },
     ],
   },
@@ -113,6 +114,10 @@ const UserJourney = () => {
 
   if (selected === 'problem-context') {
     return <ProblemContextDeck onBack={() => setSelected(null)} />;
+  }
+
+  if (selected === 'on-demand-b') {
+    return <DeckViewB onBack={() => setSelected(null)} />;
   }
 
   return <DeckView onBack={() => setSelected(null)} />;

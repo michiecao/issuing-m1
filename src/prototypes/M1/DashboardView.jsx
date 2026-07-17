@@ -224,7 +224,7 @@ const NavPlaceholder = ({ width = 60, indent = false }) => (
 );
 
 // Main Dashboard View Component
-const DashboardView = ({ simplifiedNav = false, issuingHeadline, issuingDescription }) => {
+const DashboardView = ({ simplifiedNav = false, issuingHeadline, issuingDescription, hideHeroToggle = false }) => {
   const [activeNav, setActiveNav] = useState('issuing');
   const [heroMode, setHeroMode] = useState('bank');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -733,18 +733,20 @@ const DashboardView = ({ simplifiedNav = false, issuingHeadline, issuingDescript
                     </div>
                     {/* Right: toggle + visual */}
                     <div className="flex-1 flex flex-col items-center gap-9">
-                      <div className="flex items-center bg-[#ebeef1] rounded-full p-1 whitespace-nowrap">
-                        {[
-                          { id: 'bank', label: 'Cards for your business' },
-                          { id: 'program', label: 'Cards to power your product' },
-                        ].map(({ id, label }) => (
-                          <button key={id} onClick={() => setHeroMode(id)} className="px-3.5 py-1.5 rounded-full text-[13px] transition-all" style={{ fontWeight: heroMode === id ? 600 : 400, background: heroMode === id ? '#fff' : 'transparent', color: heroMode === id ? '#353a44' : '#596171', border: 'none', cursor: 'pointer', boxShadow: heroMode === id ? '0 1px 3px rgba(0,0,0,0.12)' : 'none' }}>
-                            {label}
-                          </button>
-                        ))}
-                      </div>
+                      {!hideHeroToggle && (
+                        <div className="flex items-center bg-[#ebeef1] rounded-full p-1 whitespace-nowrap">
+                          {[
+                            { id: 'bank', label: 'Cards for your business' },
+                            { id: 'program', label: 'Cards to power your product' },
+                          ].map(({ id, label }) => (
+                            <button key={id} onClick={() => setHeroMode(id)} className="px-3.5 py-1.5 rounded-full text-[13px] transition-all" style={{ fontWeight: heroMode === id ? 600 : 400, background: heroMode === id ? '#fff' : 'transparent', color: heroMode === id ? '#353a44' : '#596171', border: 'none', cursor: 'pointer', boxShadow: heroMode === id ? '0 1px 3px rgba(0,0,0,0.12)' : 'none' }}>
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                       <div style={{ position: 'relative', width: 500, height: 280, flexShrink: 0 }}>
-                        {heroMode === 'bank' ? <BankingVisual /> : <TerminalVisual />}
+                        {!hideHeroToggle && heroMode === 'bank' ? <BankingVisual /> : <TerminalVisual />}
                       </div>
                     </div>
                   </div>
