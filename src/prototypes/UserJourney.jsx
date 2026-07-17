@@ -21,7 +21,6 @@ const flows = [
         id: 'on-demand-b',
         title: 'Direction B: Cards for banking are default, cards for infra are add-ons',
         available: true,
-        badge: 'Work in progress',
       },
     ],
   },
