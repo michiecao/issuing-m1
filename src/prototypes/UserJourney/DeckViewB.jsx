@@ -7,9 +7,7 @@ const BEATS = [
   'User is interested in Stripe Issuing and learns about its card program capabilities.',
   'User decides to move forward with Stripe and creates an account.',
   'Stripe asks the user to describe their business to personalize setup recommendations.',
-  'Alex sees that a Financial Account and a card are already included with his new Stripe account.',
-  'Stripe recommends products based on Alex\'s business info — Issuing is highlighted as an option.',
-  'If a user taps "See all products", they can also select Issuing on their own.',
+  "Stripe shows Alex what's included with his account and surfaces additional products he can add.",
   'Stripe routes the user to a sandbox to complete setup and safely test before going live.',
   'The user lands in the sandbox dashboard and is prompted to set up Issuing.',
   'User is routed to the Issuing tab in the dashboard.',
@@ -129,31 +127,16 @@ const Slide2 = () => (
   <div className="p-8 flex flex-col gap-5">
     <div className="flex flex-col items-center text-center gap-4">
       <div className="text-xs font-medium self-start" style={{ color: '#0a2540' }}>Issuing</div>
-      <h2 className="text-3xl font-light leading-tight" style={{ color: '#0a2540' }}>Launch a card program for every need</h2>
+      <h2 className="text-3xl font-light leading-tight" style={{ color: '#0a2540' }}>Build a card program for your customers</h2>
+      <p className="text-sm max-w-lg" style={{ color: '#596171' }}>Issue virtual and physical cards via API, with programmable spend controls, instant issuance, and full network access.</p>
       <div>
         <button className="px-5 py-2.5 text-sm font-semibold text-white" style={{ background: '#635bff', borderRadius: 4 }}>
           Get started
         </button>
       </div>
     </div>
-    <div className="w-full flex items-center justify-center gap-2" style={{ background: '#f7f8fa', height: 160, borderRadius: 4 }}>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <circle cx="8.5" cy="8.5" r="1.5" />
-        <path d="M21 15l-5-5L5 21" />
-      </svg>
-      <span className="text-xs font-medium" style={{ color: '#9ca3af' }}>Hero image TBD</span>
-    </div>
-    <div className="flex flex-col gap-6 mt-6">
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-col gap-0.5">
-          <div className="text-lg font-normal" style={{ color: '#0a2540' }}>Cards to power your product</div>
-          <div className="text-sm" style={{ color: '#596171' }}>Build a fully branded card program and issue cards programmatically via the Stripe Issuing API — for businesses that need to power their customers' card experience.</div>
-        </div>
-        <div className="flex gap-3">
-          {customerPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
-        </div>
-      </div>
+    <div className="flex gap-3 w-full mt-2">
+      {customerPrograms.map((p) => <ProgramCard key={p.name} {...p} />)}
     </div>
   </div>
   </div>
@@ -418,14 +401,9 @@ const SlideTellUs = () => {
                 <label style={{ fontSize: 16, color: '#353a44', lineHeight: '24px' }}>How do you want to get started?</label>
                 <div style={{ border: `1px solid ${typeaheadCursor ? '#675dff' : '#d8dee4'}`, borderRadius: 6, padding: '12px 16px', background: '#fff', height: 118, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden', transition: 'border-color 0.15s' }}>
                   <div style={{ overflow: 'hidden', height: 24 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 16, color: '#353a44', lineHeight: '24px', whiteSpace: 'nowrap' }}>
-                        {typeaheadTyped}
-                      </span>
-                      {typeaheadCursor && (
-                        <span style={{ color: '#353a44', fontWeight: 300 }}>|</span>
-                      )}
-                    </div>
+                    <span style={{ fontSize: 16, color: '#353a44', lineHeight: '24px', whiteSpace: 'nowrap' }}>
+                      {typeaheadTyped}{typeaheadCursor && <span style={{ fontWeight: 300 }}>|</span>}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1342,16 +1320,195 @@ const SlideIssuingSetup = () => (
   </div>
 );
 
-const SLIDES = [Slide1, Slide2, Slide5, SlideTellUs, SlideDefaultAccount, SlideRecFromWebsite, SlideWordCloud, SlideSandbox, SlideIssuingSetup, Slide7];
+const cardImgGradientFrameClip = "https://www.figma.com/api/mcp/asset/10b2bad4-47d1-4984-bb29-01adcf9152ea";
+const cardImgGram = "https://www.figma.com/api/mcp/asset/9cc89fd8-e9fb-4bb0-acee-831f370180e6";
+const cardImgEdgeOutline = "https://www.figma.com/api/mcp/asset/683da495-80e9-4a4b-9f71-1de5c0586af1";
+
+const MastercardLogo = () => (
+  <svg width="20" height="13" viewBox="0 0 38 24" fill="none">
+    <circle cx="14" cy="12" r="12" fill="#EB001B" fillOpacity="0.9" />
+    <circle cx="24" cy="12" r="12" fill="#F79E1B" fillOpacity="0.9" />
+    <path d="M19 4.8a12 12 0 0 1 0 14.4A12 12 0 0 1 19 4.8z" fill="#FF5F00" fillOpacity="0.9" />
+  </svg>
+);
+
+const IncludedAccountsVisual = () => (
+  <div style={{ position: 'relative', width: 252, height: 142 }}>
+    {/* Financial account module */}
+    <div style={{
+      position: 'absolute', left: 0, top: 0,
+      width: 163, height: 132,
+      background: '#fff', borderRadius: 8,
+      padding: '11px 12px',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.05)',
+      boxSizing: 'border-box',
+    }}>
+      <div style={{ fontSize: 8, color: '#596171', marginBottom: 2 }}>Financial account</div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: '#21252c', letterSpacing: '-0.5px', marginBottom: 8 }}>$21,750.69</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
+        {[
+          { flag: '🇺🇸', curr: 'USD', amount: '$2,212.49' },
+          { flag: '🇬🇧', curr: 'GBP', amount: '£6,031.63' },
+          { flag: '🇪🇺', curr: 'EUR', amount: '€3,125.99' },
+          { isUsdc: true, curr: 'USDC', amount: '$8,431.02' },
+        ].map(({ flag, curr, amount, isUsdc }) => (
+          <div key={curr} style={{ background: '#f5f6f8', borderRadius: 4, padding: '4px 6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginBottom: 1 }}>
+              {isUsdc ? (
+                <div style={{ width: 9, height: 9, borderRadius: '50%', background: '#2775CA', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: 5, fontWeight: 700, color: '#fff' }}>$</span>
+                </div>
+              ) : (
+                <span style={{ fontSize: 8 }}>{flag}</span>
+              )}
+              <span style={{ fontSize: 7, fontWeight: 600, color: '#353a44' }}>{curr}</span>
+            </div>
+            <div style={{ fontSize: 8, color: '#21252c', fontWeight: 500 }}>{amount}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+    {/* Business card — lower right overlay */}
+    <div style={{
+      position: 'absolute', right: 0, bottom: 0,
+      width: 121, height: 76, borderRadius: 5,
+      overflow: 'hidden',
+      boxShadow: '0 8px 20px rgba(80,60,160,0.35), 0 2px 8px rgba(0,0,0,0.15)',
+    }}>
+      <img src={cardImgGradientFrameClip} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(48.89deg, rgb(127,98,197) 1.49%, rgb(232,222,248) 45.5%, rgb(132,105,208) 94.66%)', opacity: 0.65, borderRadius: 5 }} />
+      <div style={{ position: 'relative', zIndex: 1, padding: '7px 9px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', color: 'white', boxSizing: 'border-box' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <img src={cardImgGram} alt="" style={{ width: 11, height: 11, objectFit: 'contain' }} />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <span style={{ fontSize: 6, fontWeight: 500, opacity: 0.85, letterSpacing: 0.5 }}>business</span>
+          <MastercardLogo />
+        </div>
+      </div>
+      <img src={cardImgEdgeOutline} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
+    </div>
+  </div>
+);
+
+const productCloudItems = [
+  { label: 'Non-recurring payments', checked: true, badge: 'Recommended' },
+  { label: 'Recurring payments', checked: true, badge: 'Recommended' },
+  { label: 'Cards to power your product', checked: true },
+  { label: 'Premium cards for your business', checked: false },
+  { label: 'Invoices', checked: false },
+  { label: 'Build a platform or marketplace', checked: false },
+  { label: 'Tax collection', checked: false },
+  { label: 'In-person payments', checked: false },
+  { label: 'Identity verification', checked: false },
+  { label: 'Fraud protection', checked: false },
+  { label: 'Financial services', checked: false },
+  { label: 'Bank data access', checked: false },
+  { label: 'Climate contributions', checked: false },
+  { label: 'Connect with a business using Stripe', checked: false },
+];
+
+const ProductPageContent = () => (
+  <div style={{ width: 658, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 28 }}>
+    <div style={{ width: '100%', background: '#f0f2f5', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px 0' }}>
+      <IncludedAccountsVisual />
+    </div>
+    <p style={{ fontSize: 20, margin: 0, lineHeight: '28px', letterSpacing: '0.3px' }}>
+      <strong style={{ color: '#21252c', fontWeight: 700 }}>Your Stripe account comes with a financial account and card.</strong>{' '}
+      <span style={{ color: '#99a5b8', fontWeight: 400 }}>What other options would you like?</span>
+    </p>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+      {productCloudItems.map((item) => (
+        <div key={item.label} style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          padding: '10px 12px',
+          borderRadius: 8,
+          border: item.checked ? '2px solid #675dff' : '1.5px solid #ebeef1',
+          background: item.checked ? '#fff' : '#f5f6f8',
+          width: 'calc(50% - 4px)',
+          boxSizing: 'border-box',
+        }}>
+          <div style={{
+            width: 14, height: 14, borderRadius: 3, flexShrink: 0,
+            border: item.checked ? '1.5px solid #675dff' : '1.5px solid #d8dee4',
+            background: item.checked ? '#533afd' : '#fff',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            {item.checked && (
+              <svg width="8" height="6" viewBox="0 0 9 7" fill="none">
+                <path d="M1 3.5l2.5 2.5 4.5-5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}
+          </div>
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#353a44', letterSpacing: '-0.15px', flex: 1 }}>{item.label}</span>
+          {item.badge && (
+            <span style={{ fontSize: 10, fontWeight: 600, color: '#533afd', background: '#f0eeff', borderRadius: 4, padding: '2px 6px', whiteSpace: 'nowrap' }}>{item.badge}</span>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const ProductsModalShell = ({ scrollOffset = 0, children }) => (
+  <div style={{ width: '100%', marginTop: 30, overflow: 'hidden' }}>
+    <Browser url="dashboard.stripe.com" fillHeight>
+      <div style={{ position: 'relative', overflow: 'hidden', height: 'calc(100vh - 154px)', background: 'rgba(182,192,205,0.7)' }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <div style={{
+            background: '#fff',
+            borderRadius: 12,
+            boxShadow: '0 15px 35px rgba(48,49,61,0.08), 0 5px 15px rgba(0,0,0,0.12)',
+            width: '93%',
+            height: 'calc(100% - 60px)',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+            <div style={{ position: 'absolute', left: 42, top: 32, fontSize: 18, fontWeight: 700, color: '#0a2540', letterSpacing: '-0.3px', zIndex: 1 }}>stripe</div>
+            <div style={{ position: 'absolute', right: 42, top: 42, display: 'flex', gap: 4, zIndex: 1 }}>
+              <div style={{ height: 5, width: 7, borderRadius: 100, background: '#675dff' }} />
+              <div style={{ height: 5, width: 125, borderRadius: 100, background: '#f5f6f8' }} />
+            </div>
+            <div style={{ flex: 1, overflow: 'hidden' }}>
+              <div style={{ paddingTop: 103, paddingBottom: 16, marginTop: -scrollOffset, transition: 'margin-top 0.45s cubic-bezier(0.4,0,0.2,1)' }}>
+                {children}
+              </div>
+            </div>
+            <div style={{ flexShrink: 0, padding: '12px 42px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 16, color: '#533afd', cursor: 'pointer', letterSpacing: '-0.31px' }}>← Back</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                <span style={{ fontSize: 16, color: '#533afd', cursor: 'pointer', letterSpacing: '-0.31px' }}>I want a different setup</span>
+                <button style={{ padding: '10px 24px', fontSize: 14, fontWeight: 600, color: '#fff', background: '#533afd', border: 'none', borderRadius: 6, cursor: 'pointer' }}>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Browser>
+  </div>
+);
+
+const SlideProducts = ({ scrolled = false }) => (
+  <ProductsModalShell scrollOffset={scrolled ? 278 : 0}>
+    <ProductPageContent />
+  </ProductsModalShell>
+);
+
+const SLIDES = [Slide1, Slide2, Slide5, SlideTellUs, SlideProducts, SlideSandbox, SlideIssuingSetup, Slide7];
+const EXPANDABLE_SLIDE = 4;
 
 const DeckView = ({ onBack }) => {
   const [current, setCurrent] = useState(0);
   const [dir, setDir] = useState(1);
   const [visible, setVisible] = useState(true);
+  const [subStep, setSubStep] = useState(0);
 
   const goTo = (next) => {
     if (next < 0 || next >= SLIDES.length) return;
     setDir(next > current ? 1 : -1);
+    setSubStep(0);
     setVisible(false);
     setTimeout(() => {
       setCurrent(next);
@@ -1359,16 +1516,34 @@ const DeckView = ({ onBack }) => {
     }, 180);
   };
 
+  const goRight = () => {
+    if (current === EXPANDABLE_SLIDE && subStep === 0) {
+      setSubStep(1);
+    } else {
+      goTo(current + 1);
+    }
+  };
+
+  const goLeft = () => {
+    if (current === EXPANDABLE_SLIDE && subStep === 1) {
+      setSubStep(0);
+    } else {
+      goTo(current - 1);
+    }
+  };
+
   useEffect(() => {
     const handler = (e) => {
-      if (e.key === 'ArrowRight') goTo(current + 1);
-      if (e.key === 'ArrowLeft') goTo(current - 1);
+      if (e.key === 'ArrowRight') goRight();
+      if (e.key === 'ArrowLeft') goLeft();
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [current]);
+  }, [current, subStep]);
 
   const Slide = SLIDES[current];
+  const isFirst = current === 0 && subStep === 0;
+  const isLast = current === SLIDES.length - 1 && !(current === EXPANDABLE_SLIDE && subStep === 0);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#f5f6f8' }}>
@@ -1391,9 +1566,9 @@ const DeckView = ({ onBack }) => {
         <p className="text-3xl font-light" style={{ color: '#353a44' }}>{BEATS[current]}</p>
       </div>
 
-      {/* Content area — centers slide in the space below the description */}
+      {/* Content area */}
       <div
-        className={`flex-1 relative flex justify-center px-16 overflow-hidden ${[1, 2, 3, 4, 5, 6, 7, 8].includes(current) ? 'items-start' : 'items-center'}`}
+        className={`flex-1 relative flex justify-center px-16 overflow-hidden ${[1, 2, 3, 4, 5, 6, 7].includes(current) ? 'items-start' : 'items-center'}`}
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? 'translateY(0)' : `translateY(${dir * 12}px)`,
@@ -1402,14 +1577,14 @@ const DeckView = ({ onBack }) => {
       >
         {/* Left arrow */}
         <button
-          onClick={() => goTo(current - 1)}
-          disabled={current === 0}
+          onClick={goLeft}
+          disabled={isFirst}
           className="absolute left-6 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-10 h-10 rounded-full transition-colors"
           style={{
-            background: current === 0 ? '#ebeef1' : '#fff',
-            color: current === 0 ? '#d8dee4' : '#353a44',
+            background: isFirst ? '#ebeef1' : '#fff',
+            color: isFirst ? '#d8dee4' : '#353a44',
             border: '1px solid #d8dee4',
-            cursor: current === 0 ? 'not-allowed' : 'pointer',
+            cursor: isFirst ? 'not-allowed' : 'pointer',
           }}
         >
           ←
@@ -1417,21 +1592,21 @@ const DeckView = ({ onBack }) => {
 
         {/* Right arrow */}
         <button
-          onClick={() => goTo(current + 1)}
-          disabled={current === SLIDES.length - 1}
+          onClick={goRight}
+          disabled={isLast}
           className="absolute right-6 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-10 h-10 rounded-full transition-colors"
           style={{
-            background: current === SLIDES.length - 1 ? '#ebeef1' : '#fff',
-            color: current === SLIDES.length - 1 ? '#d8dee4' : '#353a44',
+            background: isLast ? '#ebeef1' : '#fff',
+            color: isLast ? '#d8dee4' : '#353a44',
             border: '1px solid #d8dee4',
-            cursor: current === SLIDES.length - 1 ? 'not-allowed' : 'pointer',
+            cursor: isLast ? 'not-allowed' : 'pointer',
           }}
         >
           →
         </button>
 
         <div className="w-3/4">
-          <Slide />
+          <Slide scrolled={current === EXPANDABLE_SLIDE ? subStep > 0 : undefined} />
         </div>
       </div>
 

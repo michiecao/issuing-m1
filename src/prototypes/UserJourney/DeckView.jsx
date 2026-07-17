@@ -426,14 +426,9 @@ const SlideTellUs = () => {
                 <label style={{ fontSize: 16, color: '#353a44', lineHeight: '24px' }}>How do you want to get started?</label>
                 <div style={{ border: `1px solid ${typeaheadCursor ? '#675dff' : '#d8dee4'}`, borderRadius: 6, padding: '12px 16px', background: '#fff', height: 118, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden', transition: 'border-color 0.15s' }}>
                   <div style={{ overflow: 'hidden', height: 24 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 16, color: '#353a44', lineHeight: '24px', whiteSpace: 'nowrap' }}>
-                        {typeaheadTyped}
-                      </span>
-                      {typeaheadCursor && (
-                        <span style={{ color: '#353a44', fontWeight: 300 }}>|</span>
-                      )}
-                    </div>
+                    <span style={{ fontSize: 16, color: '#353a44', lineHeight: '24px', whiteSpace: 'nowrap' }}>
+                      {typeaheadTyped}{typeaheadCursor && <span style={{ fontWeight: 300 }}>|</span>}
+                    </span>
                   </div>
                 </div>
               </div>
