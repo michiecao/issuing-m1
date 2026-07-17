@@ -1287,7 +1287,7 @@ const DeckView = ({ onBack }) => {
   const Slide = SLIDES[current];
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#f5f6f8' }}>
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#f5f6f8' }}>
       {/* Header */}
       <div className="px-16 pt-6 pb-4 text-center flex flex-col items-center gap-6">
         <div className="flex items-center gap-2">
@@ -1304,7 +1304,7 @@ const DeckView = ({ onBack }) => {
             />
           ))}
         </div>
-        <p className="text-3xl font-light" style={{ color: '#353a44' }}>{BEATS[current]}</p>
+        <p className="text-3xl font-light" style={{ color: '#353a44', minHeight: 72 }}>{BEATS[current]}</p>
       </div>
 
       {/* Content area — centers slide in the space below the description */}
