@@ -2709,14 +2709,20 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-bold text-[16px] text-[#353a44] leading-6 tracking-[-0.31px]">Funds available</h3>
-                <button 
+                <button
                   onClick={() => setIsAddFundsOpen(true)}
                   className="flex items-center gap-1 h-6 px-2 text-[12px] font-semibold text-[#353a44] tracking-[-0.024px] bg-white border border-[#d8dee4] rounded-md hover:bg-gray-50 shadow-[0px_1px_1px_rgba(33,37,44,0.16)]"
                 >
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M4.25 4.25H7C7.41421 4.25 7.75 3.91421 7.75 3.5C7.75 3.08579 7.41421 2.75 7 2.75H4C3.30964 2.75 2.75 3.30964 2.75 4V11C2.75 11.6904 3.30964 12.25 4 12.25H14.5C15.1904 12.25 15.75 11.6904 15.75 11V6.5C15.75 6.08579 15.4142 5.75 15 5.75C14.5858 5.75 14.25 6.08579 14.25 6.5V10.75H4.25V4.25Z" fill="#474E5A"/>
+                    <path fillRule="evenodd" clipRule="evenodd" d="M8.5 7V8C8.5 8.41421 8.83579 8.75 9.25 8.75C9.66421 8.75 10 8.41421 10 8V7C10 6.58579 9.66421 6.25 9.25 6.25C8.83579 6.25 8.5 6.58579 8.5 7ZM7.25 7V8C7.25 9.10457 8.14543 10 9.25 10C10.3546 10 11.25 9.10457 11.25 8V7C11.25 5.89543 10.3546 5 9.25 5C8.14543 5 7.25 5.89543 7.25 7Z" fill="#474E5A"/>
+                    <path fillRule="evenodd" clipRule="evenodd" d="M1 5.25C1.41421 5.25 1.75 5.58579 1.75 6V12.5C1.75 12.9142 2.08579 13.25 2.5 13.25H12.5C12.9142 13.25 13.25 13.5858 13.25 14C13.25 14.4142 12.9142 14.75 12.5 14.75H2.5C1.25736 14.75 0.25 13.7426 0.25 12.5V6C0.25 5.58579 0.585786 5.25 1 5.25Z" fill="#474E5A"/>
+                    <path fillRule="evenodd" clipRule="evenodd" d="M12.5 0.25C12.9142 0.25 13.25 0.585786 13.25 1V2.25H14.5C14.9142 2.25 15.25 2.58579 15.25 3C15.25 3.41421 14.9142 3.75 14.5 3.75H13.25V5C13.25 5.41421 12.9142 5.75 12.5 5.75C12.0858 5.75 11.75 5.41421 11.75 5V3.75H10.5C10.0858 3.75 9.75 3.41421 9.75 3C9.75 2.58579 10.0858 2.25 10.5 2.25H11.75V1C11.75 0.585786 12.0858 0.25 12.5 0.25Z" fill="#474E5A"/>
+                  </svg>
                   Add funds
                 </button>
               </div>
-              
+
               <div className="flex flex-col gap-2">
                 <div className="flex items-stretch bg-white border border-[#e3e8ee] rounded-xl overflow-hidden">
                   <div className="bg-[#f5f6f8] flex items-center justify-center pl-3 pr-3 py-3">
@@ -2749,8 +2755,14 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                   </div>
                 )}
               </div>
+
+              {/* Inline banner - prompts funding without feeling like an error */}
+              <div className="flex items-start gap-2 bg-[#f5f6f8] rounded-lg px-3 py-2.5 mt-3">
+                <span className="text-[#6c7688] mt-0.5 shrink-0"><InfoIcon /></span>
+                <p className="text-[12px] text-[#353a44] leading-4">Fund your account to spend directly with cards.</p>
+              </div>
             </div>
-            
+
             {/* Resources */}
             <div>
               <h3 className="font-bold text-[16px] text-[#353a44] leading-6 tracking-[-0.31px] mb-3">Resources</h3>
@@ -2899,7 +2911,7 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                   Add funds
                 </button>
               </div>
-              
+
               {/* Account Cards */}
               <div className="flex flex-col gap-2">
                 <div className="flex items-stretch bg-white border border-[#e3e8ee] rounded-xl overflow-hidden">
@@ -2941,8 +2953,16 @@ const IssuingHomeView = ({ externalAddFundsOpen = false, onExternalAddFundsClose
                   </div>
                 )}
               </div>
+
+              {/* Inline banner - prompts funding without feeling like an error */}
+              {fundsAvailable === 0 && (
+                <div className="flex items-start gap-2 bg-[#f5f6f8] rounded-lg px-3 py-2.5 mt-3">
+                  <span className="text-[#6c7688] mt-0.5 shrink-0"><InfoIcon /></span>
+                  <p className="text-[12px] text-[#353a44] leading-4">Fund your account to spend directly with cards.</p>
+                </div>
+              )}
             </div>
-            
+
             {/* Resources */}
             <div>
               <h3 className="font-bold text-[16px] text-[#353a44] leading-6 tracking-[-0.31px] mb-3">Resources</h3>

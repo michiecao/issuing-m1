@@ -97,9 +97,6 @@ const PrototypeControlPanel = ({ children }) => {
     setIsDragging(true);
   };
 
-  // Temporarily hidden
-  return null;
-
   if (!children) {
     return null;
   }
@@ -109,7 +106,7 @@ const PrototypeControlPanel = ({ children }) => {
       {/* Panel */}
       <div
         ref={panelRef}
-        className={`fixed z-[80] ${isDragging ? 'cursor-grabbing' : ''} ${isDragging ? 'opacity-100' : isCollapsed ? 'opacity-100' : 'opacity-50 hover:opacity-100'}`}
+        className={`fixed z-[80] opacity-100 ${isDragging ? 'cursor-grabbing' : ''}`}
         style={{
           left: currentPos.left,
           bottom: currentPos.bottom,
@@ -135,7 +132,7 @@ const PrototypeControlPanel = ({ children }) => {
 
           {/* Controls */}
           <div
-            className={`transition-all duration-300 ease-in-out overflow-hidden ${isCollapsed ? 'max-h-0 opacity-0' : 'max-h-[600px] opacity-100'
+            className={`transition-all duration-300 ease-in-out ${isCollapsed ? 'max-h-0 opacity-0 overflow-hidden' : 'max-h-[70vh] opacity-100 overflow-y-auto'
               }`}
           >
             <div className="p-4 space-y-4">

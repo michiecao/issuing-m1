@@ -34,7 +34,7 @@ const flows = [
 const FlowSelection = ({ onSelect }) => (
   <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-100 flex flex-col items-center justify-center px-6">
     <div className="w-full max-w-2xl flex flex-col">
-      <h1 className="text-2xl font-light text-default mb-3">Unified cards distribution strategy</h1>
+      <h1 className="text-2xl font-light text-default mb-3">Unified cards distribution strategy: Initial explorations</h1>
       <div className="flex items-center gap-2 mb-6">
         <span className="text-sm text-default">@mcao @iman</span>
         <span className="text-sm text-default">|</span>

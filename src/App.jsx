@@ -4,12 +4,13 @@ import Prototype1, {
   initialVariables as prototype1InitialVars
 } from './prototypes/M1';
 import UserJourney, { initialVariables as userJourneyInitialVars } from './prototypes/UserJourney';
+import CardsPositioning, { initialVariables as cardsPositioningInitialVars } from './prototypes/CardsPositioning';
 
 // Prototype definitions - edit this array to add/modify prototypes
 const PROTOTYPES = [
   {
     id: 'prototype1',
-    title: 'Prototype 1',
+    title: 'Direct, self-serve onboarding',
     description: 'Explores self-serve onboarding flow for direct Issuing users.',
     status: 'in-progress',
     component: Prototype1,
@@ -18,11 +19,20 @@ const PROTOTYPES = [
   },
   {
     id: 'user-journey',
-    title: 'User Journey: Issuing Adoption',
+    title: 'Unified cards distribution strategy: Initial explorations',
     description: 'Illustrative deck walkthrough of the end-to-end Issuing product adoption story.',
     status: 'in-progress',
     component: UserJourney,
     initialVariables: userJourneyInitialVars,
+    initialControlVariables: {},
+  },
+  {
+    id: 'cards-positioning',
+    title: 'Cards positioning',
+    description: 'Toggle between nav/IA directions for where "Cards" lives when a business uses both Balances and Issuing.',
+    status: 'in-progress',
+    component: CardsPositioning,
+    initialVariables: cardsPositioningInitialVars,
     initialControlVariables: {},
   },
 ];
